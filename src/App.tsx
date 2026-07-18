@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { AppRoutes } from './AppRoutes';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-// ✅ Import Toaster from sonner
 import { Toaster } from 'sonner';
 import './styles/globals.css';
 
