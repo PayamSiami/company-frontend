@@ -36,6 +36,17 @@ interface VerifyEmailResponse {
 
 export const authApi = {
   /**
+   * Register a new user
+   */
+  register: async (data: RegisterDto): Promise<AuthResponseDto> => {
+    const response = await apiClient.post<AuthResponseDto>(
+      "/auth/register",
+      data,
+    );
+    return response.data;
+  },
+
+  /**
    * Login user with email and password
    */
   login: async (data: LoginDto): Promise<AuthResponseDto> => {

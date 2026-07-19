@@ -22,6 +22,7 @@ const AIScreeningPage = React.lazy(() => import('./pages/AI/Screening'));
 const AIAssistantPage = React.lazy(() => import('./pages/AI/Assistant'));
 const CompanyProfilePage = React.lazy(() => import('./pages/Company/Profile'));
 const LoginPage = React.lazy(() => import('./pages/Auth/Login'));
+const RegisterPage = React.lazy(() => import('./pages/Auth/Register'));
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ export const AppRoutes: React.FC = () => {
       <Routes>
         {/* Auth Routes */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Protected Company Routes */}

@@ -15,7 +15,6 @@ import {
   Sparkles,
   Shield,
   CheckCircle,
-  Loader2,
   Fingerprint,
   Zap,
   AlertCircle
