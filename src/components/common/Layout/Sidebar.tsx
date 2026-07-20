@@ -37,57 +37,57 @@ interface ChildNavItem {
 
 const navItems: NavItem[] = [
   {
-    label: 'Dashboard',
+    label: 'داشبورد',
     icon: LayoutDashboard,
     path: '/dashboard',
     exact: true
   },
   {
-    label: 'Jobs',
+    label: 'مشاغل',
     icon: Briefcase,
     path: '/jobs',
     children: [
-      { label: 'All Jobs', path: '/jobs' },
-      { label: 'Analytics', path: '/jobs/analytics' },
+      { label: 'همه مشاغل', path: '/jobs' },
+      { label: 'تحلیل‌ها', path: '/jobs/analytics' },
     ]
   },
   {
-    label: 'Applications',
+    label: 'درخواست‌ها',
     icon: FileText,
     path: '/applications',
     children: [
-      { label: 'All Applications', path: '/applications' },
-      { label: 'AI Screening', path: '/applications/screening' },
+      { label: 'همه درخواست‌ها', path: '/applications' },
+      { label: 'غربالگری هوش مصنوعی', path: '/applications/screening' },
     ]
   },
   {
-    label: 'Candidates',
+    label: 'داوطلبان',
     icon: Users,
     path: '/candidates',
     children: [
-      { label: 'All Candidates', path: '/candidates' },
-      { label: 'Recommendations', path: '/candidates/recommendations' },
+      { label: 'همه داوطلبان', path: '/candidates' },
+      { label: 'پیشنهادات', path: '/candidates/recommendations' },
     ]
   },
   {
-    label: 'AI Tools',
+    label: 'ابزارهای هوش مصنوعی',
     icon: Sparkles,
     path: '/ai',
     children: [
-      { label: 'AI Dashboard', path: '/ai' },
-      { label: 'AI Screening', path: '/ai/screening' },
-      { label: 'Job Assistant', path: '/ai/assistant' },
-      { label: 'Analytics', path: '/ai/analytics' },
+      { label: 'داشبورد هوش مصنوعی', path: '/ai' },
+      { label: 'غربالگری هوش مصنوعی', path: '/ai/screening' },
+      { label: 'دستیار شغلی', path: '/ai/assistant' },
+      { label: 'تحلیل‌ها', path: '/ai/analytics' },
     ]
   },
   {
-    label: 'Company',
+    label: 'شرکت',
     icon: Building2,
     path: '/company',
     children: [
-      { label: 'Profile', path: '/company/profile' },
-      { label: 'Team', path: '/company/team' },
-      { label: 'Settings', path: '/settings' },
+      { label: 'پروفایل', path: '/company/profile' },
+      { label: 'تیم', path: '/company/team' },
+      { label: 'تنظیمات', path: '/settings' },
     ]
   },
 ];
@@ -118,7 +118,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isExpanded = (label: string) => expandedItems.includes(label);
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900" dir="rtl">
       {/* Logo */}
       <div className={cn(
         "flex items-center gap-3 px-4 py-4 border-b border-gray-200 dark:border-gray-800",
@@ -130,7 +130,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {!isCollapsed && (
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-gray-900 dark:text-white">JobPortal</h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Company Dashboard</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">داشبورد شرکت</p>
           </div>
         )}
       </div>
@@ -158,12 +158,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                   {!isCollapsed && (
                     <span className="text-xs transition-transform duration-200">
-                      {isExpanded(item.label) ? '▼' : '▶'}
+                      {isExpanded(item.label) ? '▲' : '▼'}
                     </span>
                   )}
                 </button>
                 {!isCollapsed && isExpanded(item.label) && (
-                  <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-200 dark:border-gray-700 pl-2">
+                  <div className="mr-4 mt-1 space-y-1 border-r-2 border-gray-200 dark:border-gray-700 pr-2">
                     {item.children.map((child) => {
                       const isActive = location.pathname === child.path;
                       return (
@@ -186,7 +186,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           />
                           <span>{child.label}</span>
                           {child.badge && (
-                            <span className="ml-auto px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
+                            <span className="mr-auto px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
                               {child.badge}
                             </span>
                           )}
@@ -213,7 +213,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <item.icon className="w-5 h-5 shrink-0" />
                 {!isCollapsed && <span>{item.label}</span>}
                 {!isCollapsed && item.badge && (
-                  <span className="ml-auto px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
+                  <span className="mr-auto px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
                     {item.badge}
                   </span>
                 )}
@@ -235,10 +235,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                {user?.fullName || user?.name || 'John Doe'}
+              <p className="text-sm font-medium text-gray-900 dark:text-white truncate text-right">
+                {user?.fullName || user?.name || 'جان دو'}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate text-right">
                 {user?.email || 'john@company.com'}
               </p>
             </div>
@@ -252,10 +252,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             "w-full flex items-center gap-3 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors",
             isCollapsed ? "justify-center px-2 py-2" : "px-3 py-2"
           )}
-          title={isCollapsed ? "Logout" : undefined}
+          title={isCollapsed ? "خروج" : undefined}
         >
           <LogOut className="w-4 h-4 shrink-0" />
-          {!isCollapsed && <span>Logout</span>}
+          {!isCollapsed && <span>خروج</span>}
         </button>
       </div>
     </div>

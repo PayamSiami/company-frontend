@@ -41,10 +41,10 @@ export const Header: React.FC<HeaderProps> = ({
   const [searchOpen, setSearchOpen] = useState(false);
 
   const notifications = [
-    { id: 1, title: 'New application from John Doe', time: '2 min ago', read: false },
-    { id: 2, title: 'Candidate Jane Smith shortlisted', time: '1 hour ago', read: false },
-    { id: 3, title: 'Interview scheduled for Senior Developer', time: '3 hours ago', read: true },
-    { id: 4, title: 'AI screening completed for 5 candidates', time: '5 hours ago', read: true },
+    { id: 1, title: 'درخواست جدید از جان دو', time: '۲ دقیقه پیش', read: false },
+    { id: 2, title: 'داوطلب جین اسمیت انتخاب شد', time: '۱ ساعت پیش', read: false },
+    { id: 3, title: 'مصاحبه برای توسعه‌دهنده ارشد برنامه‌ریزی شد', time: '۳ ساعت پیش', read: true },
+    { id: 4, title: 'غربالگری هوش مصنوعی برای ۵ داوطلب تکمیل شد', time: '۵ ساعت پیش', read: true },
   ];
 
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -55,37 +55,38 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50">
+    <header className="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50" dir="rtl">
       <div className="flex items-center justify-between h-16 px-4 md:px-6">
-        {/* Left */}
+        {/* Left side - Menu and Search */}
         <div className="flex items-center gap-3">
           <button
             onClick={onMenuClick}
             className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors lg:hidden"
-            aria-label="Toggle menu"
+            aria-label="باز و بسته کردن منو"
           >
             <Menu className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
 
           <div className="hidden md:flex items-center relative">
-            <Search className="absolute left-3 w-4 h-4 text-gray-400" />
+            <Search className="absolute right-3 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search jobs, candidates, or applications..."
-              className="w-80 pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              placeholder="جستجوی مشاغل، داوطلبان یا درخواست‌ها..."
+              className="w-80 pr-9 pl-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-right"
             />
-            <kbd className="absolute right-3 text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
+            <kbd className="absolute left-3 text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
               ⌘K
             </kbd>
           </div>
         </div>
 
-        {/* Right */}
+        {/* Right side - Actions and User */}
         <div className="flex items-center gap-1 md:gap-2">
           {/* Search toggle (mobile) */}
           <button
             onClick={() => setSearchOpen(!searchOpen)}
             className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden"
+            aria-label="جستجو"
           >
             <Search className="w-5 h-5 text-gray-500" />
           </button>
@@ -94,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={toggleTheme}
             className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle theme"
+            aria-label="تغییر تم"
           >
             {isDark ? (
               <Sun className="w-5 h-5 text-yellow-500" />
@@ -107,14 +108,14 @@ export const Header: React.FC<HeaderProps> = ({
           <Link to="/ai/assistant">
             <Button variant="outline" size="sm" className="hidden md:flex gap-1.5 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20">
               <Sparkles className="w-4 h-4" />
-              <span>AI Assistant</span>
+              <span>دستیار هوش مصنوعی</span>
             </Button>
           </Link>
 
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <button className="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="اعلان‌ها">
                 <Bell className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 text-[10px] font-medium text-white bg-red-500 rounded-full flex items-center justify-center ring-2 ring-white dark:ring-gray-900">
@@ -123,32 +124,33 @@ export const Header: React.FC<HeaderProps> = ({
                 )}
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
+            {/* Changed align from 'end' to 'start' for RTL */}
+            <DropdownMenuContent align="start" className="w-80">
               <DropdownMenuLabel className="flex items-center justify-between">
-                <span>Notifications</span>
+                <span>اعلان‌ها</span>
                 <button className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
-                  Mark all as read
+                  علامت‌گذاری همه به عنوان خوانده شده
                 </button>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {notifications.length === 0 ? (
                 <div className="py-8 text-center text-gray-500 dark:text-gray-400">
                   <Bell className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-                  <p>No notifications</p>
+                  <p>هیچ اعلانی وجود ندارد</p>
                 </div>
               ) : (
                 notifications.map((n) => (
                   <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-1 p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
                     <div className="flex items-start gap-3 w-full">
                       <div className={cn(
-                        "w-2 h-2 mt-1.5 rounded-full flex-shrink-0",
+                        "w-2 h-2 mt-1.5 rounded-full shrink-0",
                         n.read ? "bg-gray-300 dark:bg-gray-600" : "bg-blue-500"
                       )} />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white text-right">
                           {n.title}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-right">
                           {n.time}
                         </p>
                       </div>
@@ -158,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
               )}
               <DropdownMenuSeparator />
               <DropdownMenuItem className="justify-center text-blue-600 dark:text-blue-400 font-medium">
-                View all notifications
+                مشاهده همه اعلان‌ها
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -166,18 +168,19 @@ export const Header: React.FC<HeaderProps> = ({
           {/* User dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-medium">
+              <button className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="منوی کاربر">
+                <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-medium">
                   {user?.fullName?.charAt(0) || 'U'}
                 </div>
                 <ChevronDown className="w-4 h-4 text-gray-400" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            {/* Changed align from 'end' to 'start' for RTL */}
+            <DropdownMenuContent align="start" className="w-56">
               <DropdownMenuLabel>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-right">
                   <span className="font-medium text-gray-900 dark:text-white">
-                    {user?.fullName || 'John Doe'}
+                    {user?.fullName || 'جان دو'}
                   </span>
                   <span className="text-xs text-gray-500 dark:text-gray-400">
                     {user?.email || 'john@company.com'}
@@ -187,20 +190,20 @@ export const Header: React.FC<HeaderProps> = ({
               <DropdownMenuSeparator />
               <DropdownMenuItem className="gap-2 cursor-pointer">
                 <User className="w-4 h-4" />
-                <span>Profile</span>
+                <span>پروفایل</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="gap-2 cursor-pointer">
                 <Settings className="w-4 h-4" />
-                <span>Settings</span>
+                <span>تنظیمات</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="gap-2 cursor-pointer">
                 <HelpCircle className="w-4 h-4" />
-                <span>Help & Support</span>
+                <span>راهنما و پشتیبانی</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="gap-2 text-red-600 dark:text-red-400 cursor-pointer">
                 <LogOut className="w-4 h-4" />
-                <span>Logout</span>
+                <span>خروج</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -212,8 +215,8 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="md:hidden p-4 border-t border-gray-200 dark:border-gray-700">
           <Input
             type="text"
-            placeholder="Search..."
-            className="w-full"
+            placeholder="جستجو..."
+            className="w-full text-right"
             autoFocus
           />
         </div>

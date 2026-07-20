@@ -72,9 +72,9 @@ const JobsAnalyticsPage: React.FC = () => {
         try {
             setExporting(true);
             // TODO: Implement export functionality
-            toast.success('Report exported successfully!');
+            toast.success('گزارش با موفقیت خروجی گرفته شد!');
         } catch (error) {
-            toast.error('Failed to export report');
+            toast.error('خروجی گرفتن گزارش با شکست مواجه شد');
         } finally {
             setExporting(false);
         }
@@ -82,7 +82,7 @@ const JobsAnalyticsPage: React.FC = () => {
 
     if (loading && !analytics) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" dir="rtl">
                 <Spinner size="lg" />
             </div>
         );
@@ -90,27 +90,25 @@ const JobsAnalyticsPage: React.FC = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" dir="rtl">
                 <div className="text-center">
                     <p className="text-red-600 dark:text-red-400">{error}</p>
                     <Button
                         onClick={() => dispatch(fetchJobAnalytics(timeRange))}
                         className="mt-4"
                     >
-                        Retry
+                        تلاش مجدد
                     </Button>
                 </div>
             </div>
         );
     }
 
-    console.log(analytics)
-
     if (!analytics) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" dir="rtl">
                 <div className="text-center">
-                    <p className="text-gray-500 dark:text-gray-400">No analytics data available</p>
+                    <p className="text-gray-500 dark:text-gray-400">داده‌های تحلیلی موجود نیست</p>
                 </div>
             </div>
         );
@@ -134,64 +132,68 @@ const JobsAnalyticsPage: React.FC = () => {
     };
 
     const statusData = Object.entries(analytics?.byStatus).map(([key, value]) => ({
-        name: key.charAt(0).toUpperCase() + key.slice(1),
+        name: key === 'open' ? 'باز'
+            : key === 'draft' ? 'پیش‌نویس'
+            : key === 'closed' ? 'بسته'
+            : key === 'expired' ? 'منقضی'
+            : 'تکمیل شده',
         value,
         color: statusColors[key as keyof typeof statusColors] || '#94a3b8',
     }));
 
     const typeData = Object.entries(analytics.byType).map(([key, value]) => ({
-        name: key === 'fullTime' ? 'Full Time'
-            : key === 'partTime' ? 'Part Time'
-                : key === 'contract' ? 'Contract'
-                    : key === 'internship' ? 'Internship'
-                        : key === 'freelance' ? 'Freelance'
-                            : 'Remote',
+        name: key === 'fullTime' ? 'تمام وقت'
+            : key === 'partTime' ? 'پاره وقت'
+            : key === 'contract' ? 'قراردادی'
+            : key === 'internship' ? 'کارآموزی'
+            : key === 'freelance' ? 'آزاد'
+            : 'دورکاری',
         value,
         color: typeColors[key as keyof typeof typeColors] || '#94a3b8',
     }));
 
     const metricCards = [
         {
-            title: 'Total Jobs',
+            title: 'کل مشاغل',
             value: analytics.total,
-            change: '+12%',
+            change: '+۱۲٪',
             trend: 'up',
         },
         {
-            title: 'Total Applications',
+            title: 'کل درخواست‌ها',
             value: analytics.applications.total,
-            change: `+${analytics.applications.growth}%`,
+            change: `+${analytics.applications.growth}٪`,
             trend: analytics.applications.growth >= 0 ? 'up' : 'down',
         },
         {
-            title: 'Avg. Applications/Job',
+            title: 'میانگین درخواست به ازای هر شغل',
             value: analytics.applications.avgPerJob,
-            change: '+5%',
+            change: '+۵٪',
             trend: 'up',
         },
         {
-            title: 'Conversion Rate',
-            value: `${analytics.performance.conversionRate}%`,
-            change: analytics.performance.conversionRate >= 0 ? '+2%' : '-2%',
+            title: 'نرخ تبدیل',
+            value: `${analytics.performance.conversionRate}٪`,
+            change: analytics.performance.conversionRate >= 0 ? '+۲٪' : '-۲٪',
             trend: analytics.performance.conversionRate >= 0 ? 'up' : 'down',
         },
     ];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Page Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            Job Analytics
-                            <Badge variant="info" size="sm" className="ml-2">
-                                <Activity className="w-3 h-3 mr-1" />
-                                Live
+                            تحلیل مشاغل
+                            <Badge variant="info" size="sm" className="mr-2">
+                                <Activity className="w-3 h-3 ml-1" />
+                                زنده
                             </Badge>
                         </h1>
                         <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-                            Track your job posting performance and hiring metrics
+                            عملکرد آگهی‌های شغلی و معیارهای استخدامی خود را دنبال کنید
                         </p>
                     </div>
                 </div>
@@ -208,7 +210,10 @@ const JobsAnalyticsPage: React.FC = () => {
                                         : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                                 )}
                             >
-                                {range}
+                                {range === '7d' ? '۷ روز' 
+                                    : range === '30d' ? '۳۰ روز'
+                                    : range === '90d' ? '۹۰ روز'
+                                    : '۱ سال'}
                             </button>
                         ))}
                     </div>
@@ -220,7 +225,7 @@ const JobsAnalyticsPage: React.FC = () => {
                         className="gap-1.5"
                     >
                         <Download className="w-4 h-4" />
-                        {exporting ? 'Exporting...' : 'Export'}
+                        {exporting ? 'در حال خروجی...' : 'خروجی'}
                     </Button>
                 </div>
             </div>
@@ -253,15 +258,15 @@ const JobsAnalyticsPage: React.FC = () => {
                 <TabsList className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
                     <TabsTrigger value="overview" className="flex items-center gap-2">
                         <BarChart3 className="w-4 h-4" />
-                        Overview
+                        نمای کلی
                     </TabsTrigger>
                     <TabsTrigger value="trends" className="flex items-center gap-2">
                         <TrendingUp className="w-4 h-4" />
-                        Trends
+                        روندها
                     </TabsTrigger>
                     <TabsTrigger value="performance" className="flex items-center gap-2">
                         <Target className="w-4 h-4" />
-                        Performance
+                        عملکرد
                     </TabsTrigger>
                 </TabsList>
 
@@ -271,8 +276,8 @@ const JobsAnalyticsPage: React.FC = () => {
                         {/* Status Distribution */}
                         <Card className="lg:col-span-2">
                             <CardHeader>
-                                <CardTitle className="text-base">Job Status Distribution</CardTitle>
-                                <CardDescription>Breakdown of jobs by status</CardDescription>
+                                <CardTitle className="text-base">توزیع وضعیت مشاغل</CardTitle>
+                                <CardDescription>توزیع مشاغل بر اساس وضعیت</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="h-[300px]">
@@ -302,8 +307,8 @@ const JobsAnalyticsPage: React.FC = () => {
                         {/* Job Type Distribution */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Job Types</CardTitle>
-                                <CardDescription>Distribution by type</CardDescription>
+                                <CardTitle className="text-base">نوع مشاغل</CardTitle>
+                                <CardDescription>توزیع بر اساس نوع</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="h-75">
@@ -335,8 +340,8 @@ const JobsAnalyticsPage: React.FC = () => {
                 <TabsContent value="trends" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Hiring Trends</CardTitle>
-                            <CardDescription>Monthly job postings, applications, and hires</CardDescription>
+                            <CardTitle className="text-base">روندهای استخدامی</CardTitle>
+                            <CardDescription>آگهی‌های شغلی، درخواست‌ها و استخدام‌های ماهانه</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="h-[400px]">
@@ -354,9 +359,9 @@ const JobsAnalyticsPage: React.FC = () => {
                                             }}
                                         />
                                         <Legend />
-                                        <Bar yAxisId="left" dataKey="jobs" fill="#3b82f6" name="Jobs Posted" radius={[4, 4, 0, 0]} />
-                                        <Line yAxisId="left" type="monotone" dataKey="applications" stroke="#8b5cf6" name="Applications" strokeWidth={2} />
-                                        <Line yAxisId="right" type="monotone" dataKey="hires" stroke="#22c55e" name="Hires" strokeWidth={2} />
+                                        <Bar yAxisId="left" dataKey="jobs" fill="#3b82f6" name="مشاغل ثبت شده" radius={[4, 4, 0, 0]} />
+                                        <Line yAxisId="left" type="monotone" dataKey="applications" stroke="#8b5cf6" name="درخواست‌ها" strokeWidth={2} />
+                                        <Line yAxisId="right" type="monotone" dataKey="hires" stroke="#22c55e" name="استخدام‌ها" strokeWidth={2} />
                                     </ComposedChart>
                                 </ResponsiveContainer>
                             </div>
@@ -370,34 +375,34 @@ const JobsAnalyticsPage: React.FC = () => {
                         {/* Performance Metrics */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Performance Metrics</CardTitle>
-                                <CardDescription>Key performance indicators</CardDescription>
+                                <CardTitle className="text-base">معیارهای عملکرد</CardTitle>
+                                <CardDescription>شاخص‌های کلیدی عملکرد</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
                                     <div className="flex justify-between text-sm mb-1">
-                                        <span className="text-gray-600 dark:text-gray-400">Conversion Rate</span>
+                                        <span className="text-gray-600 dark:text-gray-400">نرخ تبدیل</span>
                                         <span className="font-semibold">{analytics.performance.conversionRate}%</span>
                                     </div>
                                     <ProgressBar value={analytics.performance.conversionRate} max={100} className="h-2" color="blue" />
                                 </div>
                                 <div>
                                     <div className="flex justify-between text-sm mb-1">
-                                        <span className="text-gray-600 dark:text-gray-400">Shortlist Rate</span>
+                                        <span className="text-gray-600 dark:text-gray-400">نرخ انتخاب اولیه</span>
                                         <span className="font-semibold">{analytics.performance.shortlistRate}%</span>
                                     </div>
                                     <ProgressBar value={analytics.performance.shortlistRate} max={100} className="h-2" color="purple" />
                                 </div>
                                 <div>
                                     <div className="flex justify-between text-sm mb-1">
-                                        <span className="text-gray-600 dark:text-gray-400">Views per Job</span>
+                                        <span className="text-gray-600 dark:text-gray-400">بازدید به ازای هر شغل</span>
                                         <span className="font-semibold">{analytics.performance.viewsPerJob}</span>
                                     </div>
                                     <ProgressBar value={(analytics.performance.viewsPerJob / 100) * 100} max={100} className="h-2" color="green" />
                                 </div>
                                 <div>
                                     <div className="flex justify-between text-sm mb-1">
-                                        <span className="text-gray-600 dark:text-gray-400">Time to Hire (days)</span>
+                                        <span className="text-gray-600 dark:text-gray-400">زمان تا استخدام (روز)</span>
                                         <span className="font-semibold">{analytics.performance.timeToHire}</span>
                                     </div>
                                     <ProgressBar value={(1 - analytics.performance.timeToHire / 30) * 100} max={100} className="h-2" color="blue" />
@@ -408,8 +413,8 @@ const JobsAnalyticsPage: React.FC = () => {
                         {/* Top Performing Jobs */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Top Performing Jobs</CardTitle>
-                                <CardDescription>Highest performing job postings</CardDescription>
+                                <CardTitle className="text-base">مشاغل برتر</CardTitle>
+                                <CardDescription>آگهی‌های شغلی با بهترین عملکرد</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
@@ -419,7 +424,7 @@ const JobsAnalyticsPage: React.FC = () => {
                                                 {index + 1}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate text-right">
                                                     {job.title}
                                                 </p>
                                                 <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
@@ -437,7 +442,7 @@ const JobsAnalyticsPage: React.FC = () => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <Badge variant="success" size="sm">Top</Badge>
+                                            <Badge variant="success" size="sm">برتر</Badge>
                                         </div>
                                     ))}
                                 </div>
@@ -455,9 +460,9 @@ const JobsAnalyticsPage: React.FC = () => {
                             <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">Quick Tip</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">نکته سریع</p>
                             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                Jobs with detailed descriptions get 45% more applications.
+                                مشاغل با توضیحات دقیق ۴۵٪ درخواست بیشتری دریافت می‌کنند.
                             </p>
                         </div>
                     </div>
@@ -468,9 +473,9 @@ const JobsAnalyticsPage: React.FC = () => {
                             <Star className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">Best Time to Post</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">بهترین زمان برای ثبت</p>
                             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                Tuesday and Wednesday mornings have highest application rates.
+                                صبح‌های سه‌شنبه و چهارشنبه بالاترین نرخ درخواست را دارند.
                             </p>
                         </div>
                     </div>
@@ -481,9 +486,9 @@ const JobsAnalyticsPage: React.FC = () => {
                             <Award className="w-5 h-5 text-green-600 dark:text-green-400" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">Top Skill</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">مهارت برتر</p>
                             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                JavaScript is the most in-demand skill in your job postings.
+                                جاوااسکریپت پرتقاضاترین مهارت در آگهی‌های شغلی شماست.
                             </p>
                         </div>
                     </div>

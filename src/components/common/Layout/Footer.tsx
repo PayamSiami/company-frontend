@@ -3,10 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
     Heart,
-    // Github,
-    // Twitter,
-    // Linkedin,
-    // Youtube,
     Shield,
     FileText,
     HelpCircle,
@@ -29,37 +25,30 @@ export const Footer: React.FC<FooterProps> = ({
 
     const footerLinks = {
         product: [
-            { label: 'Features', href: '/features' },
-            { label: 'Pricing', href: '/pricing' },
-            { label: 'Integrations', href: '/integrations' },
-            { label: 'Changelog', href: '/changelog' },
+            { label: 'ویژگی‌ها', href: '/features' },
+            { label: 'قیمت‌گذاری', href: '/pricing' },
+            { label: 'یکپارچه‌سازی', href: '/integrations' },
+            { label: 'تغییرات', href: '/changelog' },
         ],
         company: [
-            { label: 'About', href: '/about' },
-            { label: 'Careers', href: '/careers' },
-            { label: 'Blog', href: '/blog' },
-            { label: 'Press', href: '/press' },
+            { label: 'درباره ما', href: '/about' },
+            { label: 'فرصت‌های شغلی', href: '/careers' },
+            { label: 'وبلاگ', href: '/blog' },
+            { label: 'رسانه', href: '/press' },
         ],
         resources: [
-            { label: 'Documentation', href: '/docs' },
-            { label: 'Help Center', href: '/help' },
-            { label: 'Community', href: '/community' },
-            { label: 'Status', href: '/status' },
+            { label: 'مستندات', href: '/docs' },
+            { label: 'مرکز راهنما', href: '/help' },
+            { label: 'انجمن', href: '/community' },
+            { label: 'وضعیت', href: '/status' },
         ],
         legal: [
-            { label: 'Privacy Policy', href: '/privacy' },
-            { label: 'Terms of Service', href: '/terms' },
-            { label: 'Cookie Policy', href: '/cookies' },
-            { label: 'Security', href: '/security' },
+            { label: 'حریم خصوصی', href: '/privacy' },
+            { label: 'شرایط خدمات', href: '/terms' },
+            { label: 'سیاست کوکی', href: '/cookies' },
+            { label: 'امنیت', href: '/security' },
         ],
     };
-
-    const socialLinks = [
-        // { icon: Github, href: 'https://github.com', label: 'GitHub' },
-        // { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-        // { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-        // { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
-    ];
 
     // Minimal variant - only copyright and legal links
     if (variant === 'minimal') {
@@ -67,22 +56,22 @@ export const Footer: React.FC<FooterProps> = ({
             <footer className={cn(
                 "border-t border-gray-200/50 dark:border-gray-800/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm mt-auto",
                 className
-            )}>
+            )} dir="rtl">
                 <div className="max-w-7xl mx-auto px-4 py-4 md:px-6 lg:px-8">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm">
                         <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                             <Briefcase className="w-4 h-4" />
-                            <span>© {currentYear} JobPortal. All rights reserved.</span>
+                            <span>© {currentYear} JobPortal. تمام حقوق محفوظ است.</span>
                         </div>
                         <div className="flex items-center gap-4">
                             <Link to="/privacy" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                                Privacy
+                                حریم خصوصی
                             </Link>
                             <Link to="/terms" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                                Terms
+                                شرایط
                             </Link>
                             <Link to="/help" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                                Help
+                                راهنما
                             </Link>
                         </div>
                     </div>
@@ -97,27 +86,27 @@ export const Footer: React.FC<FooterProps> = ({
             <footer className={cn(
                 "border-t border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900 mt-auto",
                 className
-            )}>
+            )} dir="rtl">
                 <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 lg:px-8">
                     <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
                         <Link to="/privacy" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                            Privacy Policy
+                            حریم خصوصی
                         </Link>
                         <Link to="/terms" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                            Terms of Service
+                            شرایط خدمات
                         </Link>
                         <Link to="/cookies" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                            Cookie Policy
+                            سیاست کوکی
                         </Link>
                         <Link to="/help" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                            Help Center
+                            مرکز راهنما
                         </Link>
                         <Link to="/status" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                            Status
+                            وضعیت
                         </Link>
                     </div>
                     <div className="text-center text-sm text-gray-400 dark:text-gray-500 mt-4">
-                        © {currentYear} JobPortal. All rights reserved.
+                        © {currentYear} JobPortal. تمام حقوق محفوظ است.
                     </div>
                 </div>
             </footer>
@@ -129,7 +118,7 @@ export const Footer: React.FC<FooterProps> = ({
         <footer className={cn(
             "border-t border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900 mt-auto",
             className
-        )}>
+        )} dir="rtl">
             <div className="max-w-7xl mx-auto px-4 py-12 md:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     {/* Brand */}
@@ -139,31 +128,17 @@ export const Footer: React.FC<FooterProps> = ({
                                 <Briefcase className="w-5 h-5 text-white" />
                             </div>
                             <span className="text-lg font-bold text-gray-900 dark:text-white">JobPortal</span>
-                            <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">Pro</span>
+                            <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">حرفه‌ای</span>
                         </div>
                         <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
-                            The AI-powered hiring platform that helps you find the best talent faster.
+                            پلتفرم استخدام مبتنی بر هوش مصنوعی که به شما کمک می‌کند بهترین استعدادها را سریع‌تر پیدا کنید.
                         </p>
-                        <div className="flex items-center gap-3 mt-4">
-                            {/* {socialLinks.map((social) => (
-                                <a
-                                    key={social.label}
-                                    href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-300 transition-all"
-                                    aria-label={social.label}
-                                >
-                                    <social.icon className="w-4 h-4" />
-                                </a>
-                            ))} */}
-                        </div>
                     </div>
 
                     {/* Links */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:col-span-1 lg:col-span-4">
                         <div>
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Product</h4>
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">محصول</h4>
                             <ul className="space-y-2">
                                 {footerLinks.product.map((link) => (
                                     <li key={link.label}>
@@ -178,7 +153,7 @@ export const Footer: React.FC<FooterProps> = ({
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Company</h4>
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">شرکت</h4>
                             <ul className="space-y-2">
                                 {footerLinks.company.map((link) => (
                                     <li key={link.label}>
@@ -193,7 +168,7 @@ export const Footer: React.FC<FooterProps> = ({
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Resources</h4>
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">منابع</h4>
                             <ul className="space-y-2">
                                 {footerLinks.resources.map((link) => (
                                     <li key={link.label}>
@@ -208,7 +183,7 @@ export const Footer: React.FC<FooterProps> = ({
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Legal</h4>
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">قانونی</h4>
                             <ul className="space-y-2">
                                 {footerLinks.legal.map((link) => (
                                     <li key={link.label}>
@@ -229,9 +204,9 @@ export const Footer: React.FC<FooterProps> = ({
                 <div className="mt-8 pt-6 border-t border-gray-200/50 dark:border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                         <Sparkles className="w-4 h-4 text-blue-500" />
-                        <span>© {currentYear} JobPortal. All rights reserved.</span>
+                        <span>© {currentYear} JobPortal. تمام حقوق محفوظ است.</span>
                         <span className="hidden md:inline">•</span>
-                        <span className="hidden md:inline text-xs">Made with <Heart className="w-3 h-3 text-red-500 inline" /> by JobPortal Team</span>
+                        <span className="hidden md:inline text-xs">ساخته شده با <Heart className="w-3 h-3 text-red-500 inline" /> توسط تیم JobPortal</span>
                     </div>
                     <div className="flex items-center gap-6 text-sm">
                         <Link
@@ -239,26 +214,26 @@ export const Footer: React.FC<FooterProps> = ({
                             className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center gap-1"
                         >
                             <Shield className="w-3.5 h-3.5" />
-                            Privacy
+                            حریم خصوصی
                         </Link>
                         <Link
                             to="/terms"
                             className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center gap-1"
                         >
                             <FileText className="w-3.5 h-3.5" />
-                            Terms
+                            شرایط
                         </Link>
                         <Link
                             to="/help"
                             className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center gap-1"
                         >
                             <HelpCircle className="w-3.5 h-3.5" />
-                            Help
+                            راهنما
                         </Link>
                         <span className="text-gray-300 dark:text-gray-700">|</span>
                         <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
                             <Zap className="w-3 h-3 text-yellow-500" />
-                            v2.4.1
+                            نسخه ۲.۴.۱
                         </span>
                     </div>
                 </div>

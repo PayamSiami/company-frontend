@@ -22,10 +22,8 @@ export type ResumeVisibility =
 export interface RegisterDto {
   email: string;
   password: string;
-  fullName: string;
-  phone?: string;
-  role: "EMPLOYER" | "CANDIDATE";
-  companyName?: string;
+  username: string;
+  role: string;
 }
 
 export interface AuthResponseDto {

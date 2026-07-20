@@ -69,9 +69,9 @@ const JobDetailPage: React.FC = () => {
         if (id) {
             try {
                 await dispatch(publishJob(id)).unwrap();
-                toast.success('Job published successfully!');
+                toast.success('شغل با موفقیت منتشر شد!');
             } catch (error) {
-                toast.error('Failed to publish job');
+                toast.error('انتشار شغل با شکست مواجه شد');
             }
         }
     };
@@ -80,9 +80,9 @@ const JobDetailPage: React.FC = () => {
         if (id) {
             try {
                 await dispatch(closeJob(id)).unwrap();
-                toast.success('Job closed successfully!');
+                toast.success('شغل با موفقیت بسته شد!');
             } catch (error) {
-                toast.error('Failed to close job');
+                toast.error('بستن شغل با شکست مواجه شد');
             }
         }
     };
@@ -91,16 +91,16 @@ const JobDetailPage: React.FC = () => {
         if (id) {
             try {
                 await dispatch(deleteJob(id)).unwrap();
-                toast.success('Job deleted successfully!');
+                toast.success('شغل با موفقیت حذف شد!');
                 navigate('/jobs');
             } catch (error) {
-                toast.error('Failed to delete job');
+                toast.error('حذف شغل با شکست مواجه شد');
             }
         }
     };
 
     const handleDuplicate = () => {
-        toast.success('Job duplicated!');
+        toast.success('شغل کپی شد!');
         navigate('/jobs/create');
     };
 
@@ -110,51 +110,51 @@ const JobDetailPage: React.FC = () => {
 
     const getStatusConfig = (status: string) => {
         const configs: Record<string, { label: string; variant: 'success' | 'gray' | 'danger' | 'warning' | 'info'; icon: any }> = {
-            open: { label: 'Active', variant: 'success', icon: CheckCircle },
-            active: { label: 'Active', variant: 'success', icon: CheckCircle },
-            draft: { label: 'Draft', variant: 'gray', icon: Clock },
-            closed: { label: 'Closed', variant: 'gray', icon: XCircle },
-            expired: { label: 'Expired', variant: 'danger', icon: AlertCircle },
-            filled: { label: 'Filled', variant: 'success', icon: CheckCircle },
-            paused: { label: 'Paused', variant: 'warning', icon: EyeOff },
+            open: { label: 'فعال', variant: 'success', icon: CheckCircle },
+            active: { label: 'فعال', variant: 'success', icon: CheckCircle },
+            draft: { label: 'پیش‌نویس', variant: 'gray', icon: Clock },
+            closed: { label: 'بسته شده', variant: 'gray', icon: XCircle },
+            expired: { label: 'منقضی شده', variant: 'danger', icon: AlertCircle },
+            filled: { label: 'تکمیل شده', variant: 'success', icon: CheckCircle },
+            paused: { label: 'متوقف شده', variant: 'warning', icon: EyeOff },
         };
         return configs[status?.toLowerCase()] || configs.draft;
     };
 
     const getJobTypeLabel = (type: string) => {
         const types: Record<string, string> = {
-            'full-time': 'Full Time',
-            'part-time': 'Part Time',
-            contract: 'Contract',
-            internship: 'Internship',
-            freelance: 'Freelance',
-            remote: 'Remote',
+            'full-time': 'تمام وقت',
+            'part-time': 'پاره وقت',
+            contract: 'قراردادی',
+            internship: 'کارآموزی',
+            freelance: 'آزاد',
+            remote: 'دورکاری',
         };
-        return types[type] || type || 'N/A';
+        return types[type] || type || 'نامشخص';
     };
 
     const getExperienceLevelLabel = (level: string) => {
         const levels: Record<string, string> = {
-            entry: 'Entry Level',
-            mid: 'Mid Level',
-            senior: 'Senior Level',
-            lead: 'Lead / Manager',
+            entry: 'مبتدی',
+            mid: 'متوسط',
+            senior: 'ارشد',
+            lead: 'رهبر تیم / مدیر',
         };
-        return levels[level] || level || 'N/A';
+        return levels[level] || level || 'نامشخص';
     };
 
     const getWorkModeLabel = (mode: string) => {
         const modes: Record<string, string> = {
-            remote: 'Remote',
-            hybrid: 'Hybrid',
-            'on-site': 'On-Site',
+            remote: 'دورکاری',
+            hybrid: 'ترکیبی',
+            'on-site': 'حضوری',
         };
-        return modes[mode] || mode || 'N/A';
+        return modes[mode] || mode || 'نامشخص';
     };
 
     const formatDate = (date: string) => {
-        if (!date) return 'N/A';
-        return new Date(date).toLocaleDateString('en-US', {
+        if (!date) return 'نامشخص';
+        return new Date(date).toLocaleDateString('fa-IR', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -164,10 +164,10 @@ const JobDetailPage: React.FC = () => {
     };
 
     const formatCurrency = (amount: number) => {
-        if (!amount) return 'N/A';
-        return new Intl.NumberFormat('en-US', {
+        if (!amount) return 'نامشخص';
+        return new Intl.NumberFormat('fa-IR', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'IRR',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
         }).format(amount);
@@ -175,31 +175,31 @@ const JobDetailPage: React.FC = () => {
 
     if (isLoading && !selectedJob) {
         return (
-            <div className="flex flex-col items-center justify-center h-64 space-y-4">
+            <div className="flex flex-col items-center justify-center h-64 space-y-4" dir="rtl">
                 <div className="relative">
                     <div className="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
                     <div className="absolute inset-0 flex items-center justify-center">
                         <Briefcase className="w-6 h-6 text-blue-500" />
                     </div>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">Loading job details...</p>
+                <p className="text-gray-500 dark:text-gray-400">در حال بارگذاری جزئیات شغل...</p>
             </div>
         );
     }
 
     if (!selectedJob) {
         return (
-            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50">
+            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50" dir="rtl">
                 <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                     <Briefcase className="h-10 w-10 text-gray-300 dark:text-gray-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Job not found</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">شغل یافت نشد</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                    The job you're looking for doesn't exist or has been removed.
+                    شغلی که به دنبال آن هستید وجود ندارد یا حذف شده است.
                 </p>
                 <Button onClick={handleBack} className="mt-4 gap-2">
                     <ArrowLeft className="h-4 w-4" />
-                    Back to Jobs
+                    بازگشت به مشاغل
                 </Button>
             </div>
         );
@@ -209,7 +209,7 @@ const JobDetailPage: React.FC = () => {
     const StatusIcon = statusConfig.icon;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Page Header */}
             <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
@@ -225,24 +225,24 @@ const JobDetailPage: React.FC = () => {
                             {selectedJob.isActive === false && selectedJob?.status !== 'draft' && (
                                 <Badge variant="gray" className="flex items-center gap-1.5">
                                     <EyeOff className="w-3.5 h-3.5" />
-                                    Inactive
+                                    غیرفعال
                                 </Badge>
                             )}
                         </div>
                         <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
                             <span className="flex items-center gap-1">
                                 <Building2 className="w-4 h-4" />
-                                {selectedJob.company || 'Unknown Company'}
+                                {selectedJob.company || 'شرکت نامشخص'}
                             </span>
                             <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
                             <span className="flex items-center gap-1">
                                 <MapPin className="w-4 h-4" />
-                                {selectedJob.location || 'Location not specified'}
+                                {selectedJob.location || 'موقعیت مشخص نشده'}
                             </span>
                             <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
                             <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                Posted {formatDate(selectedJob.createdAt)}
+                                ثبت شده در {formatDate(selectedJob.createdAt)}
                             </span>
                         </div>
                     </div>
@@ -256,7 +256,7 @@ const JobDetailPage: React.FC = () => {
                             <span className="text-sm font-medium text-gray-900 dark:text-white">
                                 {selectedJob.views}
                             </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">views</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">بازدید</span>
                         </div>
                     )}
 
@@ -267,7 +267,7 @@ const JobDetailPage: React.FC = () => {
                             <span className="text-sm font-medium text-gray-900 dark:text-white">
                                 {selectedJob.applicationCount}
                             </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">applications</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">درخواست</span>
                         </div>
                     )}
 
@@ -278,7 +278,7 @@ const JobDetailPage: React.FC = () => {
                         className="gap-1.5"
                     >
                         <Edit className="w-4 h-4" />
-                        Edit
+                        ویرایش
                     </Button>
 
                     {selectedJob?.status === 'draft' && (
@@ -289,7 +289,7 @@ const JobDetailPage: React.FC = () => {
                             className="gap-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                         >
                             <Send className="w-4 h-4" />
-                            Publish
+                            انتشار
                         </Button>
                     )}
 
@@ -301,7 +301,7 @@ const JobDetailPage: React.FC = () => {
                             className="gap-1.5 text-yellow-600 hover:text-yellow-700 border-yellow-200 hover:border-yellow-300"
                         >
                             <XCircle className="w-4 h-4" />
-                            Close
+                            بستن
                         </Button>
                     )}
 
@@ -314,26 +314,26 @@ const JobDetailPage: React.FC = () => {
                         <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuItem onClick={handleDuplicate} className="gap-2">
                                 <Copy className="w-4 h-4" />
-                                Duplicate
+                                کپی کردن
                             </DropdownMenuItem>
                             <DropdownMenuItem className="gap-2">
                                 <Share2 className="w-4 h-4" />
-                                Share
+                                اشتراک‌گذاری
                             </DropdownMenuItem>
                             <DropdownMenuItem className="gap-2">
                                 <Download className="w-4 h-4" />
-                                Download PDF
+                                دانلود PDF
                             </DropdownMenuItem>
                             <DropdownMenuItem className="gap-2">
                                 <Printer className="w-4 h-4" />
-                                Print
+                                چاپ
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="gap-2 text-red-600"
                                 onClick={() => setShowDeleteConfirm(true)}
                             >
                                 <Trash2 className="w-4 h-4" />
-                                Delete
+                                حذف
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -346,7 +346,7 @@ const JobDetailPage: React.FC = () => {
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Job Type</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">نوع شغل</p>
                                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                                     {getJobTypeLabel(selectedJob.jobType)}
                                 </p>
@@ -359,7 +359,7 @@ const JobDetailPage: React.FC = () => {
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Experience</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">سطح تجربه</p>
                                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                                     {getExperienceLevelLabel(selectedJob.experienceLevel)}
                                 </p>
@@ -372,7 +372,7 @@ const JobDetailPage: React.FC = () => {
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Work Mode</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">نوع همکاری</p>
                                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                                     {getWorkModeLabel(selectedJob.workMode)}
                                 </p>
@@ -385,7 +385,7 @@ const JobDetailPage: React.FC = () => {
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Openings</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">تعداد موقعیت</p>
                                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                                     {selectedJob.openings || 1}
                                 </p>
@@ -405,12 +405,12 @@ const JobDetailPage: React.FC = () => {
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2">
                                 <FileText className="w-4 h-4 text-gray-400" />
-                                Job Description
+                                شرح شغل
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
-                                {selectedJob.description || 'No description provided.'}
+                            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed text-right">
+                                {selectedJob.description || 'شرحی ارائه نشده است.'}
                             </p>
                         </CardContent>
                     </Card>
@@ -421,7 +421,7 @@ const JobDetailPage: React.FC = () => {
                             <CardHeader>
                                 <CardTitle className="text-base flex items-center gap-2">
                                     <List className="w-4 h-4 text-gray-400" />
-                                    Requirements
+                                    الزامات
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -432,7 +432,7 @@ const JobDetailPage: React.FC = () => {
                                         .map((reqLine: string, index: number) => (
                                             <div key={index} className="flex items-start gap-2 text-sm">
                                                 <span className="text-blue-500 mt-0.5 shrink-0">•</span>
-                                                <span className="text-gray-700 dark:text-gray-300">
+                                                <span className="text-gray-700 dark:text-gray-300 text-right">
                                                     {reqLine.replace(/^[•\-\s*]+/, '').trim()}
                                                 </span>
                                             </div>
@@ -442,14 +442,13 @@ const JobDetailPage: React.FC = () => {
                         </Card>
                     )}
 
-
                     {/* Responsibilities */}
                     {selectedJob.responsibilities && (
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-base flex items-center gap-2">
                                     <Lightbulb className="w-4 h-4 text-gray-400" />
-                                    Responsibilities
+                                    مسئولیت‌ها
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -460,7 +459,7 @@ const JobDetailPage: React.FC = () => {
                                         .map((respLine: string, index: number) => (
                                             <div key={index} className="flex items-start gap-2 text-sm">
                                                 <span className="text-purple-500 mt-0.5 shrink-0">•</span>
-                                                <span className="text-gray-700 dark:text-gray-300">
+                                                <span className="text-gray-700 dark:text-gray-300 text-right">
                                                     {respLine.replace(/^[•\-\s*]+/, '').trim()}
                                                 </span>
                                             </div>
@@ -476,7 +475,7 @@ const JobDetailPage: React.FC = () => {
                             <CardHeader>
                                 <CardTitle className="text-base flex items-center gap-2">
                                     <Award className="w-4 h-4 text-gray-400" />
-                                    Benefits
+                                    مزایا
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -487,7 +486,7 @@ const JobDetailPage: React.FC = () => {
                                         .map((benefitLine: string, index: number) => (
                                             <div key={index} className="flex items-start gap-2 text-sm">
                                                 <span className="text-green-500 mt-0.5 flex-shrink-0">•</span>
-                                                <span className="text-gray-700 dark:text-gray-300">
+                                                <span className="text-gray-700 dark:text-gray-300 text-right">
                                                     {benefitLine.replace(/^[•\-\s*]+/, '').trim()}
                                                 </span>
                                             </div>
@@ -505,37 +504,37 @@ const JobDetailPage: React.FC = () => {
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2">
                                 <Info className="w-4 h-4 text-gray-400" />
-                                Job Information
+                                اطلاعات شغل
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3 text-sm">
                             <div className="flex justify-between">
-                                <span className="text-gray-500 dark:text-gray-400">Job Type</span>
+                                <span className="text-gray-500 dark:text-gray-400">نوع شغل</span>
                                 <span className="font-medium text-gray-900 dark:text-white">
                                     {getJobTypeLabel(selectedJob.jobType)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-gray-500 dark:text-gray-400">Work Mode</span>
+                                <span className="text-gray-500 dark:text-gray-400">نوع همکاری</span>
                                 <span className="font-medium text-gray-900 dark:text-white">
                                     {getWorkModeLabel(selectedJob.workMode)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-gray-500 dark:text-gray-400">Experience Level</span>
+                                <span className="text-gray-500 dark:text-gray-400">سطح تجربه</span>
                                 <span className="font-medium text-gray-900 dark:text-white">
                                     {getExperienceLevelLabel(selectedJob.experienceLevel)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-gray-500 dark:text-gray-400">Openings</span>
+                                <span className="text-gray-500 dark:text-gray-400">تعداد موقعیت</span>
                                 <span className="font-medium text-gray-900 dark:text-white">
                                     {selectedJob.openings || 1}
                                 </span>
                             </div>
                             {selectedJob.applicationDeadline && (
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">Deadline</span>
+                                    <span className="text-gray-500 dark:text-gray-400">مهلت ثبت</span>
                                     <span className="font-medium text-gray-900 dark:text-white">
                                         {formatDate(selectedJob?.applicationDeadline)}
                                     </span>
@@ -543,21 +542,21 @@ const JobDetailPage: React.FC = () => {
                             )}
                             {selectedJob.expiresAt && (
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">Expires</span>
+                                    <span className="text-gray-500 dark:text-gray-400">انقضا</span>
                                     <span className="font-medium text-gray-900 dark:text-white">
                                         {formatDate(selectedJob?.expiresAt)}
                                     </span>
                                 </div>
                             )}
                             <div className="flex justify-between pt-2 border-t border-gray-100 dark:border-gray-800">
-                                <span className="text-gray-500 dark:text-gray-400">Created</span>
+                                <span className="text-gray-500 dark:text-gray-400">تاریخ ایجاد</span>
                                 <span className="font-medium text-gray-900 dark:text-white">
                                     {formatDate(selectedJob?.createdAt)}
                                 </span>
                             </div>
                             {selectedJob.updatedAt && selectedJob.updatedAt !== selectedJob.createdAt && (
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">Updated</span>
+                                    <span className="text-gray-500 dark:text-gray-400">آخرین بروزرسانی</span>
                                     <span className="font-medium text-gray-900 dark:text-white">
                                         {formatDate(selectedJob?.updatedAt)}
                                     </span>
@@ -572,7 +571,7 @@ const JobDetailPage: React.FC = () => {
                             <CardHeader>
                                 <CardTitle className="text-base flex items-center gap-2">
                                     <DollarSign className="w-4 h-4 text-gray-400" />
-                                    Salary Range
+                                    محدوده حقوق
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -580,7 +579,7 @@ const JobDetailPage: React.FC = () => {
                                     {formatCurrency(selectedJob.minSalary || 0)} - {formatCurrency(selectedJob.maxSalary || 0)}
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                    Annual salary range
+                                    محدوده حقوق سالانه
                                 </p>
                             </CardContent>
                         </Card>
@@ -592,7 +591,7 @@ const JobDetailPage: React.FC = () => {
                             <CardHeader>
                                 <CardTitle className="text-base flex items-center gap-2">
                                     <Star className="w-4 h-4 text-gray-400" />
-                                    Skills
+                                    مهارت‌ها
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -613,7 +612,7 @@ const JobDetailPage: React.FC = () => {
                             <CardHeader>
                                 <CardTitle className="text-base flex items-center gap-2">
                                     <Tag className="w-4 h-4 text-gray-400" />
-                                    Tags
+                                    برچسب‌ها
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -638,18 +637,18 @@ const JobDetailPage: React.FC = () => {
                             <div className="p-2 rounded-xl bg-red-100 dark:bg-red-900/30">
                                 <AlertCircle className="h-6 w-6" />
                             </div>
-                            <h3 className="text-lg font-semibold">Delete Job</h3>
+                            <h3 className="text-lg font-semibold">حذف شغل</h3>
                         </div>
-                        <p className="text-left text-gray-600 dark:text-gray-400 mb-4">
-                            Are you sure you want to delete "<span className="font-medium text-gray-900 dark:text-white">{selectedJob.title}</span>"?
-                            This action cannot be undone. All applications associated with this job will also be removed.
+                        <p className="text-right text-gray-600 dark:text-gray-400 mb-4">
+                            آیا مطمئن هستید که می‌خواهید "<span className="font-medium text-gray-900 dark:text-white">{selectedJob.title}</span>" را حذف کنید؟
+                            این عمل قابل بازگشت نیست. تمام درخواست‌های مرتبط با این شغل نیز حذف خواهند شد.
                         </p>
                         <div className="flex justify-end gap-3">
                             <Button
                                 variant="outline"
                                 onClick={() => setShowDeleteConfirm(false)}
                             >
-                                Cancel
+                                انصراف
                             </Button>
                             <Button
                                 variant="danger"
@@ -657,7 +656,7 @@ const JobDetailPage: React.FC = () => {
                                 className="gap-2"
                             >
                                 <Trash2 className="h-4 w-4" />
-                                Delete Job
+                                حذف شغل
                             </Button>
                         </div>
                     </div>

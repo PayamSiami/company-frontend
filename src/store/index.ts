@@ -5,10 +5,11 @@ import dashboardReducer from "./slices/dashboard.slice";
 import applicationsReducer from "./slices/applications.slice";
 import jobsReducer from "./slices/jobs.slice";
 import companyReducer from "./slices/company.slice";
-// ✅ Import the new slices
 import candidatesReducer from "./slices/candidates.slice";
 import aiReducer from "./slices/ai.slice";
 import notificationsReducer from "./slices/notifications.slice";
+import analyticsReducer from "./slices/analytics.slice";
+import teamReducer from "./slices/team.slice";
 import { NODE_ENV } from "../config/env";
 
 export const store = configureStore({
@@ -21,6 +22,8 @@ export const store = configureStore({
     candidates: candidatesReducer,
     ai: aiReducer,
     notifications: notificationsReducer,
+    analytics: analyticsReducer,
+    team: teamReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

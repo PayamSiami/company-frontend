@@ -29,36 +29,36 @@ interface DashboardChartsProps {
 
 // Mock data
 const mockApplicationData: ChartDataPoint[] = [
-    { label: 'Mon', value: 12, secondaryValue: 3 },
-    { label: 'Tue', value: 18, secondaryValue: 5 },
-    { label: 'Wed', value: 15, secondaryValue: 4 },
-    { label: 'Thu', value: 22, secondaryValue: 7 },
-    { label: 'Fri', value: 28, secondaryValue: 9 },
-    { label: 'Sat', value: 14, secondaryValue: 4 },
-    { label: 'Sun', value: 8, secondaryValue: 2 },
+    { label: 'دوشنبه', value: 12, secondaryValue: 3 },
+    { label: 'سه‌شنبه', value: 18, secondaryValue: 5 },
+    { label: 'چهارشنبه', value: 15, secondaryValue: 4 },
+    { label: 'پنج‌شنبه', value: 22, secondaryValue: 7 },
+    { label: 'جمعه', value: 28, secondaryValue: 9 },
+    { label: 'شنبه', value: 14, secondaryValue: 4 },
+    { label: 'یکشنبه', value: 8, secondaryValue: 2 },
 ];
 
 const mockJobData: ChartDataPoint[] = [
-    { label: 'Jan', value: 5, secondaryValue: 2 },
-    { label: 'Feb', value: 8, secondaryValue: 4 },
-    { label: 'Mar', value: 12, secondaryValue: 6 },
-    { label: 'Apr', value: 10, secondaryValue: 5 },
-    { label: 'May', value: 15, secondaryValue: 8 },
-    { label: 'Jun', value: 20, secondaryValue: 10 },
-    { label: 'Jul', value: 18, secondaryValue: 9 },
-    { label: 'Aug', value: 22, secondaryValue: 11 },
-    { label: 'Sep', value: 25, secondaryValue: 13 },
-    { label: 'Oct', value: 20, secondaryValue: 10 },
-    { label: 'Nov', value: 28, secondaryValue: 14 },
-    { label: 'Dec', value: 32, secondaryValue: 16 },
+    { label: 'فروردین', value: 5, secondaryValue: 2 },
+    { label: 'اردیبهشت', value: 8, secondaryValue: 4 },
+    { label: 'خرداد', value: 12, secondaryValue: 6 },
+    { label: 'تیر', value: 10, secondaryValue: 5 },
+    { label: 'مرداد', value: 15, secondaryValue: 8 },
+    { label: 'شهریور', value: 20, secondaryValue: 10 },
+    { label: 'مهر', value: 18, secondaryValue: 9 },
+    { label: 'آبان', value: 22, secondaryValue: 11 },
+    { label: 'آذر', value: 25, secondaryValue: 13 },
+    { label: 'دی', value: 20, secondaryValue: 10 },
+    { label: 'بهمن', value: 28, secondaryValue: 14 },
+    { label: 'اسفند', value: 32, secondaryValue: 16 },
 ];
 
 const mockScoreData: ChartDataPoint[] = [
-    { label: '0-20%', value: 12, color: 'bg-red-500' },
-    { label: '20-40%', value: 18, color: 'bg-orange-500' },
-    { label: '40-60%', value: 25, color: 'bg-yellow-500' },
-    { label: '60-80%', value: 30, color: 'bg-blue-500' },
-    { label: '80-100%', value: 15, color: 'bg-green-500' },
+    { label: '۰-۲۰٪', value: 12, color: 'bg-red-500' },
+    { label: '۲۰-۴۰٪', value: 18, color: 'bg-orange-500' },
+    { label: '۴۰-۶۰٪', value: 25, color: 'bg-yellow-500' },
+    { label: '۶۰-۸۰٪', value: 30, color: 'bg-blue-500' },
+    { label: '۸۰-۱۰۰٪', value: 15, color: 'bg-green-500' },
 ];
 
 // BarChart Component
@@ -80,7 +80,7 @@ const BarChart: React.FC<{
         const maxValue = Math.max(...data.map(d => d.value), ...data.map(d => d.secondaryValue || 0));
 
         return (
-            <div className="space-y-3">
+            <div className="space-y-3" dir="rtl">
                 {title && (
                     <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{title}</p>
@@ -88,13 +88,13 @@ const BarChart: React.FC<{
                             {showSecondary && (
                                 <span className="flex items-center gap-1">
                                     <span className="w-2 h-2 rounded-full bg-blue-500" />
-                                    Applications
+                                    درخواست‌ها
                                 </span>
                             )}
                             {showSecondary && (
                                 <span className="flex items-center gap-1">
                                     <span className="w-2 h-2 rounded-full bg-purple-400" />
-                                    Hires
+                                    استخدام‌ها
                                 </span>
                             )}
                         </div>
@@ -133,7 +133,7 @@ const BarChart: React.FC<{
                                     {/* Tooltip */}
                                     <div className="absolute -top-8 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
                                         {item.label}: {item.value}
-                                        {item.secondaryValue !== undefined && ` (${item.secondaryValue} hires)`}
+                                        {item.secondaryValue !== undefined && ` (${item.secondaryValue} استخدام)`}
                                     </div>
                                 </div>
                                 <span className="text-[10px] text-gray-400 dark:text-gray-500">
@@ -156,10 +156,10 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
     const [activeTab, setActiveTab] = useState<'applications' | 'jobs' | 'scores'>('applications');
 
     const timeRanges = [
-        { value: '7d', label: '7D' },
-        { value: '30d', label: '30D' },
-        { value: '90d', label: '90D' },
-        { value: '1y', label: '1Y' },
+        { value: '7d', label: '۷ روز' },
+        { value: '30d', label: '۳۰ روز' },
+        { value: '90d', label: '۹۰ روز' },
+        { value: '1y', label: '۱ سال' },
     ];
 
     const getChartData = () => {
@@ -178,13 +178,13 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
     const getChartTitle = () => {
         switch (activeTab) {
             case 'applications':
-                return 'Applications Overview';
+                return 'نمای کلی درخواست‌ها';
             case 'jobs':
-                return 'Job Postings Overview';
+                return 'نمای کلی آگهی‌های شغلی';
             case 'scores':
-                return 'AI Score Distribution';
+                return 'توزیع امتیازات هوش مصنوعی';
             default:
-                return 'Applications Overview';
+                return 'نمای کلی درخواست‌ها';
         }
     };
 
@@ -206,7 +206,7 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
     const chartConfig = getChartConfig();
 
     return (
-        <div className={cn("space-y-4", className)}>
+        <div className={cn("space-y-4", className)} dir="rtl">
             {/* Chart Controls */}
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
@@ -222,7 +222,9 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
                                         : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                                 )}
                             >
-                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                {tab === 'applications' ? 'درخواست‌ها' :
+                                    tab === 'jobs' ? 'مشاغل' :
+                                    'امتیازات'}
                             </button>
                         ))}
                     </div>
@@ -273,32 +275,32 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
                 <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                     <span className="flex items-center gap-1">
                         <TrendingUp className="w-3.5 h-3.5 text-green-500" />
-                        Total: {chartData.reduce((sum, d) => sum + d.value, 0)}
+                        مجموع: {chartData.reduce((sum, d) => sum + d.value, 0)}
                     </span>
                     {activeTab === 'applications' && (
                         <span className="flex items-center gap-1">
                             <Users className="w-3.5 h-3.5 text-blue-500" />
-                            Avg: {Math.round(chartData.reduce((sum, d) => sum + d.value, 0) / chartData.length)}
+                            میانگین: {Math.round(chartData.reduce((sum, d) => sum + d.value, 0) / chartData.length)}
                         </span>
                     )}
                     {activeTab === 'jobs' && (
                         <span className="flex items-center gap-1">
                             <Briefcase className="w-3.5 h-3.5 text-green-500" />
-                            Total Jobs: {chartData.reduce((sum, d) => sum + d.value, 0)}
+                            کل مشاغل: {chartData.reduce((sum, d) => sum + d.value, 0)}
                         </span>
                     )}
                     {activeTab === 'scores' && (
                         <span className="flex items-center gap-1">
                             <BarChart3 className="w-3.5 h-3.5 text-purple-500" />
-                            Distribution: {chartData.length} ranges
+                            توزیع: {chartData.length} بازه
                         </span>
                     )}
                 </div>
                 <Badge variant="gray" size="sm" className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
-                    {timeRange === '7d' ? 'Last 7 days' :
-                        timeRange === '30d' ? 'Last 30 days' :
-                            timeRange === '90d' ? 'Last 90 days' : 'Last year'}
+                    {timeRange === '7d' ? '۷ روز گذشته' :
+                        timeRange === '30d' ? '۳۰ روز گذشته' :
+                            timeRange === '90d' ? '۹۰ روز گذشته' : 'سال گذشته'}
                 </Badge>
             </div>
         </div>

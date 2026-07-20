@@ -58,7 +58,15 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
   };
 
   const getStatusLabel = (status: string) => {
-    return status?.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+    const labels: Record<string, string> = {
+      'PENDING': 'در انتظار',
+      'REVIEWING': 'در حال بررسی',
+      'SHORTLISTED': 'انتخاب شده',
+      'REJECTED': 'رد شده',
+      'INTERVIEW_SCHEDULED': 'مصاحبه برنامه‌ریزی شده',
+      'HIRED': 'استخدام شده',
+    };
+    return labels[status] || status?.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   };
 
   const toggleSection = (section: string) => {
@@ -72,7 +80,8 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
   const isSectionExpanded = (section: string) => expandedSections.includes(section);
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('en-US', {
+    if (!date) return 'نامشخص';
+    return new Date(date).toLocaleDateString('fa-IR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -83,10 +92,8 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
 
   const StatusIcon = getStatusIcon(application.status);
 
-  console.log(application)
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Header Card */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
         <div className="p-6 md:p-8">
@@ -107,7 +114,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
 
               <div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {application?.userId?.username || 'Unknown Candidate'}
+                  {application?.userId?.username || 'داوطلب ناشناس'}
                 </h2>
                 <div className="flex flex-wrap items-center gap-3 mt-1">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -115,7 +122,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                   </span>
                   <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Applied {formatDate(application.createdAt)}
+                    ثبت درخواست {formatDate(application.createdAt)}
                   </span>
                 </div>
               </div>
@@ -142,9 +149,9 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                 <Briefcase className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Job Title</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">عنوان شغل</p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {application.jobTitle}
+                  {application.jobTitle || 'نامشخص'}
                 </p>
               </div>
             </div>
@@ -155,9 +162,9 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                   <DollarSign className="w-4 h-4 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Expected Salary</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">حقوق مورد انتظار</p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    ${application.expectedSalary.toLocaleString()}
+                    {application.expectedSalary.toLocaleString('fa-IR')} تومان
                   </p>
                 </div>
               </div>
@@ -169,9 +176,9 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                   <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Available From</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">تاریخ آمادگی</p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {new Date(application.availableFrom).toLocaleDateString()}
+                    {formatDate(application.availableFrom)}
                   </p>
                 </div>
               </div>
@@ -182,7 +189,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                 <Zap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">AI Score</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">امتیاز هوش مصنوعی</p>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">
                     {application.aiScore || 0}%
@@ -215,12 +222,12 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                 <MessageSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Cover Letter
+                نامه پوششی
               </h3>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-400">
-                {application.coverLetter.split(' ').length} words
+                {application.coverLetter.split(' ').length} کلمه
               </span>
               {isSectionExpanded('coverLetter') ? (
                 <ChevronUp className="w-5 h-5 text-gray-400" />
@@ -232,7 +239,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
           {isSectionExpanded('coverLetter') && (
             <div className="px-6 pb-6">
               <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed text-right">
                   {application.coverLetter}
                 </p>
               </div>
@@ -252,19 +259,19 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
               <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-900/20">
                 <Star className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="text-left">
+              <div className="text-right">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                  AI Screening Analysis
+                  تحلیل غربالگری هوش مصنوعی
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Powered by Gemini AI
+                  مبتنی بر Gemini AI
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Badge variant="info" size="sm" className="hidden sm:flex">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                {application.aiScreeningData.overallMatch}% Match
+                <TrendingUp className="w-3 h-3 ml-1" />
+                {application.aiScreeningData.overallMatch}% تطابق
               </Badge>
               {isSectionExpanded('screening') ? (
                 <ChevronUp className="w-5 h-5 text-gray-400" />
@@ -279,7 +286,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
               {/* Match Scores Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Skills Match</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">تطابق مهارت‌ها</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
                       {application.aiScreeningData.skillMatch}%
@@ -293,7 +300,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                   </div>
                 </div>
                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Experience Match</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">تطابق تجربه</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
                       {application.aiScreeningData.experienceMatch}%
@@ -307,7 +314,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                   </div>
                 </div>
                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Education Match</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">تطابق تحصیلات</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
                       {application.aiScreeningData.educationMatch}%
@@ -321,7 +328,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                   </div>
                 </div>
                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Overall Match</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">تطابق کلی</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
                       {application.aiScreeningData.overallMatch}%
@@ -343,7 +350,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                     <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
-                        AI Suggestions
+                        پیشنهادات هوش مصنوعی
                       </p>
                       <ul className="mt-1 space-y-1">
                         {application.aiScreeningData.suggestions.map((suggestion: string, idx: number) => (
@@ -362,11 +369,11 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
               <div className="flex flex-wrap gap-3 pt-2">
                 <Button variant="primary" size="sm" className="gap-2">
                   <Download className="w-4 h-4" />
-                  Download Report
+                  دانلود گزارش
                 </Button>
                 <Button variant="outline" size="sm" className="gap-2">
                   <ExternalLink className="w-4 h-4" />
-                  View Full Analysis
+                  مشاهده تحلیل کامل
                 </Button>
               </div>
             </div>
@@ -386,12 +393,12 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                 <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </div>
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Status History
+                تاریخچه وضعیت
               </h3>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-400">
-                {application.statusHistory.length} updates
+                {application.statusHistory.length} بروزرسانی
               </span>
               {isSectionExpanded('history') ? (
                 <ChevronUp className="w-5 h-5 text-gray-400" />
@@ -405,7 +412,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
             <div className="px-6 pb-6">
               <div className="relative">
                 {/* Timeline line */}
-                <div className="absolute left-6 top-3 bottom-3 w-0.5 bg-gray-200 dark:bg-gray-700" />
+                <div className="absolute right-6 top-3 bottom-3 w-0.5 bg-gray-200 dark:bg-gray-700" />
 
                 <div className="space-y-4">
                   {application.statusHistory.map((entry: any, idx: number) => {
@@ -427,7 +434,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
                             </span>
                           </div>
                           {entry.notes && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-right">
                               {entry.notes}
                             </p>
                           )}
@@ -446,19 +453,19 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
       <div className="flex flex-wrap gap-3">
         <Button className="gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
           <Mail className="w-4 h-4" />
-          Contact Candidate
+          تماس با داوطلب
         </Button>
         <Button variant="outline" className="gap-2">
           <Calendar className="w-4 h-4" />
-          Schedule Interview
+          برنامه‌ریزی مصاحبه
         </Button>
         <Button variant="outline" className="gap-2">
           <FileText className="w-4 h-4" />
-          View Resume
+          مشاهده رزومه
         </Button>
         <Button variant="outline" className="gap-2">
           <Download className="w-4 h-4" />
-          Download Resume
+          دانلود رزومه
         </Button>
       </div>
     </div>

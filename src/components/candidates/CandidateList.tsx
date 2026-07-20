@@ -76,46 +76,46 @@ export const CandidateList: React.FC<CandidateListProps> = ({
 
     if (loading && candidates.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center h-64 space-y-4">
+            <div className="flex flex-col items-center justify-center h-64 space-y-4" dir="rtl">
                 <Spinner size="lg" />
-                <p className="text-gray-500 dark:text-gray-400">Loading candidates...</p>
+                <p className="text-gray-500 dark:text-gray-400">در حال بارگذاری داوطلبان...</p>
             </div>
         );
     }
 
     if (candidates.length === 0) {
         return (
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 p-12 text-center">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 p-12 text-center" dir="rtl">
                 <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
                     <Users className="h-10 w-10 text-blue-500" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No Candidates Found</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">هیچ داوطلبی یافت نشد</h3>
                 <p className="text-gray-500 dark:text-gray-400 mt-1 max-w-sm mx-auto">
-                    Start posting jobs to attract qualified candidates to your company.
+                    برای جذب داوطلبان واجد شرایط به شرکت خود، ثبت آگهی شغلی را شروع کنید.
                 </p>
                 <Button className="mt-4 gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                     <UserPlus className="w-4 h-4" />
-                    Post a Job
+                    ثبت آگهی شغلی
                 </Button>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Header with controls */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         <Users className="w-5 h-5 text-gray-400" />
                         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {filteredCandidates.length} candidates
+                            {filteredCandidates.length} داوطلب
                         </span>
                     </div>
                     {shortlistedCount > 0 && (
                         <Badge variant="success" className="flex items-center gap-1">
                             <Star className="w-3 h-3 fill-current" />
-                            {shortlistedCount} shortlisted
+                            {shortlistedCount} انتخاب شده
                         </Badge>
                     )}
                 </div>
@@ -131,7 +131,7 @@ export const CandidateList: React.FC<CandidateListProps> = ({
                                     ? "bg-white dark:bg-gray-700 shadow-sm"
                                     : "hover:bg-white/50 dark:hover:bg-gray-700/50"
                             )}
-                            aria-label="Grid view"
+                            aria-label="نمایش شبکه‌ای"
                         >
                             <LayoutGrid className="w-4 h-4" />
                         </button>
@@ -143,7 +143,7 @@ export const CandidateList: React.FC<CandidateListProps> = ({
                                     ? "bg-white dark:bg-gray-700 shadow-sm"
                                     : "hover:bg-white/50 dark:hover:bg-gray-700/50"
                             )}
-                            aria-label="List view"
+                            aria-label="نمایش لیستی"
                         >
                             <ListIcon className="w-4 h-4" />
                         </button>
@@ -155,15 +155,15 @@ export const CandidateList: React.FC<CandidateListProps> = ({
                         onChange={(e) => setSortBy(e.target.value as any)}
                         className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="newest">Newest</option>
-                        <option value="oldest">Oldest</option>
-                        <option value="name">Name</option>
-                        <option value="match">Match Score</option>
+                        <option value="newest">جدیدترین</option>
+                        <option value="oldest">قدیمی‌ترین</option>
+                        <option value="name">نام</option>
+                        <option value="match">امتیاز تطابق</option>
                     </select>
 
                     <Button variant="outline" size="sm" className="gap-1.5">
                         <Download className="w-4 h-4" />
-                        <span className="hidden sm:inline">Export</span>
+                        <span className="hidden sm:inline">خروجی</span>
                     </Button>
                 </div>
             </div>
@@ -171,10 +171,10 @@ export const CandidateList: React.FC<CandidateListProps> = ({
             {/* Results count */}
             <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
                 <span>
-                    Showing {filteredCandidates.length > 0 ? startIndex + 1 : 0} - {Math.min(endIndex, filteredCandidates.length)} of {filteredCandidates.length} candidates
+                    نمایش {filteredCandidates.length > 0 ? startIndex + 1 : 0} - {Math.min(endIndex, filteredCandidates.length)} از {filteredCandidates.length} داوطلب
                 </span>
                 <span>
-                    {Math.ceil(filteredCandidates.length / itemsPerPage)} pages
+                    {Math.ceil(filteredCandidates.length / itemsPerPage)} صفحه
                 </span>
             </div>
 
@@ -201,16 +201,16 @@ export const CandidateList: React.FC<CandidateListProps> = ({
             {filteredCandidates.length === 0 && (
                 <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 p-12 text-center">
                     <Search className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No matching candidates</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">هیچ داوطلبی مطابقت ندارد</h3>
                     <p className="text-gray-500 dark:text-gray-400 mt-1">
-                        Try adjusting your search or filters to find more candidates
+                        برای یافتن داوطلبان بیشتر، جستجو یا فیلترهای خود را تنظیم کنید
                     </p>
                     <Button
                         variant="outline"
                         className="mt-4"
                         onClick={() => onSearch?.('')}
                     >
-                        Clear Search
+                        پاک کردن جستجو
                     </Button>
                 </div>
             )}

@@ -6,8 +6,8 @@ import {
   FileText,
   Sparkles,
   Eye,
-  ArrowRight,
-  ChevronRight,
+  ArrowLeft,
+  ChevronLeft,
   Filter,
   UserCheck,
   Target,
@@ -117,15 +117,15 @@ const DashboardPage: React.FC = () => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return 'صبح بخیر';
+    if (hour < 18) return 'عصر بخیر';
+    return 'شب بخیر';
   };
 
   const formatDate = (date: string) => {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('en-US', {
-      month: 'short',
+    if (!date) return 'نامشخص';
+    return new Date(date).toLocaleDateString('fa-IR', {
+      month: 'long',
       day: 'numeric',
       year: 'numeric'
     });
@@ -146,9 +146,9 @@ const DashboardPage: React.FC = () => {
           insights.push({
             id: '1',
             type: 'auto_shortlisted',
-            title: `${screeningData.totalCandidatesScreened} candidates screened today`,
-            description: `Based on AI analysis, ${highMatches.length} candidates match 70%+ of job requirements across ${highMatches.length} positions.`,
-            action: 'View candidates',
+            title: `${screeningData.totalCandidatesScreened} داوطلب امروز غربال شدند`,
+            description: `بر اساس تحلیل هوش مصنوعی، ${highMatches.length} داوطلب حداقل ۷۰٪ با نیازهای شغلی مطابقت دارند.`,
+            action: 'مشاهده داوطلبان',
             actionLink: '/candidates',
             icon: Sparkles,
             color: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800',
@@ -162,9 +162,9 @@ const DashboardPage: React.FC = () => {
         insights.push({
           id: '2',
           type: 'needs_review',
-          title: `${screeningData.pendingScreening.length} candidates need review`,
-          description: `These candidates are pending AI screening. Review them manually to ensure no potential matches are missed.`,
-          action: 'Review candidates',
+          title: `${screeningData.pendingScreening.length} داوطلب نیاز به بررسی دارند`,
+          description: `این داوطلبان در صف بررسی هوش مصنوعی هستند. برای اطمینان از عدم از دست دادن استعدادهای بالقوه، آنها را به صورت دستی بررسی کنید.`,
+          action: 'بررسی داوطلبان',
           actionLink: '/applications',
           icon: UserCheck,
           color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
@@ -181,9 +181,9 @@ const DashboardPage: React.FC = () => {
         insights.push({
           id: '3',
           type: 'suggestion',
-          title: `Suggestion: Review job descriptions`,
-          description: `${lowPerformingJobs.length} job posting${lowPerformingJobs.length > 1 ? 's have' : ' has'} low application rates. Consider adjusting requirements or salary ranges.`,
-          action: 'View jobs',
+          title: `پیشنهاد: بازبینی شرح شغل`,
+          description: `${lowPerformingJobs.length} آگهی شغلی نرخ تطابق پایینی دارند. تنظیم نیازمندی‌ها یا محدوده حقوقی را در نظر بگیرید.`,
+          action: 'مشاهده مشاغل',
           actionLink: '/jobs',
           icon: Target,
           color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800',
@@ -197,10 +197,10 @@ const DashboardPage: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { variant: 'warning' | 'info' | 'success' | 'danger', label: string }> = {
-      pending: { variant: 'warning', label: 'Pending' },
-      reviewing: { variant: 'info', label: 'Reviewing' },
-      shortlisted: { variant: 'success', label: 'Shortlisted' },
-      rejected: { variant: 'danger', label: 'Rejected' },
+      pending: { variant: 'warning', label: 'در انتظار' },
+      reviewing: { variant: 'info', label: 'در حال بررسی' },
+      shortlisted: { variant: 'success', label: 'انتخاب شده' },
+      rejected: { variant: 'danger', label: 'رد شده' },
     };
     return config[status] || config.pending;
   };
@@ -220,8 +220,8 @@ const DashboardPage: React.FC = () => {
       type: app.status === 'shortlisted' ? 'shortlist' :
         app.status === 'interviewing' ? 'interview' :
           app.status === 'hired' ? 'candidate' : 'application',
-      title: `${app.applicantId?.username || 'Candidate'} applied for ${app.jobId?.title || 'position'}`,
-      description: `${app.applicantId?.username || 'Candidate'} - ${app.jobId?.title || 'No job'}`,
+      title: `${app.applicantId?.username || 'داوطلب'} برای ${app.jobId?.title || 'موقعیت شغلی'} درخواست داد`,
+      description: `${app.applicantId?.username || 'داوطلب'} - ${app.jobId?.title || 'بدون شغل'}`,
       timestamp: app.createdAt || app.appliedAt || new Date(),
       status: app.status === 'pending' ? 'pending' :
         app.status === 'shortlisted' ? 'completed' :
@@ -230,7 +230,7 @@ const DashboardPage: React.FC = () => {
               app.status === 'hired' ? 'completed' : undefined,
       link: `/applications/${app._id}`,
       user: {
-        name: app.applicantId?.username || 'Unknown Candidate'
+        name: app.applicantId?.username || 'داوطلب ناشناس'
       }
     }));
   };
@@ -238,7 +238,7 @@ const DashboardPage: React.FC = () => {
   // Loading state
   if (isLoading && !stats) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" dir="rtl">
         {/* Welcome Section Skeleton */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -295,21 +295,21 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Welcome Section - Improved */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Dashboard
+              داشبورد
             </h1>
             <Badge variant="success" size="sm" className="flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              Live
+              زنده
             </Badge>
           </div>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-            {getGreeting()}, {user?.fullName || 'User'}! Here's an overview of your hiring activity.
+            {getGreeting()}، {user?.fullName || 'کاربر'}! در اینجا خلاصه فعالیت‌های استخدامی شما را مشاهده می‌کنید.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -320,7 +320,7 @@ const DashboardPage: React.FC = () => {
             onClick={() => navigate('/jobs/create')}
           >
             <Plus className="w-4 h-4" />
-            Post Job
+            ثبت آگهی شغلی
           </Button>
           <Button
             className="gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
@@ -328,7 +328,7 @@ const DashboardPage: React.FC = () => {
             onClick={() => navigate('/ai/screening')}
           >
             <Sparkles className="w-4 h-4" />
-            AI Insights
+            بینش هوش مصنوعی
           </Button>
         </div>
       </div>
@@ -360,10 +360,10 @@ const DashboardPage: React.FC = () => {
             <div>
               <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <BarChart3 className="w-5 h-5 text-blue-500" />
-                Analytics Overview
+                نمای کلی تحلیلی
               </CardTitle>
               <CardDescription>
-                Track your hiring metrics and trends
+                روندهای استخدامی خود را دنبال کنید
               </CardDescription>
             </div>
             <Button
@@ -373,7 +373,7 @@ const DashboardPage: React.FC = () => {
               onClick={() => navigate('/jobs/analytics')}
             >
               <TrendingUp className="w-4 h-4" />
-              Full Report
+              گزارش کامل
             </Button>
           </div>
         </CardHeader>
@@ -394,14 +394,14 @@ const DashboardPage: React.FC = () => {
                 <div className="p-1.5 rounded-lg bg-linear-to-r from-indigo-500 to-purple-500">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
-                AI Screening Insights
+                بینش‌های هوش مصنوعی
               </CardTitle>
-              <CardDescription>AI-powered insights to optimize your hiring process</CardDescription>
+              <CardDescription>بینش‌های مبتنی بر هوش مصنوعی برای بهینه‌سازی فرآیند استخدام</CardDescription>
             </div>
             <Link to="/ai/screening">
               <Button variant="ghost" size="sm" className="gap-1 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">
-                View All
-                <ChevronRight className="w-4 h-4" />
+                مشاهده همه
+                <ChevronLeft className="w-4 h-4" />
               </Button>
             </Link>
           </CardHeader>
@@ -434,7 +434,7 @@ const DashboardPage: React.FC = () => {
                       <Link to={insight.actionLink || '#'} className="mt-auto">
                         <Button size="sm" variant="ghost" className="px-0 gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700">
                           {insight.action}
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <ArrowLeft className="w-3.5 h-3.5" />
                         </Button>
                       </Link>
                     )}
@@ -455,19 +455,19 @@ const DashboardPage: React.FC = () => {
               <div>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <FileText className="w-5 h-5 text-gray-400" />
-                  Recent Applications
+                  درخواست‌های اخیر
                 </CardTitle>
-                <CardDescription>Latest candidate applications</CardDescription>
+                <CardDescription>آخرین درخواست‌های داوطلبان</CardDescription>
               </div>
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" className="gap-1.5">
                   <Filter className="w-4 h-4" />
-                  Filter
+                  فیلتر
                 </Button>
                 <Link to="/applications">
                   <Button variant="ghost" size="sm" className="gap-1 text-gray-600 dark:text-gray-400">
-                    View all
-                    <ChevronRight className="w-4 h-4" />
+                    مشاهده همه
+                    <ChevronLeft className="w-4 h-4" />
                   </Button>
                 </Link>
               </div>
@@ -480,23 +480,23 @@ const DashboardPage: React.FC = () => {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-gray-100 dark:border-gray-800">
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Candidate
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Job Position
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          AI Score
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Applied
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          داوطلب
                         </th>
                         <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Action
+                          موقعیت شغلی
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          وضعیت
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          امتیاز AI
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          تاریخ درخواست
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          عملیات
                         </th>
                       </tr>
                     </thead>
@@ -511,12 +511,12 @@ const DashboardPage: React.FC = () => {
                                   {app?.applicantId?.username?.charAt(0) || '?'}
                                 </div>
                                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                  {app?.applicantId?.username || 'Unknown'}
+                                  {app?.applicantId?.username || 'ناشناس'}
                                 </span>
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
-                              {app?.jobId?.title || 'N/A'}
+                              {app?.jobId?.title || 'نامشخص'}
                             </td>
                             <td className="px-4 py-3">
                               <Badge variant={statusConfig.variant} size="sm">
@@ -539,7 +539,7 @@ const DashboardPage: React.FC = () => {
                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                               {formatDate(app.createdAt)}
                             </td>
-                            <td className="px-4 py-3 text-right">
+                            <td className="px-4 py-3 text-left">
                               <Link to={`/applications/${app._id}`}>
                                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
                                   <Eye className="w-4 h-4 text-gray-400" />
@@ -557,12 +557,12 @@ const DashboardPage: React.FC = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                     <FileText className="w-8 h-8 text-gray-300 dark:text-gray-600" />
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400">No applications yet</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Start receiving applications by posting your first job</p>
+                  <p className="text-gray-500 dark:text-gray-400">هنوز درخواستی وجود ندارد</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">با ثبت اولین آگهی شغلی، دریافت درخواست‌ها را شروع کنید</p>
                   <Link to="/jobs/create">
                     <Button variant="outline" size="sm" className="mt-4">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Post your first job
+                      <Plus className="w-4 h-4 ml-2" />
+                      ثبت اولین آگهی شغلی
                     </Button>
                   </Link>
                 </div>
@@ -589,8 +589,8 @@ const DashboardPage: React.FC = () => {
                 <Plus className="w-5 h-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Post a Job</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Create new listing</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">ثبت آگهی شغلی</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">ایجاد آگهی جدید</p>
               </div>
             </div>
           </Card>
@@ -602,8 +602,8 @@ const DashboardPage: React.FC = () => {
                 <Users className="w-5 h-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Find Candidates</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Search talent pool</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">جستجوی داوطلبان</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">جستجو در بانک استعدادها</p>
               </div>
             </div>
           </Card>
@@ -615,9 +615,9 @@ const DashboardPage: React.FC = () => {
                 <FileText className="w-5 h-5 text-green-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Review Applications</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">بررسی درخواست‌ها</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {stats?.pendingApplications || 0} pending
+                  {stats?.pendingApplications || 0} در انتظار
                 </p>
               </div>
             </div>
@@ -630,8 +630,8 @@ const DashboardPage: React.FC = () => {
                 <TrendingUp className="w-5 h-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Analytics</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">View reports</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">تحلیل‌ها</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">مشاهده گزارش‌ها</p>
               </div>
             </div>
           </Card>

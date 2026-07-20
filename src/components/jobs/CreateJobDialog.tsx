@@ -84,38 +84,38 @@ const initialFormData: JobFormData = {
 };
 
 const steps = [
-    { label: 'Basic Info', icon: Briefcase },
-    { label: 'Details', icon: Sparkles },
-    { label: 'Requirements', icon: Users },
-    { label: 'Compensation', icon: DollarSign },
+    { label: 'اطلاعات اولیه', icon: Briefcase },
+    { label: 'جزئیات', icon: Sparkles },
+    { label: 'نیازمندی‌ها', icon: Users },
+    { label: 'حقوق و مزایا', icon: DollarSign },
 ];
 
 const jobTypes = [
-    { value: 'full-time', label: 'Full Time' },
-    { value: 'part-time', label: 'Part Time' },
-    { value: 'contract', label: 'Contract' },
-    { value: 'internship', label: 'Internship' },
+    { value: 'full-time', label: 'تمام وقت' },
+    { value: 'part-time', label: 'پاره وقت' },
+    { value: 'contract', label: 'قراردادی' },
+    { value: 'internship', label: 'کارآموزی' },
 ];
 
 const workModes = [
-    { value: 'remote', label: 'Remote' },
-    { value: 'hybrid', label: 'Hybrid' },
-    { value: 'on-site', label: 'On-Site' },
+    { value: 'remote', label: 'دورکاری' },
+    { value: 'hybrid', label: 'ترکیبی' },
+    { value: 'on-site', label: 'حضوری' },
 ];
 
 const experienceLevels = [
-    { value: 'entry', label: 'Entry Level' },
-    { value: 'mid', label: 'Mid-Level' },
-    { value: 'senior', label: 'Senior' },
-    { value: 'lead', label: 'Lead' },
+    { value: 'entry', label: 'مبتدی' },
+    { value: 'mid', label: 'متوسط' },
+    { value: 'senior', label: 'ارشد' },
+    { value: 'lead', label: 'رهبر تیم' },
 ];
 
 const currencies = [
-    { value: 'USD', label: 'USD ($)' },
-    { value: 'EUR', label: 'EUR (€)' },
-    { value: 'GBP', label: 'GBP (£)' },
-    { value: 'CAD', label: 'CAD (C$)' },
-    { value: 'AUD', label: 'AUD (A$)' },
+    { value: 'USD', label: 'دلار ($)' },
+    { value: 'EUR', label: 'یورو (€)' },
+    { value: 'GBP', label: 'پوند (£)' },
+    { value: 'CAD', label: 'دلار کانادا (C$)' },
+    { value: 'AUD', label: 'دلار استرالیا (A$)' },
 ];
 
 export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
@@ -178,17 +178,17 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
         const newErrors: Record<string, string> = {};
 
         if (step === 0) {
-            if (!formData.title.trim()) newErrors.title = 'Job title is required';
-            if (!formData.description.trim()) newErrors.description = 'Job description is required';
+            if (!formData.title.trim()) newErrors.title = 'عنوان شغل الزامی است';
+            if (!formData.description.trim()) newErrors.description = 'شرح شغل الزامی است';
         }
 
         if (step === 1) {
-            if (formData.requirements.length === 0) newErrors.requirements = 'At least one requirement is required';
-            if (formData.responsibilities.length === 0) newErrors.responsibilities = 'At least one responsibility is required';
+            if (!formData.requirements.trim()) newErrors.requirements = 'حداقل یک نیازمندی الزامی است';
+            if (!formData.responsibilities.trim()) newErrors.responsibilities = 'حداقل یک مسئولیت الزامی است';
         }
 
         if (step === 2) {
-            if (formData.openings < 1) newErrors.openings = 'At least 1 opening is required';
+            if (formData.openings < 1) newErrors.openings = 'حداقل ۱ موقعیت الزامی است';
         }
 
         setErrors(newErrors);
@@ -211,13 +211,13 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
         setIsSubmitting(true);
         try {
             await dispatch(createJob(formData)).unwrap();
-            toast.success('Job created successfully!');
+            toast.success('شغل با موفقیت ایجاد شد!');
             onOpenChange(false);
             setFormData(initialFormData);
             setActiveStep(0);
             onSuccess?.();
         } catch (error) {
-            toast.error('Failed to create job');
+            toast.error('ایجاد شغل با شکست مواجه شد');
             console.error('Create job error:', error);
         } finally {
             setIsSubmitting(false);
@@ -235,11 +235,11 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
         <Modal
             isOpen={open}
             onClose={handleClose}
-            title="Post a New Job"
+            title="ثبت آگهی شغلی جدید"
             size="lg"
             className="max-w-3xl"
         >
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6" dir="rtl">
                 {/* Steps */}
                 <div className="flex items-center gap-2">
                     {steps.map((step, index) => (
@@ -257,7 +257,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                 {step.label}
                             </button>
                             {index < steps.length - 1 && (
-                                <span className="text-gray-300 dark:text-gray-600">→</span>
+                                <span className="text-gray-300 dark:text-gray-600">←</span>
                             )}
                         </React.Fragment>
                     ))}
@@ -270,12 +270,12 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                         <div className="space-y-4">
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Job Title *
+                                    عنوان شغل *
                                 </label>
                                 <Input
                                     value={formData.title}
                                     onChange={(e) => handleChange('title', e.target.value)}
-                                    placeholder="e.g., Senior Full Stack Developer"
+                                    placeholder="مثال: توسعه‌دهنده ارشد فول‌استک"
                                     error={!!errors.title}
                                 />
                                 {errors.title && (
@@ -285,19 +285,19 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Job Description *
+                                    شرح شغل *
                                 </label>
                                 <textarea
                                     value={formData.description}
                                     onChange={(e) => handleChange('description', e.target.value)}
                                     rows={4}
                                     className={cn(
-                                        "w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all",
+                                        "w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-right",
                                         errors.description
                                             ? "border-red-500"
                                             : "border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
                                     )}
-                                    placeholder="Describe the job role, team, and company culture..."
+                                    placeholder="نقش شغلی، تیم و فرهنگ شرکت را توضیح دهید..."
                                 />
                                 {errors.description && (
                                     <p className="mt-1 flex text-sm text-red-600">{errors.description}</p>
@@ -307,7 +307,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Job Type
+                                        نوع شغل
                                     </label>
                                     <Select
                                         value={formData.jobType}
@@ -317,7 +317,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                 </div>
                                 <div>
                                     <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Experience Level
+                                        سطح تجربه
                                     </label>
                                     <Select
                                         value={formData.experienceLevel}
@@ -329,7 +329,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Work Mode
+                                    نوع همکاری
                                 </label>
                                 <div className="flex gap-2">
                                     {workModes.map((mode) => (
@@ -356,26 +356,26 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                         <div className="space-y-4">
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Location
+                                    موقعیت مکانی
                                 </label>
                                 <div className="grid grid-cols-1 gap-3">
                                     <Input
                                         value={formData.location}
                                         onChange={(e) => handleChange('location', e.target.value)}
-                                        placeholder="City"
+                                        placeholder="شهر"
                                     />
                                 </div>
                             </div>
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Requirements *
+                                    نیازمندی‌ها *
                                 </label>
                                 <div className="flex gap-2 mb-2">
                                     <Input
                                         value={formData.requirements}
                                         onChange={(e) => handleChange('requirements', e.target.value)}
-                                        placeholder="Add a requirement..."
+                                        placeholder="یک نیازمندی اضافه کنید..."
                                         className="flex-1"
                                     />
                                 </div>
@@ -386,13 +386,13 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Responsibilities *
+                                    مسئولیت‌ها *
                                 </label>
                                 <div className="flex gap-2 mb-2">
                                     <Input
                                         value={formData.responsibilities}
                                         onChange={(e) => handleChange('responsibilities', e.target.value)}
-                                        placeholder="Add a responsibility..."
+                                        placeholder="یک مسئولیت اضافه کنید..."
                                         className="flex-1"
                                     />
                                 </div>
@@ -409,31 +409,31 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Minimum Salary
+                                        حداقل حقوق
                                     </label>
                                     <Input
                                         type="number"
                                         value={formData.salaryRange.min}
                                         onChange={(e) => handleNestedChange('salaryRange', 'min', parseFloat(e.target.value) || 0)}
-                                        placeholder="50000"
+                                        placeholder="۵۰۰۰۰"
                                     />
                                 </div>
                                 <div>
                                     <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Maximum Salary
+                                        حداکثر حقوق
                                     </label>
                                     <Input
                                         type="number"
                                         value={formData.salaryRange.max}
                                         onChange={(e) => handleNestedChange('salaryRange', 'max', parseFloat(e.target.value) || 0)}
-                                        placeholder="90000"
+                                        placeholder="۹۰۰۰۰"
                                     />
                                 </div>
                             </div>
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Currency
+                                    واحد پول
                                 </label>
                                 <Select
                                     value={formData.salaryRange.currency}
@@ -444,7 +444,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Openings *
+                                    تعداد موقعیت‌ها *
                                 </label>
                                 <Input
                                     type="number"
@@ -461,7 +461,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Application Deadline
+                                        مهلت ثبت‌نام
                                     </label>
                                     <Input
                                         type="date"
@@ -471,7 +471,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                 </div>
                                 <div>
                                     <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Expires At
+                                        تاریخ انقضا
                                     </label>
                                     <Input
                                         type="date"
@@ -483,7 +483,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
 
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Benefits
+                                    مزایا
                                 </label>
                                 <div className="flex gap-2 mb-2">
                                     <Input
@@ -493,7 +493,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                             setCurrentInputType('benefit');
                                             setCurrentInput(e.target.value);
                                         }}
-                                        placeholder="Add a benefit..."
+                                        placeholder="یک مزیت اضافه کنید..."
                                         className="flex-1"
                                     />
                                 </div>
@@ -506,7 +506,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                         <div className="space-y-4">
                             <div>
                                 <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Required Skills
+                                    مهارت‌های مورد نیاز
                                 </label>
                                 <div className="flex gap-2 mb-2">
                                     <Input
@@ -516,7 +516,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                             setCurrentInput(e.target.value);
                                         }}
                                         onKeyDown={(e) => handleKeyDown(e, 'skills')}
-                                        placeholder="Add a skill..."
+                                        placeholder="یک مهارت اضافه کنید..."
                                         className="flex-1"
                                     />
                                     <Button
@@ -548,13 +548,13 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                             <div className="flex justify-center bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-800">
                                 <div className="flex items-start gap-3">
                                     <div>
-                                        <p className="text-sm font-medium text-blue-800 dark:text-blue-300">AI-Powered Suggestions</p>
+                                        <p className="text-sm font-medium text-blue-800 dark:text-blue-300">پیشنهادات مبتنی بر هوش مصنوعی</p>
                                         <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                                            Add skills like React, Node.js, Python, or let AI suggest relevant skills based on your job title.
+                                            مهارت‌هایی مانند React، Node.js، Python را اضافه کنید یا اجازه دهید هوش مصنوعی مهارت‌های مرتبط را بر اساس عنوان شغلی پیشنهاد دهد.
                                         </p>
                                         <Button variant="outline" size="sm" className="mt-2 gap-1.5">
                                             <Zap className="w-3.5 h-3.5" />
-                                            Suggest Skills
+                                            پیشنهاد مهارت‌ها
                                         </Button>
                                     </div>
                                 </div>
@@ -568,17 +568,17 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                     <div>
                         {activeStep > 0 && (
                             <Button variant="outline" onClick={handlePrev}>
-                                Back
+                                قبلی
                             </Button>
                         )}
                     </div>
                     <div className="flex gap-3">
                         <Button variant="outline" onClick={handleClose}>
-                            Cancel
+                            انصراف
                         </Button>
                         {activeStep < steps.length - 1 ? (
                             <Button variant="primary" onClick={handleNext}>
-                                Next
+                                بعدی
                             </Button>
                         ) : (
                             <Button
@@ -590,13 +590,13 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                        Creating...
+                                        <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                                        در حال ایجاد...
                                     </>
                                 ) : (
                                     <>
-                                        <Check className="w-4 h-4 mr-2" />
-                                        Create Job
+                                        <Check className="w-4 h-4 ml-2" />
+                                        ایجاد شغل
                                     </>
                                 )}
                             </Button>

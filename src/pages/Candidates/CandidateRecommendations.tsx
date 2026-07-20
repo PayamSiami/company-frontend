@@ -141,13 +141,10 @@ const CandidateRecommendations: React.FC = () => {
 
     const handleStatusChange = async (candidateId: string, newStatus: string) => {
         try {
-            // await employerService.updateCandidateStatus(candidateId, {
-            //     status: newStatus,
-            // });
-            toast.success(`Candidate ${newStatus} successfully`);
+            toast.success(`وضعیت داوطلب با موفقیت به ${newStatus} تغییر یافت`);
             fetchRecommendations();
         } catch (error) {
-            toast.error("Failed to update candidate status");
+            toast.error("تغییر وضعیت داوطلب با شکست مواجه شد");
         }
     };
 
@@ -157,23 +154,22 @@ const CandidateRecommendations: React.FC = () => {
 
     const handleDownloadResume = async (candidateId: string) => {
         try {
-            // await employerService.downloadResume(candidateId);
-            toast.success("Resume downloaded successfully");
+            toast.success("رزومه با موفقیت دانلود شد");
         } catch (error) {
-            toast.error("Failed to download resume");
+            toast.error("دانلود رزومه با شکست مواجه شد");
         }
     };
 
     const getStatusBadge = (status: string) => {
         const statusMap: Record<string, { color: string; label: string }> = {
-            pending: { color: "bg-yellow-500", label: "Pending" },
-            reviewed: { color: "bg-blue-500", label: "Reviewed" },
-            shortlisted: { color: "bg-green-500", label: "Shortlisted" },
-            interviewing: { color: "bg-purple-500", label: "Interviewing" },
-            hired: { color: "bg-emerald-500", label: "Hired" },
-            rejected: { color: "bg-red-500", label: "Rejected" },
+            pending: { color: "bg-yellow-500", label: "در انتظار" },
+            reviewed: { color: "bg-blue-500", label: "بررسی شده" },
+            shortlisted: { color: "bg-green-500", label: "انتخاب شده" },
+            interviewing: { color: "bg-purple-500", label: "در حال مصاحبه" },
+            hired: { color: "bg-emerald-500", label: "استخدام شده" },
+            rejected: { color: "bg-red-500", label: "رد شده" },
         };
-        return statusMap[status] || { color: "bg-gray-500", label: status || "Unknown" };
+        return statusMap[status] || { color: "bg-gray-500", label: status || "نامشخص" };
     };
 
     const getScoreColor = (score: number) => {
@@ -187,13 +183,12 @@ const CandidateRecommendations: React.FC = () => {
     };
 
     const getMatchLabel = (score: number) => {
-        if (score >= 80) return { label: "Excellent Match", icon: <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> };
-        if (score >= 60) return { label: "Good Match", icon: <ThumbsUp className="w-4 h-4 text-green-500" /> };
-        if (score >= 40) return { label: "Potential Match", icon: <AlertCircle className="w-4 h-4 text-yellow-500" /> };
-        return { label: "Low Match", icon: <ThumbsDown className="w-4 h-4 text-red-500" /> };
+        if (score >= 80) return { label: "تطابق عالی", icon: <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> };
+        if (score >= 60) return { label: "تطابق خوب", icon: <ThumbsUp className="w-4 h-4 text-green-500" /> };
+        if (score >= 40) return { label: "تطابق بالقوه", icon: <AlertCircle className="w-4 h-4 text-yellow-500" /> };
+        return { label: "تطابق پایین", icon: <ThumbsDown className="w-4 h-4 text-red-500" /> };
     };
 
-    // Calculate stats
     const totalRecommendations = data?.length || 0;
     const excellentMatches = data?.filter((r: any) => r.matchScore >= 80).length || 0;
     const goodMatches = data?.filter((r: any) => r.matchScore >= 60 && r.matchScore < 80).length || 0;
@@ -201,24 +196,23 @@ const CandidateRecommendations: React.FC = () => {
         ? Math.round(data.reduce((acc: number, r: any) => acc + r.matchScore, 0) / totalRecommendations)
         : 0;
 
-    // Job options for select
     const jobOptions = jobs.map(job => ({
         value: job._id,
         label: job.title
     }));
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-gray-50 p-6" dir="rtl">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
                             <Sparkles className="w-8 h-8 text-purple-500" />
-                            AI-Powered Recommendations
+                            پیشنهادات مبتنی بر هوش مصنوعی
                         </h1>
                         <p className="text-gray-500 mt-1">
-                            Find the best candidates matched to your job requirements using AI
+                            بهترین داوطلبان را با استفاده از هوش مصنوعی بر اساس نیازمندی‌های شغلی خود بیابید
                         </p>
                     </div>
                     <div className="flex gap-2 mt-4 md:mt-0">
@@ -226,11 +220,11 @@ const CandidateRecommendations: React.FC = () => {
                             variant="outline"
                             onClick={() => navigate("/employer/candidates")}
                         >
-                            View All Candidates
+                            مشاهده همه داوطلبان
                         </Button>
                         <Button onClick={() => navigate("/employer/jobs")}>
-                            <Briefcase className="w-4 h-4 mr-2" />
-                            Manage Jobs
+                            <Briefcase className="w-4 h-4 ml-2" />
+                            مدیریت مشاغل
                         </Button>
                     </div>
                 </div>
@@ -241,7 +235,7 @@ const CandidateRecommendations: React.FC = () => {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-purple-700">Total Recommendations</p>
+                                    <p className="text-sm text-purple-700">کل پیشنهادات</p>
                                     <p className="text-2xl font-bold text-purple-900">
                                         {totalRecommendations}
                                     </p>
@@ -254,7 +248,7 @@ const CandidateRecommendations: React.FC = () => {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Excellent Matches</p>
+                                    <p className="text-sm text-gray-500">تطابق عالی</p>
                                     <p className="text-2xl font-bold text-green-600">
                                         {excellentMatches}
                                     </p>
@@ -267,7 +261,7 @@ const CandidateRecommendations: React.FC = () => {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Good Matches</p>
+                                    <p className="text-sm text-gray-500">تطابق خوب</p>
                                     <p className="text-2xl font-bold text-yellow-600">
                                         {goodMatches}
                                     </p>
@@ -280,7 +274,7 @@ const CandidateRecommendations: React.FC = () => {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Average Match Score</p>
+                                    <p className="text-sm text-gray-500">میانگین امتیاز تطابق</p>
                                     <p className="text-2xl font-bold text-blue-600">
                                         {avgScore}%
                                     </p>
@@ -295,14 +289,14 @@ const CandidateRecommendations: React.FC = () => {
                 <Card className="mb-6">
                     <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg">Filters</CardTitle>
+                            <CardTitle className="text-lg">فیلترها</CardTitle>
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => setShowFilters(!showFilters)}
                             >
-                                <Filter className="w-4 h-4 mr-2" />
-                                {showFilters ? "Hide Filters" : "Show Filters"}
+                                <Filter className="w-4 h-4 ml-2" />
+                                {showFilters ? "پنهان کردن فیلترها" : "نمایش فیلترها"}
                             </Button>
                         </div>
                     </CardHeader>
@@ -312,23 +306,23 @@ const CandidateRecommendations: React.FC = () => {
                                 {/* Job Selection */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Select Job
+                                        انتخاب شغل
                                     </label>
                                     <Select
                                         value={selectedJob}
                                         onChange={(value: any) => setSelectedJob(value)}
                                         options={jobOptions}
-                                        placeholder="Select a job"
+                                        placeholder="انتخاب شغل"
                                     />
                                 </div>
 
                                 {/* Skills Input */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Required Skills (comma separated)
+                                        مهارت‌های مورد نیاز (با کاما جدا کنید)
                                     </label>
                                     <Input
-                                        placeholder="React, Node.js, TypeScript"
+                                        placeholder="React، Node.js، TypeScript"
                                         value={searchSkills}
                                         onChange={(e) => setSearchSkills(e.target.value)}
                                     />
@@ -337,7 +331,7 @@ const CandidateRecommendations: React.FC = () => {
                                 {/* Min Score Slider */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Minimum Match Score: {minScore}%
+                                        حداقل امتیاز تطابق: {minScore}%
                                     </label>
                                     <Slider
                                         value={[minScore]}
@@ -352,38 +346,38 @@ const CandidateRecommendations: React.FC = () => {
                                 {/* Experience Range */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Min Experience (years)
+                                        حداقل سابقه (سال)
                                     </label>
                                     <Input
                                         type="number"
-                                        placeholder="0"
+                                        placeholder="۰"
                                         value={experienceMin}
                                         onChange={(e) => setExperienceMin(e.target.value)}
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Max Experience (years)
+                                        حداکثر سابقه (سال)
                                     </label>
                                     <Input
                                         type="number"
-                                        placeholder="20"
+                                        placeholder="۲۰"
                                         value={experienceMax}
                                         onChange={(e) => setExperienceMax(e.target.value)}
                                     />
                                 </div>
                                 <div className="flex items-end gap-2">
                                     <Button onClick={handleApplyFilters} className="w-full">
-                                        <Search className="w-4 h-4 mr-2" />
-                                        Apply Filters
+                                        <Search className="w-4 h-4 ml-2" />
+                                        اعمال فیلترها
                                     </Button>
                                     <Button
                                         variant="outline"
                                         onClick={handleResetFilters}
                                         className="w-full"
                                     >
-                                        <X className="w-4 h-4 mr-2" />
-                                        Reset
+                                        <X className="w-4 h-4 ml-2" />
+                                        بازنشانی
                                     </Button>
                                 </div>
                             </div>
@@ -394,9 +388,9 @@ const CandidateRecommendations: React.FC = () => {
                 {/* Recommendations List */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Recommended Candidates</CardTitle>
+                        <CardTitle>داوطلبان پیشنهادی</CardTitle>
                         <CardDescription>
-                            {totalRecommendations} candidates matched to your requirements
+                            {totalRecommendations} داوطلب مطابق با نیازمندی‌های شما
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -418,24 +412,24 @@ const CandidateRecommendations: React.FC = () => {
                             <div className="text-center py-12">
                                 <AlertCircle className="w-16 h-16 text-red-300 mx-auto mb-4" />
                                 <h3 className="text-lg font-semibold text-red-600">
-                                    Error Loading Recommendations
+                                    خطا در بارگذاری پیشنهادات
                                 </h3>
                                 <p className="text-gray-500">{error}</p>
                                 <Button className="mt-4" onClick={fetchRecommendations}>
-                                    Try Again
+                                    تلاش مجدد
                                 </Button>
                             </div>
                         ) : totalRecommendations === 0 ? (
                             <div className="text-center py-12">
                                 <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                                 <h3 className="text-lg font-semibold text-gray-600">
-                                    No Recommendations Found
+                                    هیچ پیشنهادی یافت نشد
                                 </h3>
                                 <p className="text-gray-500">
-                                    Try adjusting your filters or check back later for new candidates.
+                                    سعی کنید فیلترهای خود را تنظیم کنید یا بعداً برای داوطلبان جدید مراجعه کنید.
                                 </p>
                                 <Button className="mt-4" onClick={handleResetFilters}>
-                                    Reset Filters
+                                    بازنشانی فیلترها
                                 </Button>
                             </div>
                         ) : (
@@ -466,7 +460,7 @@ const CandidateRecommendations: React.FC = () => {
                                                         <div>
                                                             <div className="flex items-center gap-2 flex-wrap">
                                                                 <h3 className="font-semibold text-gray-900 text-lg">
-                                                                    {rec.candidate.userId?.name || "Unknown"}
+                                                                    {rec.candidate.userId?.name || "ناشناس"}
                                                                 </h3>
                                                                 <Badge
                                                                     className={`${statusBadge.color} text-white`}
@@ -477,7 +471,7 @@ const CandidateRecommendations: React.FC = () => {
                                                             <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
                                                                 <span className="flex items-center gap-1">
                                                                     <Briefcase className="w-3 h-3" />
-                                                                    {rec.candidate.jobId?.title || "No job"}
+                                                                    {rec.candidate.jobId?.title || "بدون شغل"}
                                                                 </span>
                                                                 <span className="flex items-center gap-1">
                                                                     <Mail className="w-3 h-3" />
@@ -501,22 +495,22 @@ const CandidateRecommendations: React.FC = () => {
                                                                     variant="info"
                                                                     className={`${scoreColor} border-current`}
                                                                 >
-                                                                    <Zap className="w-3 h-3 mr-1" />
-                                                                    AI Score: {rec.matchDetails?.aiScore || rec.matchScore}%
+                                                                    <Zap className="w-3 h-3 ml-1" />
+                                                                    امتیاز AI: {rec.matchDetails?.aiScore || rec.matchScore}%
                                                                 </Badge>
                                                                 <Badge
                                                                     variant="info"
                                                                     className="bg-blue-50 border-blue-200"
                                                                 >
-                                                                    Exp: {rec.matchDetails?.experienceMatch?.candidateYears || 0} years
+                                                                    سابقه: {rec.matchDetails?.experienceMatch?.candidateYears || 0} سال
                                                                 </Badge>
                                                                 {rec.matchDetails?.educationMatch?.match && (
                                                                     <Badge
                                                                         variant="info"
                                                                         className="bg-green-50 border-green-200"
                                                                     >
-                                                                        <CheckCircle className="w-3 h-3 mr-1 text-green-500" />
-                                                                        Education Matched
+                                                                        <CheckCircle className="w-3 h-3 ml-1 text-green-500" />
+                                                                        تحصیلات مطابقت دارد
                                                                     </Badge>
                                                                 )}
                                                             </div>
@@ -543,8 +537,8 @@ const CandidateRecommendations: React.FC = () => {
                                                                     setShowDetailsModal(true);
                                                                 }}
                                                             >
-                                                                <Eye className="w-4 h-4 mr-1" />
-                                                                Details
+                                                                <Eye className="w-4 h-4 ml-1" />
+                                                                جزئیات
                                                             </Button>
                                                             <Button
                                                                 size="sm"
@@ -554,8 +548,8 @@ const CandidateRecommendations: React.FC = () => {
                                                                     handleStatusChange(rec.candidate._id, "shortlisted")
                                                                 }
                                                             >
-                                                                <UserCheck className="w-4 h-4 mr-1" />
-                                                                Shortlist
+                                                                <UserCheck className="w-4 h-4 ml-1" />
+                                                                انتخاب
                                                             </Button>
                                                         </div>
                                                     </div>
@@ -565,7 +559,7 @@ const CandidateRecommendations: React.FC = () => {
                                                 {rec.matchDetails?.skillsMatch && (
                                                     <div className="mt-3 pt-3 border-t">
                                                         <div className="flex flex-wrap items-center gap-2">
-                                                            <span className="text-sm text-gray-500">Skills Match:</span>
+                                                            <span className="text-sm text-gray-500">تطابق مهارت‌ها:</span>
                                                             {rec.matchDetails.skillsMatch.matched?.map((skill: string) => (
                                                                 <Badge key={skill} className="bg-green-100 text-green-700">
                                                                     {skill}
@@ -580,8 +574,8 @@ const CandidateRecommendations: React.FC = () => {
                                                                     {skill}
                                                                 </Badge>
                                                             ))}
-                                                            <span className="text-sm text-gray-500 ml-2">
-                                                                ({rec.matchDetails.skillsMatch.matchPercentage || 0}% match)
+                                                            <span className="text-sm text-gray-500 mr-2">
+                                                                ({rec.matchDetails.skillsMatch.matchPercentage || 0}% تطابق)
                                                             </span>
                                                         </div>
                                                     </div>
@@ -595,7 +589,7 @@ const CandidateRecommendations: React.FC = () => {
                                 {pagination.totalPages > 1 && (
                                     <div className="flex items-center justify-between mt-6 pt-4 border-t">
                                         <p className="text-sm text-gray-500">
-                                            Showing {data.length} of {pagination.total} candidates
+                                            نمایش {data.length} از {pagination.total} داوطلب
                                         </p>
                                         <div className="flex items-center gap-2">
                                             <Button
@@ -609,10 +603,10 @@ const CandidateRecommendations: React.FC = () => {
                                                 }
                                                 disabled={pagination.page === 1}
                                             >
-                                                <ChevronLeft className="w-4 h-4" />
+                                                <ChevronRight className="w-4 h-4" />
                                             </Button>
                                             <span className="text-sm">
-                                                Page {pagination.page} of {pagination.totalPages}
+                                                صفحه {pagination.page} از {pagination.totalPages}
                                             </span>
                                             <Button
                                                 variant="outline"
@@ -625,7 +619,7 @@ const CandidateRecommendations: React.FC = () => {
                                                 }
                                                 disabled={pagination.page === pagination.totalPages}
                                             >
-                                                <ChevronRight className="w-4 h-4" />
+                                                <ChevronLeft className="w-4 h-4" />
                                             </Button>
                                         </div>
                                     </div>
@@ -642,10 +636,10 @@ const CandidateRecommendations: React.FC = () => {
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
                             <Sparkles className="w-5 h-5 text-purple-500" />
-                            Candidate Match Details
+                            جزئیات تطابق داوطلب
                         </DialogTitle>
                         <DialogDescription>
-                            Detailed breakdown of how this candidate matches your requirements
+                            تحلیل دقیق تطابق این داوطلب با نیازمندی‌های شما
                         </DialogDescription>
                     </DialogHeader>
                     {selectedCandidate && (
@@ -663,14 +657,14 @@ const CandidateRecommendations: React.FC = () => {
                                 </Avatar>
                                 <div>
                                     <h2 className="text-xl font-bold">
-                                        {selectedCandidate.candidate.userId?.name || "Unknown"}
+                                        {selectedCandidate.candidate.userId?.name || "ناشناس"}
                                     </h2>
                                     <p className="text-gray-500">
-                                        {selectedCandidate.candidate.jobId?.title || "No job"} at{" "}
-                                        {selectedCandidate.candidate.jobId?.company || "Unknown company"}
+                                        {selectedCandidate.candidate.jobId?.title || "بدون شغل"} در{" "}
+                                        {selectedCandidate.candidate.jobId?.company || "شرکت نامشخص"}
                                     </p>
                                     <p className="text-sm text-gray-400">
-                                        Applied {new Date(selectedCandidate.appliedDate).toLocaleDateString()}
+                                        ثبت درخواست: {new Date(selectedCandidate.appliedDate).toLocaleDateString('fa-IR')}
                                     </p>
                                 </div>
                             </div>
@@ -679,9 +673,9 @@ const CandidateRecommendations: React.FC = () => {
                             <div className="bg-purple-50 p-4 rounded-lg">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <h3 className="font-semibold text-gray-900">Overall Match</h3>
+                                        <h3 className="font-semibold text-gray-900">تطابق کلی</h3>
                                         <p className="text-sm text-gray-500">
-                                            Based on skills, experience, education, and AI analysis
+                                            بر اساس مهارت‌ها، سابقه، تحصیلات و تحلیل هوش مصنوعی
                                         </p>
                                     </div>
                                     <div className="text-center">
@@ -703,36 +697,36 @@ const CandidateRecommendations: React.FC = () => {
                                     <AccordionTrigger>
                                         <div className="flex items-center gap-2">
                                             <Star className="w-4 h-4 text-yellow-500" />
-                                            Skills Match ({selectedCandidate.matchDetails?.skillsMatch?.matchPercentage || 0}%)
+                                            تطابق مهارت‌ها ({selectedCandidate.matchDetails?.skillsMatch?.matchPercentage || 0}%)
                                         </div>
                                     </AccordionTrigger>
                                     <AccordionContent>
                                         <div className="space-y-2">
                                             <div>
-                                                <p className="text-sm font-medium text-green-600">Matched Skills:</p>
+                                                <p className="text-sm font-medium text-green-600">مهارت‌های مطابقت‌دار:</p>
                                                 <div className="flex flex-wrap gap-2 mt-1">
                                                     {selectedCandidate.matchDetails?.skillsMatch?.matched?.map((skill) => (
                                                         <Badge key={skill} className="bg-green-100 text-green-700">
-                                                            <CheckCircle className="w-3 h-3 mr-1" />
+                                                            <CheckCircle className="w-3 h-3 ml-1" />
                                                             {skill}
                                                         </Badge>
                                                     ))}
                                                     {(!selectedCandidate.matchDetails?.skillsMatch?.matched || selectedCandidate.matchDetails.skillsMatch.matched.length === 0) && (
-                                                        <p className="text-sm text-gray-500">No skills matched</p>
+                                                        <p className="text-sm text-gray-500">هیچ مهارتی مطابقت ندارد</p>
                                                     )}
                                                 </div>
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-red-600">Missing Skills:</p>
+                                                <p className="text-sm font-medium text-red-600">مهارت‌های缺失:</p>
                                                 <div className="flex flex-wrap gap-2 mt-1">
                                                     {selectedCandidate.matchDetails?.skillsMatch?.missing?.map((skill) => (
                                                         <Badge key={skill} variant="info" className="text-red-500 border-red-300">
-                                                            <AlertCircle className="w-3 h-3 mr-1" />
+                                                            <AlertCircle className="w-3 h-3 ml-1" />
                                                             {skill}
                                                         </Badge>
                                                     ))}
                                                     {(!selectedCandidate.matchDetails?.skillsMatch?.missing || selectedCandidate.matchDetails.skillsMatch.missing.length === 0) && (
-                                                        <p className="text-sm text-green-600">All skills matched!</p>
+                                                        <p className="text-sm text-green-600">همه مهارت‌ها مطابقت دارند!</p>
                                                     )}
                                                 </div>
                                             </div>
@@ -745,21 +739,21 @@ const CandidateRecommendations: React.FC = () => {
                                     <AccordionTrigger>
                                         <div className="flex items-center gap-2">
                                             <Briefcase className="w-4 h-4 text-blue-500" />
-                                            Experience Match
+                                            تطابق سابقه کاری
                                         </div>
                                     </AccordionTrigger>
                                     <AccordionContent>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <p className="text-sm text-gray-500">Candidate Experience</p>
+                                                <p className="text-sm text-gray-500">سابقه داوطلب</p>
                                                 <p className="text-lg font-semibold">
-                                                    {selectedCandidate.matchDetails?.experienceMatch?.candidateYears || 0} years
+                                                    {selectedCandidate.matchDetails?.experienceMatch?.candidateYears || 0} سال
                                                 </p>
                                             </div>
                                             <div>
-                                                <p className="text-sm text-gray-500">Required Experience</p>
+                                                <p className="text-sm text-gray-500">سابقه مورد نیاز</p>
                                                 <p className="text-lg font-semibold">
-                                                    {selectedCandidate.matchDetails?.experienceMatch?.requiredYears || 0} years
+                                                    {selectedCandidate.matchDetails?.experienceMatch?.requiredYears || 0} سال
                                                 </p>
                                             </div>
                                         </div>
@@ -772,8 +766,8 @@ const CandidateRecommendations: React.FC = () => {
                                                 }
                                             >
                                                 {selectedCandidate.matchDetails?.experienceMatch?.match
-                                                    ? "✅ Experience requirement met"
-                                                    : "❌ Experience requirement not met"}
+                                                    ? "✅ نیازمندی سابقه برآورده شده است"
+                                                    : "❌ نیازمندی سابقه برآورده نشده است"}
                                             </Badge>
                                         </div>
                                     </AccordionContent>
@@ -784,7 +778,7 @@ const CandidateRecommendations: React.FC = () => {
                                     <AccordionTrigger>
                                         <div className="flex items-center gap-2">
                                             <Award className="w-4 h-4 text-purple-500" />
-                                            Education Match
+                                            تطابق تحصیلات
                                         </div>
                                     </AccordionTrigger>
                                     <AccordionContent>
@@ -797,11 +791,11 @@ const CandidateRecommendations: React.FC = () => {
                                                 }
                                             >
                                                 {selectedCandidate.matchDetails?.educationMatch?.match
-                                                    ? "✅ Education matched"
-                                                    : "⚠️ No education data available"}
+                                                    ? "✅ تحصیلات مطابقت دارد"
+                                                    : "⚠️ اطلاعات تحصیلی موجود نیست"}
                                             </Badge>
                                             <p className="text-sm text-gray-600">
-                                                {selectedCandidate.matchDetails?.educationMatch?.details || "No education details available"}
+                                                {selectedCandidate.matchDetails?.educationMatch?.details || "جزئیات تحصیلی موجود نیست"}
                                             </p>
                                         </div>
                                     </AccordionContent>
@@ -812,7 +806,7 @@ const CandidateRecommendations: React.FC = () => {
                                     <AccordionTrigger>
                                         <div className="flex items-center gap-2">
                                             <Zap className="w-4 h-4 text-orange-500" />
-                                            AI Analysis Score
+                                            امتیاز تحلیل هوش مصنوعی
                                         </div>
                                     </AccordionTrigger>
                                     <AccordionContent>
@@ -832,7 +826,7 @@ const CandidateRecommendations: React.FC = () => {
                                             </div>
                                         </div>
                                         <p className="text-sm text-gray-500 mt-2">
-                                            AI-generated score based on resume analysis and job requirements
+                                            امتیاز تولید شده توسط هوش مصنوعی بر اساس تحلیل رزومه و نیازمندی‌های شغلی
                                         </p>
                                     </AccordionContent>
                                 </AccordionItem>
@@ -844,15 +838,15 @@ const CandidateRecommendations: React.FC = () => {
                                     onClick={() => handleViewResume(selectedCandidate.candidate._id)}
                                     variant="outline"
                                 >
-                                    <Eye className="w-4 h-4 mr-2" />
-                                    View Resume
+                                    <Eye className="w-4 h-4 ml-2" />
+                                    مشاهده رزومه
                                 </Button>
                                 <Button
                                     onClick={() => handleDownloadResume(selectedCandidate.candidate._id)}
                                     variant="outline"
                                 >
-                                    <Download className="w-4 h-4 mr-2" />
-                                    Download Resume
+                                    <Download className="w-4 h-4 ml-2" />
+                                    دانلود رزومه
                                 </Button>
                                 <Button
                                     className="bg-green-600 hover:bg-green-700"
@@ -861,18 +855,18 @@ const CandidateRecommendations: React.FC = () => {
                                         setShowDetailsModal(false);
                                     }}
                                 >
-                                    <UserCheck className="w-4 h-4 mr-2" />
-                                    Shortlist Candidate
+                                    <UserCheck className="w-4 h-4 ml-2" />
+                                    انتخاب داوطلب
                                 </Button>
                                 <Button
                                     variant="outline"
-                                    className="ml-auto"
+                                    className="mr-auto"
                                     onClick={() => {
                                         setShowDetailsModal(false);
                                         navigate(`/employer/candidates/${selectedCandidate.candidate._id}`);
                                     }}
                                 >
-                                    View Full Profile
+                                    مشاهده پروفایل کامل
                                 </Button>
                             </div>
                         </div>

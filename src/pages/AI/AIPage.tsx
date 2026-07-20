@@ -10,7 +10,7 @@ import {
     FileSearch,
     BarChart3,
     FileText,
-    ArrowRight,
+    ArrowLeft,
     Star,
     Clock,
     CheckCircle,
@@ -19,7 +19,7 @@ import {
     Wand2,
     Loader2,
     Eye,
-    ChevronRight,
+    ChevronLeft,
     XCircle,
     List,
 } from 'lucide-react';
@@ -56,59 +56,59 @@ const AIPage: React.FC = () => {
     const aiTools: AITool[] = [
         {
             id: 'screening',
-            title: 'AI Screening',
-            description: 'Automatically screen candidates against job requirements using AI',
+            title: 'غربالگری هوش مصنوعی',
+            description: 'به طور خودکار داوطلبان را بر اساس نیازمندی‌های شغلی با استفاده از هوش مصنوعی غربال کنید',
             color: 'text-indigo-600 dark:text-indigo-400',
             gradient: 'from-indigo-500 to-purple-600',
             path: '/ai/screening',
             features: [
-                'Automatic candidate scoring',
-                'Skill match analysis',
-                'Experience evaluation',
-                'Real-time screening'
+                'امتیازدهی خودکار داوطلبان',
+                'تحلیل تطابق مهارت‌ها',
+                'ارزیابی تجربه',
+                'غربالگری لحظه‌ای'
             ],
             stats: {
-                label: 'Candidates screened',
-                value: '1,247',
-                change: '+12%'
+                label: 'داوطلبان غربال شده',
+                value: '۱,۲۴۷',
+                change: '+۱۲٪'
             }
         },
         {
             id: 'assistant',
-            title: 'AI Job Assistant',
-            description: 'Generate job descriptions, requirements, and interview questions with AI',
+            title: 'دستیار شغلی هوش مصنوعی',
+            description: 'تولید شرح شغل، نیازمندی‌ها و سوالات مصاحبه با هوش مصنوعی',
             color: 'text-blue-600 dark:text-blue-400',
             gradient: 'from-blue-500 to-cyan-600',
             path: '/ai/assistant',
             features: [
-                'Job description generation',
-                'Requirements extraction',
-                'Salary suggestions',
-                'Interview questions'
+                'تولید شرح شغل',
+                'استخراج نیازمندی‌ها',
+                'پیشنهاد حقوق',
+                'سوالات مصاحبه'
             ],
             stats: {
-                label: 'Jobs created',
-                value: '48',
-                change: '+8%'
+                label: 'مشاغل ایجاد شده',
+                value: '۴۸',
+                change: '+۸٪'
             }
         },
         {
             id: 'analytics',
-            title: 'AI Analytics',
-            description: 'Get insights into your hiring process with AI-powered analytics',
+            title: 'تحلیل‌های هوش مصنوعی',
+            description: 'با تحلیل‌های مبتنی بر هوش مصنوعی، بینش‌هایی از فرآیند استخدام خود دریافت کنید',
             color: 'text-purple-600 dark:text-purple-400',
             gradient: 'from-purple-500 to-pink-600',
             path: '/ai/analytics',
             features: [
-                'Hiring trends',
-                'Candidate insights',
-                'Market analysis',
-                'Performance metrics'
+                'روندهای استخدام',
+                'بینش‌های داوطلبان',
+                'تحلیل بازار',
+                'معیارهای عملکرد'
             ],
             stats: {
-                label: 'Reports generated',
-                value: '156',
-                change: '+5%'
+                label: 'گزارش‌های تولید شده',
+                value: '۱۵۶',
+                change: '+۵٪'
             }
         }
     ];
@@ -116,43 +116,43 @@ const AIPage: React.FC = () => {
     const recentActivities: Activity[] = [
         {
             id: 1,
-            title: 'Candidate screened for Senior Developer',
+            title: 'داوطلب برای توسعه‌دهنده ارشد غربال شد',
             score: 85,
             status: 'completed',
-            time: '2 hours ago',
+            time: '۲ ساعت پیش',
             type: 'screening'
         },
         {
             id: 2,
-            title: 'Job description generated for DevOps Engineer',
+            title: 'شرح شغل برای مهندس DevOps تولید شد',
             score: null,
             status: 'completed',
-            time: '4 hours ago',
+            time: '۴ ساعت پیش',
             type: 'generation'
         },
         {
             id: 3,
-            title: 'AI screening in progress for 15 candidates',
+            title: 'غربالگری هوش مصنوعی برای ۱۵ داوطلب در حال انجام',
             score: null,
             status: 'in-progress',
-            time: 'Just now',
+            time: 'همین الان',
             type: 'screening'
         },
         {
             id: 4,
-            title: 'Analytics report generated for Q4 hiring',
+            title: 'گزارش تحلیلی برای استخدام سه‌ماهه چهارم تولید شد',
             score: 92,
             status: 'completed',
-            time: '6 hours ago',
+            time: '۶ ساعت پیش',
             type: 'analytics'
         }
     ];
 
     const quickStats = [
-        { label: 'Total AI Screenings', value: '1,247', change: '+12%', color: 'text-green-600' },
-        { label: 'Avg. Screening Score', value: '76%', change: '+5%', color: 'text-green-600' },
-        { label: 'Jobs with AI', value: '48', change: '78%', color: 'text-blue-600' },
-        { label: 'Time Saved', value: '~40h', change: 'Using AI automation', color: 'text-green-600' },
+        { label: 'کل غربالگری‌های AI', value: '۱,۲۴۷', change: '+۱۲٪', color: 'text-green-600' },
+        { label: 'میانگین امتیاز غربالگری', value: '۷۶٪', change: '+۵٪', color: 'text-green-600' },
+        { label: 'مشاغل با AI', value: '۴۸', change: '۷۸٪', color: 'text-blue-600' },
+        { label: 'زمان ذخیره شده', value: '~۴۰ ساعت', change: 'با اتوماسیون AI', color: 'text-green-600' },
     ];
 
     const getStatusIcon = (status: Activity['status']) => {
@@ -185,6 +185,21 @@ const AIPage: React.FC = () => {
         }
     };
 
+    const getStatusLabel = (status: Activity['status']) => {
+        switch (status) {
+            case 'completed':
+                return 'تکمیل شده';
+            case 'in-progress':
+                return 'در حال انجام';
+            case 'pending':
+                return 'در انتظار';
+            case 'failed':
+                return 'ناموفق';
+            default:
+                return status;
+        }
+    };
+
     const getTypeIcon = (type: Activity['type']) => {
         switch (type) {
             case 'screening':
@@ -199,21 +214,21 @@ const AIPage: React.FC = () => {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8" dir="rtl">
             {/* Page Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <div className="flex items-center gap-3">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                AI Tools
-                                <Badge variant="info" size="sm" className="ml-2">
-                                    <Activity className="w-3 h-3 mr-1" />
-                                    Live
+                                ابزارهای هوش مصنوعی
+                                <Badge variant="info" size="sm" className="mr-2">
+                                    <Activity className="w-3 h-3 ml-1" />
+                                    زنده
                                 </Badge>
                             </h1>
                             <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-                                Leverage AI to streamline your hiring process
+                                از هوش مصنوعی برای ساده‌سازی فرآیند استخدام خود استفاده کنید
                             </p>
                         </div>
                     </div>
@@ -249,7 +264,7 @@ const AIPage: React.FC = () => {
                         className="flex items-center gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
                     >
                         <Wand2 className="h-4 w-4" />
-                        Try AI Assistant
+                        امتحان دستیار هوش مصنوعی
                     </Button>
                 </div>
             </div>
@@ -311,7 +326,7 @@ const AIPage: React.FC = () => {
                                         </div>
                                     )}
                                 </div>
-                                <ChevronRight className="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors shrink-0" />
+                                <ChevronLeft className="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors shrink-0" />
                             </div>
 
                             {/* Features */}
@@ -333,8 +348,8 @@ const AIPage: React.FC = () => {
                                     navigate(tool.path);
                                 }}
                             >
-                                Get Started
-                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                شروع کنید
+                                <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                             </Button>
                         </div>
                     </div>
@@ -348,11 +363,11 @@ const AIPage: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                             <Activity className="w-5 h-5 text-gray-400" />
-                            Recent AI Activity
+                            فعالیت‌های اخیر هوش مصنوعی
                         </h2>
                         <Button variant="ghost" size="sm" className="gap-1 text-sm">
-                            View all
-                            <ArrowRight className="w-4 h-4" />
+                            مشاهده همه
+                            <ArrowLeft className="w-4 h-4" />
                         </Button>
                     </div>
                     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 divide-y divide-gray-100 dark:divide-gray-800 overflow-hidden">
@@ -375,12 +390,12 @@ const AIPage: React.FC = () => {
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate text-right">
                                                     {activity.title}
                                                 </p>
                                                 <TypeIcon className="w-3 h-3 text-gray-400 shrink-0" />
                                             </div>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">{activity.time}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 text-right">{activity.time}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 shrink-0">
@@ -397,7 +412,7 @@ const AIPage: React.FC = () => {
                                             size="sm"
                                             className="capitalize"
                                         >
-                                            {activity.status === 'in-progress' ? 'In Progress' : activity.status}
+                                            {getStatusLabel(activity.status)}
                                         </Badge>
                                         {isCompleted && (
                                             <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors opacity-0 group-hover:opacity-100">
@@ -419,13 +434,13 @@ const AIPage: React.FC = () => {
                                 <Rocket className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
-                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">AI Tip of the Day</h4>
+                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">نکته روز هوش مصنوعی</h4>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                    Use specific keywords in job titles for better candidate matching.
+                                    برای تطابق بهتر داوطلبان، از کلمات کلیدی خاص در عناوین شغلی استفاده کنید.
                                 </p>
                                 <Button size="sm" className="mt-2 px-0 text-blue-600">
-                                    Learn more
-                                    <ArrowRight className="w-4 h-4 ml-1" />
+                                    بیشتر بدانید
+                                    <ArrowLeft className="w-4 h-4 mr-1" />
                                 </Button>
                             </div>
                         </div>
@@ -433,28 +448,28 @@ const AIPage: React.FC = () => {
 
                     <Card className="p-5">
                         <div className="flex items-center justify-between mb-3">
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">AI Usage</h4>
-                            <Badge variant="info" size="sm">This month</Badge>
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">استفاده از هوش مصنوعی</h4>
+                            <Badge variant="info" size="sm">این ماه</Badge>
                         </div>
                         <div className="space-y-3">
                             <div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-gray-600 dark:text-gray-400">Screenings</span>
-                                    <span className="font-medium">78%</span>
+                                    <span className="text-gray-600 dark:text-gray-400">غربالگری‌ها</span>
+                                    <span className="font-medium">۷۸٪</span>
                                 </div>
                                 <ProgressBar value={78} max={100} className="h-1.5 mt-1" color="indigo" />
                             </div>
                             <div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-gray-600 dark:text-gray-400">Generations</span>
-                                    <span className="font-medium">45%</span>
+                                    <span className="text-gray-600 dark:text-gray-400">تولید محتوا</span>
+                                    <span className="font-medium">۴۵٪</span>
                                 </div>
                                 <ProgressBar value={45} max={100} className="h-1.5 mt-1" color="blue" />
                             </div>
                             <div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-gray-600 dark:text-gray-400">Analytics</span>
-                                    <span className="font-medium">62%</span>
+                                    <span className="text-gray-600 dark:text-gray-400">تحلیل‌ها</span>
+                                    <span className="font-medium">۶۲٪</span>
                                 </div>
                                 <ProgressBar value={62} max={100} className="h-1.5 mt-1" color="purple" />
                             </div>

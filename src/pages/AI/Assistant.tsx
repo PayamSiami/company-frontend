@@ -84,12 +84,12 @@ const AIAssistantPage: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const generationFields = [
-    { id: 'description', label: 'Description', icon: FileText, color: 'blue', description: 'Generate a compelling job description' },
-    { id: 'requirements', label: 'Requirements', icon: List, color: 'purple', description: 'List key qualifications and skills' },
-    { id: 'benefits', label: 'Benefits', icon: Award, color: 'orange', description: 'Highlight perks and advantages' },
-    { id: 'tags', label: 'Tags', icon: Tag, color: 'pink', description: 'Generate relevant tags' },
-    { id: 'skills', label: 'Skills', icon: Star, color: 'green', description: 'Identify required technical skills' },
-    { id: 'interview', label: 'Interview Questions', icon: MessageSquare, color: 'indigo', description: 'Generate interview questions' },
+    { id: 'description', label: 'شرح شغل', icon: FileText, color: 'blue', description: 'تولید شرح شغل جذاب' },
+    { id: 'requirements', label: 'نیازمندی‌ها', icon: List, color: 'purple', description: 'لیست صلاحیت‌ها و مهارت‌های کلیدی' },
+    { id: 'benefits', label: 'مزایا', icon: Award, color: 'orange', description: 'برجسته‌سازی مزایا و امتیازات' },
+    { id: 'tags', label: 'برچسب‌ها', icon: Tag, color: 'pink', description: 'تولید برچسب‌های مرتبط' },
+    { id: 'skills', label: 'مهارت‌ها', icon: Star, color: 'green', description: 'شناسایی مهارت‌های فنی مورد نیاز' },
+    { id: 'interview', label: 'سوالات مصاحبه', icon: MessageSquare, color: 'indigo', description: 'تولید سوالات مصاحبه' },
   ];
 
   const handleFieldChange = (field: keyof JobData, value: any) => {
@@ -115,7 +115,7 @@ const AIAssistantPage: React.FC = () => {
 
   const handleGenerate = async (field: string) => {
     if (!jobData.title) {
-      toast.error('Please enter a job title first');
+      toast.error('لطفاً ابتدا عنوان شغل را وارد کنید');
       return;
     }
 
@@ -124,40 +124,22 @@ const AIAssistantPage: React.FC = () => {
         jobTitle: jobData.title,
         companyName: jobData.company || undefined,
         field: field as any,
-        // additionalContext: JSON.stringify({
-        //   location: jobData.location,
-        //   experienceLevel: jobData.experienceLevel,
-        //   workMode: jobData.workMode,
-        //   jobType: jobData.jobType,
-        //   minSalary: jobData.minSalary,
-        //   maxSalary: jobData.maxSalary,
-        //   tags: jobData.tags,
-        // }),
       })).unwrap();
 
       if (result) {
-        toast.success(`${field} generated successfully!`);
+        toast.success(`${field} با موفقیت تولید شد!`);
       }
     } catch (err: any) {
-      toast.error(err.message || 'Failed to generate content');
+      toast.error(err.message || 'تولید محتوا با شکست مواجه شد');
     }
   };
 
   const handleGenerateAll = async () => {
     if (!jobData.title) {
-      toast.error('Please enter a job title first');
+      toast.error('لطفاً ابتدا عنوان شغل را وارد کنید');
       return;
     }
 
-    // additionalContext: JSON.stringify({
-    //   location: jobData.location,
-    //   experienceLevel: jobData.experienceLevel,
-    //   workMode: jobData.workMode,
-    //   jobType: jobData.jobType,
-    //   minSalary: jobData.minSalary,
-    //   maxSalary: jobData.maxSalary,
-    //   tags: jobData.tags,
-    // })
     try {
       await dispatch(generateJobContent({
         jobTitle: jobData.title,
@@ -165,15 +147,15 @@ const AIAssistantPage: React.FC = () => {
         field: "summary"
       })).unwrap();
 
-      toast.success('All content generated successfully!');
+      toast.success('همه محتوا با موفقیت تولید شد!');
     } catch (err: any) {
-      toast.error(err.message || 'Failed to generate all content');
+      toast.error(err.message || 'تولید همه محتوا با شکست مواجه شد');
     }
   };
 
   const handleSave = async () => {
     if (Object.keys(generatedContent)?.length === 0) {
-      toast.error('No content to save');
+      toast.error('محتوا برای ذخیره وجود ندارد');
       return;
     }
 
@@ -184,15 +166,9 @@ const AIAssistantPage: React.FC = () => {
         content[field] = data.content;
       });
 
-      // await dispatch(saveGeneratedContent({
-      //   jobTitle: jobData.title,
-      //   companyName: jobData.company || undefined,
-      //   content,
-      // })).unwrap();
-
-      toast.success('Content saved successfully!');
+      toast.success('محتوا با موفقیت ذخیره شد!');
     } catch (err: any) {
-      toast.error(err.message || 'Failed to save content');
+      toast.error(err.message || 'ذخیره محتوا با شکست مواجه شد');
     } finally {
       setIsSaving(false);
     }
@@ -202,13 +178,12 @@ const AIAssistantPage: React.FC = () => {
     const textToCopy = typeof text === 'string' ? text : text.join('\n• ');
     navigator.clipboard.writeText(textToCopy);
     setCopied(key);
-    toast.success('Copied to clipboard!');
+    toast.success('کپی شد!');
     setTimeout(() => setCopied(null), 2000);
   };
 
   const handleClearAll = () => {
-    // dispatch(clearGeneratedContent());
-    toast.info('Cleared all generated content');
+    toast.info('همه محتوای تولید شده پاک شد');
   };
 
   const handleExport = () => {
@@ -224,13 +199,8 @@ const AIAssistantPage: React.FC = () => {
     a.download = `job-content-${jobData.title.toLowerCase().replace(/\s+/g, '-')}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success('Exported successfully!');
+    toast.success('با موفقیت خروجی گرفته شد!');
   };
-
-  // const getFieldIcon = (field: string) => {
-  //   const f = generationFields.find(f => f.id === field);
-  //   return f?.icon || FileText;
-  // };
 
   const getFieldColor = (field: string) => {
     const f = generationFields.find(f => f.id === field);
@@ -238,41 +208,41 @@ const AIAssistantPage: React.FC = () => {
   };
 
   const experienceLevels = [
-    { value: 'entry', label: 'Entry Level' },
-    { value: 'mid', label: 'Mid Level' },
-    { value: 'senior', label: 'Senior Level' },
-    { value: 'lead', label: 'Lead / Manager' },
+    { value: 'entry', label: 'مبتدی' },
+    { value: 'mid', label: 'متوسط' },
+    { value: 'senior', label: 'ارشد' },
+    { value: 'lead', label: 'رهبر تیم / مدیر' },
   ];
 
   const workModes = [
-    { value: 'remote', label: 'Remote' },
-    { value: 'hybrid', label: 'Hybrid' },
-    { value: 'on-site', label: 'On-Site' },
+    { value: 'remote', label: 'دورکاری' },
+    { value: 'hybrid', label: 'ترکیبی' },
+    { value: 'on-site', label: 'حضوری' },
   ];
 
   const jobTypes = [
-    { value: 'full-time', label: 'Full Time' },
-    { value: 'part-time', label: 'Part Time' },
-    { value: 'contract', label: 'Contract' },
-    { value: 'internship', label: 'Internship' },
+    { value: 'full-time', label: 'تمام وقت' },
+    { value: 'part-time', label: 'پاره وقت' },
+    { value: 'contract', label: 'قراردادی' },
+    { value: 'internship', label: 'کارآموزی' },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                AI Job Assistant
-                <Badge variant="info" size="sm" className="ml-2">
-                  <Sparkle className="w-3 h-3 mr-1" />
-                  Beta
+                دستیار شغلی هوش مصنوعی
+                <Badge variant="info" size="sm" className="mr-2">
+                  <Sparkle className="w-3 h-3 ml-1" />
+                  بتا
                 </Badge>
               </h1>
               <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-                Generate job descriptions, requirements, and more with AI
+                تولید شرح شغل، نیازمندی‌ها و بیشتر با هوش مصنوعی
               </p>
             </div>
           </div>
@@ -285,9 +255,9 @@ const AIAssistantPage: React.FC = () => {
             className="gap-1.5"
           >
             <Clock className="w-4 h-4" />
-            History
+            تاریخچه
             {history?.length > 0 && (
-              <Badge variant="gray" size="sm" className="ml-1">
+              <Badge variant="gray" size="sm" className="mr-1">
                 {history?.length}
               </Badge>
             )}
@@ -296,15 +266,15 @@ const AIAssistantPage: React.FC = () => {
             <>
               <Button variant="outline" size="sm" onClick={handleSave} disabled={isSaving} className="gap-1.5">
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkle className="w-4 h-4" />}
-                Save
+                ذخیره
               </Button>
               <Button variant="outline" size="sm" onClick={handleExport} className="gap-1.5">
                 <Download className="w-4 h-4" />
-                Export
+                خروجی
               </Button>
               <Button variant="outline" size="sm" onClick={handleClearAll} className="gap-1.5 text-red-500 hover:text-red-600">
                 <Trash2 className="w-4 h-4" />
-                Clear All
+                پاک کردن همه
               </Button>
             </>
           )}
@@ -318,7 +288,7 @@ const AIAssistantPage: React.FC = () => {
             <div className="flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-red-500" />
               <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-              <Button variant="ghost" size="sm" className="ml-auto">
+              <Button variant="ghost" size="sm" className="mr-auto">
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -333,20 +303,20 @@ const AIAssistantPage: React.FC = () => {
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <Brain className="w-4 h-4 text-blue-500" />
-                Job Details
+                جزئیات شغل
               </CardTitle>
-              <CardDescription>Enter the job information to generate content</CardDescription>
+              <CardDescription>برای تولید محتوا، اطلاعات شغل را وارد کنید</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Job Title */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Job Title *
+                  عنوان شغل *
                 </label>
                 <Input
                   value={jobData.title}
                   onChange={(e) => handleFieldChange('title', e.target.value)}
-                  placeholder="e.g., Senior Full Stack Developer"
+                  placeholder="مثال: توسعه‌دهنده ارشد فول‌استک"
                   className="mt-1.5"
                 />
               </div>
@@ -354,12 +324,12 @@ const AIAssistantPage: React.FC = () => {
               {/* Company Name */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Company Name
+                  نام شرکت
                 </label>
                 <Input
                   value={jobData.company}
                   onChange={(e) => handleFieldChange('company', e.target.value)}
-                  placeholder="e.g., Acme Inc."
+                  placeholder="مثال: شرکت آکمی"
                   className="mt-1.5"
                 />
               </div>
@@ -367,12 +337,12 @@ const AIAssistantPage: React.FC = () => {
               {/* Location */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Location
+                  موقعیت مکانی
                 </label>
                 <Input
                   value={jobData.location}
                   onChange={(e) => handleFieldChange('location', e.target.value)}
-                  placeholder="e.g., San Francisco, CA"
+                  placeholder="مثال: تهران، ایران"
                   className="mt-1.5"
                 />
               </div>
@@ -380,7 +350,7 @@ const AIAssistantPage: React.FC = () => {
               {/* Experience Level */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Experience Level
+                  سطح تجربه
                 </label>
                 <select
                   value={jobData.experienceLevel}
@@ -398,7 +368,7 @@ const AIAssistantPage: React.FC = () => {
               {/* Work Mode */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Work Mode
+                  نوع همکاری
                 </label>
                 <select
                   value={jobData.workMode}
@@ -416,7 +386,7 @@ const AIAssistantPage: React.FC = () => {
               {/* Job Type */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Job Type
+                  نوع شغل
                 </label>
                 <select
                   value={jobData.jobType}
@@ -435,25 +405,25 @@ const AIAssistantPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Min Salary
+                    حداقل حقوق
                   </label>
                   <Input
                     type="number"
                     value={jobData.minSalary || ''}
                     onChange={(e) => handleFieldChange('minSalary', parseInt(e.target.value) || 0)}
-                    placeholder="0"
+                    placeholder="۰"
                     className="mt-1.5"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Max Salary
+                    حداکثر حقوق
                   </label>
                   <Input
                     type="number"
                     value={jobData.maxSalary || ''}
                     onChange={(e) => handleFieldChange('maxSalary', parseInt(e.target.value) || 0)}
-                    placeholder="0"
+                    placeholder="۰"
                     className="mt-1.5"
                   />
                 </div>
@@ -462,17 +432,17 @@ const AIAssistantPage: React.FC = () => {
               {/* Tags */}
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Tags
+                  برچسب‌ها
                 </label>
                 <div className="flex gap-2 mt-1.5">
                   <Input
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
-                    placeholder="Add tag..."
+                    placeholder="افزودن برچسب..."
                     onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
                   />
                   <Button variant="outline" size="sm" onClick={handleAddTag}>
-                    Add
+                    افزودن
                   </Button>
                 </div>
                 {jobData?.tags?.length > 0 && (
@@ -500,12 +470,12 @@ const AIAssistantPage: React.FC = () => {
                 {isGenerating ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Generating...
+                    در حال تولید...
                   </>
                 ) : (
                   <>
                     <Zap className="w-4 h-4" />
-                    Generate All
+                    تولید همه
                   </>
                 )}
               </Button>
@@ -517,9 +487,9 @@ const AIAssistantPage: React.FC = () => {
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-yellow-500" />
-                Quick Actions
+                اقدامات سریع
               </CardTitle>
-              <CardDescription>Generate specific content sections</CardDescription>
+              <CardDescription>تولید بخش‌های خاص محتوا</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {generatedContent && generationFields.map((field) => (
@@ -528,16 +498,12 @@ const AIAssistantPage: React.FC = () => {
                   variant="outline"
                   className="w-full justify-start gap-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
                   onClick={() => handleGenerate(field.id)}
-                // disabled={isGenerating && isGenerating[field.id] || !jobData.title}
                 >
                   <field.icon className="w-4 h-4" />
-                  <span className="flex-1 text-left">{field.label}</span>
+                  <span className="flex-1 text-right">{field.label}</span>
                   {generatedContent[field.id] && (
                     <Check className="w-4 h-4 text-green-500" />
                   )}
-                  {/* {isGenerating && isGenerating[field.id] && (
-                    <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                  )} */}
                 </Button>
               ))}
             </CardContent>
@@ -578,7 +544,7 @@ const AIAssistantPage: React.FC = () => {
                   {(jobData.minSalary > 0 || jobData.maxSalary > 0) && (
                     <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
                       <DollarSign className="w-3 h-3" />
-                      ${jobData.minSalary.toLocaleString()} - ${jobData.maxSalary.toLocaleString()}
+                      {jobData.minSalary.toLocaleString('fa-IR')} - {jobData.maxSalary.toLocaleString('fa-IR')} تومان
                     </div>
                   )}
                 </div>
@@ -592,9 +558,9 @@ const AIAssistantPage: React.FC = () => {
               <div className="flex items-start gap-3">
                 <Lightbulb className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Pro Tip</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">نکته حرفه‌ای</p>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                    Fill in as many job details as possible for better, more relevant AI-generated content.
+                    تا حد امکان جزئیات شغل را پر کنید تا محتوای تولید شده توسط هوش مصنوعی بهتر و مرتبط‌تر باشد.
                   </p>
                 </div>
               </div>
@@ -611,7 +577,7 @@ const AIAssistantPage: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base flex items-center gap-2">
                     <Clock className="w-4 h-4" />
-                    Generation History
+                    تاریخچه تولید
                   </CardTitle>
                   <Button variant="ghost" size="sm" onClick={() => setShowHistory(false)}>
                     <X className="w-4 h-4" />
@@ -620,29 +586,7 @@ const AIAssistantPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {/* {history.slice().reverse().map((item, index) => {
-                    const Icon = getFieldIcon(item.field);
-                    return (
-                      <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                        <div className="flex items-center gap-2">
-                          <Icon className="w-4 h-4" />
-                          <span className="text-sm capitalize">{item.field}</span>
-                          <span className="text-xs text-gray-400">
-                            {new Date(item.timestamp).toLocaleTimeString()}
-                          </span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            document.getElementById(`content-${item.field}`)?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                        >
-                          <Eye className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    );
-                  })} */}
+                  {/* History items would go here */}
                 </div>
               </CardContent>
             </Card>
@@ -654,22 +598,22 @@ const AIAssistantPage: React.FC = () => {
               <Card
                 key={field.id}
                 id={`content-${field.id}`}
-                className="hover:shadow-lg transition-all duration-300 border-l-4"
-                style={{ borderLeftColor: `var(--color-${getFieldColor(field.id)}-500)` }}
+                className="hover:shadow-lg transition-all duration-300 border-r-4"
+                style={{ borderRightColor: `var(--color-${getFieldColor(field.id)}-500)` }}
               >
                 <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                   <div className="space-y-1">
                     <CardTitle className="text-base flex items-center gap-2">
                       <field.icon className="w-4 h-4" />
                       {field.label}
-                      <Badge variant="gray" size="sm" className="ml-2">
+                      <Badge variant="gray" size="sm" className="mr-2">
                         {typeof generatedContent[field.id] === 'string'
-                          ? `${(generatedContent[field.id] as string).split(' ')?.length} words`
-                          : `${(generatedContent[field.id] as string[])?.length} items`}
+                          ? `${(generatedContent[field.id] as string).split(' ')?.length} کلمه`
+                          : `${(generatedContent[field.id] as string[])?.length} مورد`}
                       </Badge>
                       {generatedContent[field.id] && (
                         <Badge variant="gray" size="sm">
-                          {generatedContent[field.id].tokens} tokens
+                          {generatedContent[field.id].tokens} توکن
                         </Badge>
                       )}
                     </CardTitle>
@@ -695,7 +639,6 @@ const AIAssistantPage: React.FC = () => {
                       size="sm"
                       onClick={() => handleGenerate(field.id)}
                       className="h-8 px-2"
-                    // disabled={isGenerating[field.id]}
                     >
                       <RefreshCw className="w-4 h-4" />
                     </Button>
@@ -712,7 +655,7 @@ const AIAssistantPage: React.FC = () => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed text-right">
                       {generatedContent[field.id] as string}
                     </p>
                   )}
@@ -729,10 +672,10 @@ const AIAssistantPage: React.FC = () => {
                   <Sparkles className="w-10 h-10 text-gray-300 dark:text-gray-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  No content generated yet
+                  هنوز محتوایی تولید نشده است
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 max-w-sm mx-auto">
-                  Enter job details and click any generation button above to create AI-powered content
+                  جزئیات شغل را وارد کنید و روی هر دکمه تولید بالا کلیک کنید تا محتوای مبتنی بر هوش مصنوعی ایجاد شود
                 </p>
               </CardContent>
             </Card>
@@ -744,11 +687,11 @@ const AIAssistantPage: React.FC = () => {
               <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1">
                   <Sparkle className="w-3 h-3" />
-                  {Object.keys(generatedContent).length} sections generated
+                  {Object.keys(generatedContent).length} بخش تولید شد
                 </span>
                 <span className="flex items-center gap-1">
                   <ClockIcon className="w-3 h-3" />
-                  {new Date().toLocaleString()}
+                  {new Date().toLocaleString('fa-IR')}
                 </span>
               </div>
               <div className="flex items-center gap-3">
@@ -757,14 +700,14 @@ const AIAssistantPage: React.FC = () => {
                   className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center gap-1"
                 >
                   <Download className="w-3 h-3" />
-                  Export All
+                  خروجی همه
                 </button>
                 <button
                   onClick={handleClearAll}
                   className="hover:text-red-600 transition-colors flex items-center gap-1"
                 >
                   <Trash2 className="w-3 h-3" />
-                  Clear All
+                  پاک کردن همه
                 </button>
               </div>
             </div>

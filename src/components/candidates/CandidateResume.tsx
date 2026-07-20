@@ -22,7 +22,6 @@ import { ProgressBar } from '../common/UI/ProgressBar';
 import { Modal } from '../common/UI/Modal';
 import { toast } from 'sonner';
 
-// ✅ Updated to match API response
 interface PdfFile {
     filename: string;
     path: string;
@@ -41,19 +40,16 @@ interface CandidateResumeProps {
     onPreview?: (resumeId: string) => void;
 }
 
-// ✅ Convert single resume to array for consistent handling
 const normalizeResumes = (resumes?: any | any[]): any[] => {
     if (!resumes) return [];
     if (Array.isArray(resumes)) return resumes;
     return [resumes];
 };
 
-// ✅ Calculate completion score based on filled fields
 const calculateCompletionScore = (resume: any): number => {
     let score = 0;
     let totalFields = 0;
 
-    // Personal Info
     if (resume.personalInfo) {
         totalFields += 5;
         if (resume.personalInfo.firstName) score++;
@@ -63,37 +59,31 @@ const calculateCompletionScore = (resume: any): number => {
         if (resume.personalInfo.location) score++;
     }
 
-    // Skills
     if (resume.skills) {
         totalFields += 1;
         if (resume.skills.length > 0) score++;
     }
 
-    // Experience
     if (resume.experience) {
         totalFields += 1;
         if (resume.experience.length > 0) score++;
     }
 
-    // Education
     if (resume.education) {
         totalFields += 1;
         if (resume.education.length > 0) score++;
     }
 
-    // Certifications
     if (resume.certifications) {
         totalFields += 1;
         if (resume.certifications.length > 0) score++;
     }
 
-    // Languages
     if (resume.languages) {
         totalFields += 1;
         if (resume.languages.length > 0) score++;
     }
 
-    // Projects
     if (resume.projects) {
         totalFields += 1;
         if (resume.projects.length > 0) score++;
@@ -102,10 +92,9 @@ const calculateCompletionScore = (resume: any): number => {
     return totalFields > 0 ? Math.round((score / totalFields) * 100) : 0;
 };
 
-// ✅ Convert single resume to display format
 const convertToDisplayResume = (resume: any) => ({
     _id: resume._id,
-    title: resume.title || 'Untitled Resume',
+    title: resume.title || 'رزومه بدون عنوان',
     template: resume.template || 'modern',
     visibility: resume.visibility || 'private',
     isDefault: resume.isDefault || false,
@@ -129,39 +118,39 @@ const ResumeCard: React.FC<{
 
     const getVisibilityBadge = (visibility: string) => {
         const config: Record<string, { variant: 'success' | 'gray' | 'info' | 'warning', label: string }> = {
-            public: { variant: 'success', label: 'Public' },
-            private: { variant: 'gray', label: 'Private' },
-            link_only: { variant: 'info', label: 'Link Only' },
-            PUBLIC: { variant: 'success', label: 'Public' },
-            PRIVATE: { variant: 'gray', label: 'Private' },
-            LINK_ONLY: { variant: 'info', label: 'Link Only' },
+            public: { variant: 'success', label: 'عمومی' },
+            private: { variant: 'gray', label: 'خصوصی' },
+            link_only: { variant: 'info', label: 'فقط لینک' },
+            PUBLIC: { variant: 'success', label: 'عمومی' },
+            PRIVATE: { variant: 'gray', label: 'خصوصی' },
+            LINK_ONLY: { variant: 'info', label: 'فقط لینک' },
         };
         return config[visibility] || { variant: 'gray', label: visibility };
     };
 
     const getTemplateBadge = (template: string) => {
         const config: Record<string, { variant: 'info' | 'gray' | 'success', label: string }> = {
-            modern: { variant: 'info', label: 'Modern' },
-            classic: { variant: 'gray', label: 'Classic' },
-            minimal: { variant: 'gray', label: 'Minimal' },
-            professional: { variant: 'success', label: 'Professional' },
-            creative: { variant: 'info', label: 'Creative' },
+            modern: { variant: 'info', label: 'مدرن' },
+            classic: { variant: 'gray', label: 'کلاسیک' },
+            minimal: { variant: 'gray', label: 'مینیمال' },
+            professional: { variant: 'success', label: 'حرفه‌ای' },
+            creative: { variant: 'info', label: 'خلاق' },
         };
         return config[template] || { variant: 'gray', label: template };
     };
 
     const formatFileSize = (bytes?: number) => {
-        if (!bytes) return 'Unknown size';
-        if (bytes < 1024) return bytes + ' B';
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        if (!bytes) return 'اندازه نامشخص';
+        if (bytes < 1024) return bytes + ' بایت';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' کیلوبایت';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' مگابایت';
     };
 
     const visibilityConfig = getVisibilityBadge(displayResume.visibility);
     const templateConfig = getTemplateBadge(displayResume.template);
 
     return (
-        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 hover:shadow-md transition-shadow">
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 hover:shadow-md transition-shadow" dir="rtl">
             <div className="flex items-start gap-4">
                 {/* Icon */}
                 <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex-shrink-0">
@@ -179,7 +168,7 @@ const ResumeCard: React.FC<{
                                 {displayResume.isDefault && (
                                     <Badge variant="success" size="sm" className="flex items-center gap-1">
                                         <CheckCircle className="w-3 h-3" />
-                                        Default
+                                        پیش‌فرض
                                     </Badge>
                                 )}
                             </div>
@@ -202,7 +191,7 @@ const ResumeCard: React.FC<{
                                 {!displayResume.fileName && (
                                     <span className="flex items-center gap-1 text-yellow-500">
                                         <File className="w-3 h-3" />
-                                        No file uploaded
+                                        فایلی آپلود نشده است
                                     </span>
                                 )}
                             </div>
@@ -227,7 +216,7 @@ const ResumeCard: React.FC<{
                                     <button
                                         onClick={() => onSetDefault?.(resume._id)}
                                         className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                        title="Set as default"
+                                        title="تنظیم به عنوان پیش‌فرض"
                                     >
                                         <Star className="w-4 h-4" />
                                     </button>
@@ -237,14 +226,14 @@ const ResumeCard: React.FC<{
                                         <button
                                             onClick={() => onPreview?.(resume._id)}
                                             className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                            title="Preview"
+                                            title="پیش‌نمایش"
                                         >
                                             <Eye className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => onDownload?.(resume._id)}
                                             className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                            title="Download"
+                                            title="دانلود"
                                         >
                                             <Download className="w-4 h-4" />
                                         </button>
@@ -253,7 +242,7 @@ const ResumeCard: React.FC<{
                                 <button
                                     onClick={() => onDelete?.(resume._id)}
                                     className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-gray-400 hover:text-red-600 dark:hover:text-red-400"
-                                    title="Delete"
+                                    title="حذف"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </button>
@@ -265,16 +254,16 @@ const ResumeCard: React.FC<{
                     <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-400 dark:text-gray-500">
                         <span className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
-                            Updated: {new Date(displayResume.updatedAt).toLocaleDateString()}
+                            بروزرسانی: {new Date(displayResume.updatedAt).toLocaleDateString('fa-IR')}
                         </span>
                         <span className="flex items-center gap-1">
                             <Clock className="w-3 h-3" />
-                            Created: {new Date(displayResume.createdAt).toLocaleDateString()}
+                            ایجاد: {new Date(displayResume.createdAt).toLocaleDateString('fa-IR')}
                         </span>
                         {displayResume.pdfFile?.uploadedAt && (
                             <span className="flex items-center gap-1">
                                 <Upload className="w-3 h-3" />
-                                Uploaded: {new Date(displayResume.pdfFile.uploadedAt).toLocaleDateString()}
+                                آپلود: {new Date(displayResume.pdfFile.uploadedAt).toLocaleDateString('fa-IR')}
                             </span>
                         )}
                     </div>
@@ -297,7 +286,6 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
 
-    // ✅ Normalize resumes to array
     const resumeArray = normalizeResumes(resumes);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -305,11 +293,11 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
         if (file) {
             const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
             if (!validTypes.includes(file.type)) {
-                toast.error('Please upload a PDF or Word document');
+                toast.error('لطفاً یک فایل PDF یا Word آپلود کنید');
                 return;
             }
             if (file.size > 10 * 1024 * 1024) {
-                toast.error('File size must be less than 10MB');
+                toast.error('حجم فایل باید کمتر از ۱۰ مگابایت باشد');
                 return;
             }
             setSelectedFile(file);
@@ -318,18 +306,18 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
 
     const handleUpload = async () => {
         if (!selectedFile) {
-            toast.error('Please select a file');
+            toast.error('لطفاً یک فایل انتخاب کنید');
             return;
         }
 
         setUploading(true);
         try {
             await onUpload?.(selectedFile);
-            toast.success('Resume uploaded successfully!');
+            toast.success('رزومه با موفقیت آپلود شد!');
             setShowUploadModal(false);
             setSelectedFile(null);
         } catch (error) {
-            toast.error('Failed to upload resume');
+            toast.error('آپلود رزومه با شکست مواجه شد');
         } finally {
             setUploading(false);
         }
@@ -337,39 +325,39 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
 
     const handleDownload = (resumeId: string) => {
         onDownload?.(resumeId);
-        toast.success('Downloading resume...');
+        toast.success('در حال دانلود رزومه...');
     };
 
     const handleSetDefault = (resumeId: string) => {
         onSetDefault?.(resumeId);
-        toast.success('Default resume updated!');
+        toast.success('رزومه پیش‌فرض بروزرسانی شد!');
     };
 
     const handleDelete = (resumeId: string) => {
-        if (window.confirm('Are you sure you want to delete this resume?')) {
+        if (window.confirm('آیا مطمئن هستید که می‌خواهید این رزومه را حذف کنید؟')) {
             onDelete?.(resumeId);
-            toast.success('Resume deleted successfully!');
+            toast.success('رزومه با موفقیت حذف شد!');
         }
     };
 
     const handlePreview = (resumeId: string) => {
         onPreview?.(resumeId);
-        toast.info('Opening resume preview...');
+        toast.info('در حال باز کردن پیش‌نمایش رزومه...');
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4" dir="rtl">
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <FileText className="w-4 h-4 text-gray-400" />
-                        Resumes
+                        رزومه‌ها
                         <Badge variant="gray" size="sm">
-                            {resumeArray.length} total
+                            {resumeArray.length} کل
                         </Badge>
                     </h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Manage candidate resumes</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">مدیریت رزومه‌های داوطلب</p>
                 </div>
                 <div className="flex items-center gap-2">
                     {onRefresh && (
@@ -389,7 +377,7 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
                         className="gap-1.5"
                     >
                         <Upload className="w-4 h-4" />
-                        Upload Resume
+                        آپلود رزومه
                     </Button>
                 </div>
             </div>
@@ -411,9 +399,9 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
             ) : (
                 <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/30 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700">
                     <FileText className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">No resumes uploaded</h4>
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">هیچ رزومه‌ای آپلود نشده است</h4>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Upload a resume to get started
+                        برای شروع، یک رزومه آپلود کنید
                     </p>
                     <Button
                         variant="outline"
@@ -422,7 +410,7 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
                         className="mt-4 gap-1.5"
                     >
                         <Upload className="w-4 h-4" />
-                        Upload Resume
+                        آپلود رزومه
                     </Button>
                 </div>
             )}
@@ -434,17 +422,17 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
                     setShowUploadModal(false);
                     setSelectedFile(null);
                 }}
-                title="Upload Resume"
+                title="آپلود رزومه"
                 size="sm"
             >
-                <div className="p-6 space-y-4">
+                <div className="p-6 space-y-4" dir="rtl">
                     <div className="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer">
                         <Upload className="w-10 h-10 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
                         <p className="text-sm text-gray-600 dark:text-gray-300">
-                            {selectedFile ? selectedFile.name : 'Drop your resume here or click to browse'}
+                            {selectedFile ? selectedFile.name : 'فایل رزومه خود را اینجا رها کنید یا کلیک کنید'}
                         </p>
                         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                            PDF, DOC, or DOCX (Max 10MB)
+                            PDF، DOC یا DOCX (حداکثر ۱۰ مگابایت)
                         </p>
                         <input
                             type="file"
@@ -462,7 +450,7 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
                                     {selectedFile.name}
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    {(selectedFile.size / 1024).toFixed(1)} KB
+                                    {(selectedFile.size / 1024).toFixed(1)} کیلوبایت
                                 </p>
                             </div>
                             <button
@@ -482,7 +470,7 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
                                 setSelectedFile(null);
                             }}
                         >
-                            Cancel
+                            انصراف
                         </Button>
                         <Button
                             variant="primary"
@@ -492,7 +480,7 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
                             className="gap-2"
                         >
                             <Upload className="w-4 h-4" />
-                            Upload Resume
+                            آپلود رزومه
                         </Button>
                     </div>
                 </div>

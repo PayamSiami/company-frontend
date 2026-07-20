@@ -82,11 +82,11 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
 
     const getStatusConfig = (status: string) => {
         const configs = {
-            OPEN: { label: 'Active', variant: 'success' as const, icon: CheckCircle },
-            DRAFT: { label: 'Draft', variant: 'gray' as const, icon: Clock },
-            CLOSED: { label: 'Closed', variant: 'gray' as const, icon: XCircle },
-            EXPIRED: { label: 'Expired', variant: 'danger' as const, icon: AlertCircle },
-            FILLED: { label: 'Filled', variant: 'success' as const, icon: CheckCircle },
+            OPEN: { label: 'فعال', variant: 'success' as const, icon: CheckCircle },
+            DRAFT: { label: 'پیش‌نویس', variant: 'gray' as const, icon: Clock },
+            CLOSED: { label: 'بسته شده', variant: 'gray' as const, icon: XCircle },
+            EXPIRED: { label: 'منقضی شده', variant: 'danger' as const, icon: AlertCircle },
+            FILLED: { label: 'تکمیل شده', variant: 'success' as const, icon: CheckCircle },
         };
         return configs[status as keyof typeof configs] || configs.DRAFT;
     };
@@ -94,8 +94,9 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
     const statusConfig = getStatusConfig(job.status);
 
     const formatDate = (date: string) => {
-        return new Date(date).toLocaleDateString('en-US', {
-            month: 'short',
+        if (!date) return 'نامشخص';
+        return new Date(date).toLocaleDateString('fa-IR', {
+            month: 'long',
             day: 'numeric',
             year: 'numeric'
         });
@@ -103,12 +104,12 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
 
     const getJobTypeLabel = (type: string) => {
         const types: Record<string, string> = {
-            FULL_TIME: 'Full Time',
-            PART_TIME: 'Part Time',
-            CONTRACT: 'Contract',
-            INTERNSHIP: 'Internship',
-            FREELANCE: 'Freelance',
-            REMOTE: 'Remote'
+            FULL_TIME: 'تمام وقت',
+            PART_TIME: 'پاره وقت',
+            CONTRACT: 'قراردادی',
+            INTERNSHIP: 'کارآموزی',
+            FREELANCE: 'آزاد',
+            REMOTE: 'دورکاری'
         };
         return types[type] || type;
     };
@@ -126,6 +127,7 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                 job.status === 'CLOSED' || job.status === 'EXPIRED' ? "opacity-75" : ""
             )}
             onClick={() => setExpanded(!expanded)}
+            dir="rtl"
         >
             <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -142,7 +144,7 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                         <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
                             <span className="flex items-center gap-1">
                                 <Building2 className="w-3.5 h-3.5" />
-                                {job.companyName || 'Unknown Company'}
+                                {job.companyName || 'شرکت نامشخص'}
                             </span>
                             {job.location && (
                                 <span className="flex items-center gap-1">
@@ -157,7 +159,7 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                             {job.applicationCount !== undefined && (
                                 <span className="flex items-center gap-1">
                                     <Users className="w-3.5 h-3.5" />
-                                    {job.applicationCount} applications
+                                    {job.applicationCount} درخواست
                                 </span>
                             )}
                         </div>
@@ -166,7 +168,7 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                     <div className="flex items-center gap-2 shrink-0">
                         {job.salaryRange && (
                             <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                ${job.salaryRange.min.toLocaleString()} - ${job.salaryRange.max.toLocaleString()}
+                                {job.salaryRange.min.toLocaleString()} - {job.salaryRange.max.toLocaleString()} {job.salaryRange.currency}
                             </span>
                         )}
                         <DropdownMenu>
@@ -179,36 +181,36 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                                 <Link to={`/jobs/${job._id}`}>
                                     <DropdownMenuItem className="gap-2">
                                         <Eye className="w-4 h-4" />
-                                        View Details
+                                        مشاهده جزئیات
                                     </DropdownMenuItem>
                                 </Link>
                                 <DropdownMenuItem onClick={(e) => handleAction('edit', e)} className="gap-2">
                                     <Edit className="w-4 h-4" />
-                                    Edit
+                                    ویرایش
                                 </DropdownMenuItem>
                                 {job.status === 'DRAFT' && (
                                     <DropdownMenuItem onClick={(e) => handleAction('publish', e)} className="gap-2">
                                         <Send className="w-4 h-4" />
-                                        Publish
+                                        انتشار
                                     </DropdownMenuItem>
                                 )}
                                 {job.status === 'OPEN' && (
                                     <DropdownMenuItem onClick={(e) => handleAction('close', e)} className="gap-2">
                                         <XCircle className="w-4 h-4" />
-                                        Close
+                                        بستن
                                     </DropdownMenuItem>
                                 )}
                                 <DropdownMenuItem onClick={(e) => handleAction('duplicate', e)} className="gap-2">
                                     <Copy className="w-4 h-4" />
-                                    Duplicate
+                                    کپی کردن
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={(e) => handleAction('archive', e)} className="gap-2">
                                     <Archive className="w-4 h-4" />
-                                    Archive
+                                    بایگانی
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={(e) => handleAction('delete', e)} className="gap-2 text-red-600">
                                     <Trash2 className="w-4 h-4" />
-                                    Delete
+                                    حذف
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -218,23 +220,23 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                 {/* Expanded Details */}
                 {expanded && (
                     <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 space-y-2">
-                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 text-right">
                             {job.description}
                         </p>
                         <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                             <span className="flex items-center gap-1">
                                 <Calendar className="w-3.5 h-3.5" />
-                                Posted: {formatDate(job.createdAt)}
+                                تاریخ ثبت: {formatDate(job.createdAt)}
                             </span>
                             {job.expiresAt && (
                                 <span className="flex items-center gap-1">
                                     <AlertCircle className="w-3.5 h-3.5" />
-                                    Expires: {formatDate(job.expiresAt)}
+                                    انقضا: {formatDate(job.expiresAt)}
                                 </span>
                             )}
                             <span className="flex items-center gap-1">
                                 <Users className="w-3.5 h-3.5" />
-                                {job.applicationCount || 0} applications
+                                {job.applicationCount || 0} درخواست
                             </span>
                             <Badge variant="gray" size="sm">
                                 {job.experienceLevel}
@@ -282,7 +284,6 @@ export const JobList: React.FC<JobListProps> = ({
             case 'close': onClose?.(id); break;
             case 'view':
             case 'edit':
-                // Navigate to job detail/edit
                 break;
         }
     };
@@ -311,27 +312,27 @@ export const JobList: React.FC<JobListProps> = ({
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
+            <div className="flex flex-col items-center justify-center py-12 space-y-4" dir="rtl">
                 <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                <p className="text-gray-500 dark:text-gray-400">Loading jobs...</p>
+                <p className="text-gray-500 dark:text-gray-400">در حال بارگذاری مشاغل...</p>
             </div>
         );
     }
 
     if (jobs.length === 0) {
         return (
-            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50">
+            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50" dir="rtl">
                 <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                     <Briefcase className="h-10 w-10 text-gray-300 dark:text-gray-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No jobs found</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">هیچ شغلی یافت نشد</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                    Start posting jobs to attract candidates
+                    برای جذب داوطلبان، ثبت آگهی شغلی را شروع کنید
                 </p>
                 <Link to="/jobs/create">
                     <Button className="mt-4 gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                         <Plus className="w-4 h-4" />
-                        Post Your First Job
+                        ثبت اولین آگهی شغلی
                     </Button>
                 </Link>
             </div>
@@ -339,18 +340,18 @@ export const JobList: React.FC<JobListProps> = ({
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4" dir="rtl">
             {/* Filters */}
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-3">
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search jobs..."
-                            className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all w-48 md:w-64"
+                            placeholder="جستجوی مشاغل..."
+                            className="pr-9 pl-4 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all w-48 md:w-64 text-right"
                         />
                     </div>
 
@@ -359,12 +360,12 @@ export const JobList: React.FC<JobListProps> = ({
                         onChange={(e) => setFilterStatus(e.target.value)}
                         className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="all">All Status</option>
-                        <option value="OPEN">Active</option>
-                        <option value="DRAFT">Draft</option>
-                        <option value="CLOSED">Closed</option>
-                        <option value="EXPIRED">Expired</option>
-                        <option value="FILLED">Filled</option>
+                        <option value="all">همه وضعیت‌ها</option>
+                        <option value="OPEN">فعال</option>
+                        <option value="DRAFT">پیش‌نویس</option>
+                        <option value="CLOSED">بسته شده</option>
+                        <option value="EXPIRED">منقضی شده</option>
+                        <option value="FILLED">تکمیل شده</option>
                     </select>
 
                     <select
@@ -372,15 +373,15 @@ export const JobList: React.FC<JobListProps> = ({
                         onChange={(e) => setSortBy(e.target.value as any)}
                         className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="newest">Newest</option>
-                        <option value="oldest">Oldest</option>
-                        <option value="applications">Most Applied</option>
-                        <option value="title">Title</option>
+                        <option value="newest">جدیدترین</option>
+                        <option value="oldest">قدیمی‌ترین</option>
+                        <option value="applications">بیشترین درخواست</option>
+                        <option value="title">عنوان</option>
                     </select>
                 </div>
 
                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {filteredJobs?.length} {filteredJobs?.length === 1 ? 'job' : 'jobs'}
+                    {filteredJobs?.length} {filteredJobs?.length === 1 ? 'شغل' : 'شغل'}
                 </span>
             </div>
 
@@ -404,8 +405,8 @@ export const JobList: React.FC<JobListProps> = ({
                     <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                         <Search className="h-8 w-8 text-gray-300 dark:text-gray-600" />
                     </div>
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">No matching jobs</h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Try adjusting your search or filters</p>
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">هیچ شغلی مطابقت ندارد</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">سعی کنید جستجو یا فیلترهای خود را تنظیم کنید</p>
                     <Button
                         variant="outline"
                         size="sm"
@@ -415,7 +416,7 @@ export const JobList: React.FC<JobListProps> = ({
                             setFilterStatus('all');
                         }}
                     >
-                        Clear filters
+                        پاک کردن فیلترها
                     </Button>
                 </div>
             )}

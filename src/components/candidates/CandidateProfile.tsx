@@ -22,7 +22,6 @@ import { Button } from '../common/UI/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../common/UI/Tabs';
 import { cn } from '../../lib/utils';
 
-// ✅ Define proper types matching the API response
 interface Skill {
     _id?: string;
     name: string;
@@ -145,8 +144,8 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
     const projects = resume?.projects || [];
 
     const formatDate = (date: string) => {
-        if (!date) return 'N/A';
-        return new Date(date).toLocaleDateString('en-US', {
+        if (!date) return 'نامشخص';
+        return new Date(date).toLocaleDateString('fa-IR', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
@@ -202,19 +201,39 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
         return colors[level || ''] || 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
     };
 
+    const getLevelLabel = (level?: string) => {
+        const labels: Record<string, string> = {
+            beginner: 'مبتدی',
+            intermediate: 'متوسط',
+            advanced: 'پیشرفته',
+            expert: 'متخصص',
+        };
+        return labels[level || ''] || level || '';
+    };
+
     const getStatusLabel = (status: string) => {
         const labels: Record<string, string> = {
-            pending: 'Pending',
-            reviewed: 'Reviewed',
-            shortlisted: 'Shortlisted',
-            interviewing: 'Interviewing',
-            hired: 'Hired',
-            rejected: 'Rejected',
-            ACTIVE: 'Active',
-            INACTIVE: 'Inactive',
-            BLACKLISTED: 'Blacklisted'
+            pending: 'در انتظار',
+            reviewed: 'بررسی شده',
+            shortlisted: 'انتخاب شده',
+            interviewing: 'در حال مصاحبه',
+            hired: 'استخدام شده',
+            rejected: 'رد شده',
+            ACTIVE: 'فعال',
+            INACTIVE: 'غیرفعال',
+            BLACKLISTED: 'لیست سیاه'
         };
-        return labels[status] || status || 'Unknown';
+        return labels[status] || status || 'نامشخص';
+    };
+
+    const getAIRecommendationLabel = (recommendation?: string) => {
+        const labels: Record<string, string> = {
+            consider: 'مورد توجه',
+            interview: 'مصاحبه',
+            shortlist: 'انتخاب',
+            reject: 'رد'
+        };
+        return labels[recommendation || ''] || recommendation || '';
     };
 
     const StatusIcon = getStatusIcon(candidate.status);
@@ -225,7 +244,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
     }, 0);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Profile Header */}
             <Card>
                 <CardContent className="p-6">
@@ -254,7 +273,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                         {personalInfo?.firstName} {personalInfo?.lastName}
                                     </h2>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {personalInfo?.title || 'Candidate'}
+                                        {personalInfo?.title || 'داوطلب'}
                                     </p>
                                     <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
                                         <span className="flex items-center gap-1">
@@ -297,7 +316,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                             )}
                                         >
                                             <Award className="w-3.5 h-3.5" />
-                                            AI: {candidate.aiRecommendation}
+                                            AI: {getAIRecommendationLabel(candidate.aiRecommendation)}
                                         </Badge>
                                     )}
                                     {onShortlistToggle && (
@@ -308,7 +327,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                             className="gap-1.5"
                                         >
                                             <Star className={cn("w-4 h-4", isShortlisted && "fill-current")} />
-                                            {isShortlisted ? 'Shortlisted' : 'Shortlist'}
+                                            {isShortlisted ? 'انتخاب شده' : 'انتخاب'}
                                         </Button>
                                     )}
                                 </div>
@@ -322,15 +341,15 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Card>
                     <CardContent className="p-4">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Experience</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">کل سابقه کاری</p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                            {totalExperience} years
+                            {totalExperience} سال
                         </p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardContent className="p-4">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Skills</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">مهارت‌ها</p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
                             {skills.length}
                         </p>
@@ -338,7 +357,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 </Card>
                 <Card>
                     <CardContent className="p-4">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">AI Score</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">امتیاز هوش مصنوعی</p>
                         <p className="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-1">
                             {candidate.score || 0}%
                         </p>
@@ -346,7 +365,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 </Card>
                 <Card>
                     <CardContent className="p-4">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Applied</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">تاریخ ثبت</p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
                             {formatDate(candidate.appliedDate)}
                         </p>
@@ -359,27 +378,27 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 <TabsList className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-1 flex flex-wrap">
                     <TabsTrigger value="overview" className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        Overview
+                        نمای کلی
                     </TabsTrigger>
                     <TabsTrigger value="experience" className="flex items-center gap-2">
                         <Briefcase className="w-4 h-4" />
-                        Experience
+                        سابقه کاری
                     </TabsTrigger>
                     <TabsTrigger value="education" className="flex items-center gap-2">
                         <GraduationCap className="w-4 h-4" />
-                        Education
+                        تحصیلات
                     </TabsTrigger>
                     <TabsTrigger value="skills" className="flex items-center gap-2">
                         <Star className="w-4 h-4" />
-                        Skills
+                        مهارت‌ها
                     </TabsTrigger>
                     <TabsTrigger value="certifications" className="flex items-center gap-2">
                         <Award className="w-4 h-4" />
-                        Certifications
+                        گواهینامه‌ها
                     </TabsTrigger>
                     <TabsTrigger value="projects" className="flex items-center gap-2">
                         <FileText className="w-4 h-4" />
-                        Projects
+                        پروژه‌ها
                     </TabsTrigger>
                 </TabsList>
 
@@ -389,10 +408,10 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                     {personalInfo?.summary && (
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Professional Summary</CardTitle>
+                                <CardTitle className="text-base">خلاصه حرفه‌ای</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 text-right">
                                     {personalInfo.summary}
                                 </p>
                             </CardContent>
@@ -402,8 +421,8 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                     {/* Skills Overview */}
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Skills</CardTitle>
-                            <CardDescription>Top skills and proficiency</CardDescription>
+                            <CardTitle className="text-base">مهارت‌ها</CardTitle>
+                            <CardDescription>مهارت‌های برتر و سطح تسلط</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-wrap gap-2">
@@ -417,14 +436,14 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                     >
                                         {skill.name}
                                         {skill.level && (
-                                            <span className="ml-1.5 text-xs opacity-70">
-                                                ({skill.level})
+                                            <span className="mr-1.5 text-xs opacity-70">
+                                                ({getLevelLabel(skill.level)})
                                             </span>
                                         )}
                                     </Badge>
                                 ))}
                                 {skills.length === 0 && (
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">No skills listed</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">هیچ مهارتی ذکر نشده است</p>
                                 )}
                             </div>
                         </CardContent>
@@ -434,7 +453,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Experience Summary</CardTitle>
+                                <CardTitle className="text-base">خلاصه سابقه کاری</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-2">
@@ -444,22 +463,22 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                                 <Briefcase className="w-4 h-4 text-blue-500" />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white text-right">
                                                     {exp.position}
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                    {exp.company} • {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 text-right">
+                                                    {exp.company} • {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'تاکنون'}
                                                 </p>
                                             </div>
                                         </div>
                                     ))}
                                     {experience.length > 2 && (
-                                        <p className="text-xs text-gray-400 dark:text-gray-500">
-                                            +{experience.length - 2} more experiences
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 text-right">
+                                            +{experience.length - 2} سابقه کاری دیگر
                                         </p>
                                     )}
                                     {experience.length === 0 && (
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">No experience listed</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ سابقه کاری ذکر نشده است</p>
                                     )}
                                 </div>
                             </CardContent>
@@ -467,7 +486,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
 
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Education</CardTitle>
+                                <CardTitle className="text-base">تحصیلات</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-2">
@@ -477,22 +496,22 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                                 <GraduationCap className="w-4 h-4 text-purple-500" />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                                    {edu.degree} {edu.fieldOfStudy ? `in ${edu.fieldOfStudy}` : ''}
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white text-right">
+                                                    {edu.degree} {edu.fieldOfStudy ? `در ${edu.fieldOfStudy}` : ''}
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                    {edu.institution} • {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Present'}
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 text-right">
+                                                    {edu.institution} • {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'تاکنون'}
                                                 </p>
                                             </div>
                                         </div>
                                     ))}
                                     {education.length > 2 && (
-                                        <p className="text-xs text-gray-400 dark:text-gray-500">
-                                            +{education.length - 2} more education
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 text-right">
+                                            +{education.length - 2} تحصیلات دیگر
                                         </p>
                                     )}
                                     {education.length === 0 && (
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">No education listed</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ تحصیلاتی ذکر نشده است</p>
                                     )}
                                 </div>
                             </CardContent>
@@ -503,7 +522,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                     {languages.length > 0 && (
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-base">Languages</CardTitle>
+                                <CardTitle className="text-base">زبان‌ها</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="flex flex-wrap gap-2">
@@ -522,31 +541,31 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 <TabsContent value="experience" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Work Experience</CardTitle>
-                            <CardDescription>Professional experience history</CardDescription>
+                            <CardTitle className="text-base">سابقه کاری</CardTitle>
+                            <CardDescription>تاریخچه سابقه حرفه‌ای</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {experience.length > 0 ? (
                                 <div className="relative space-y-6">
-                                    <div className="absolute left-5 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
+                                    <div className="absolute right-5 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
                                     {experience.map((exp, index) => (
-                                        <div key={exp._id || index} className="relative pl-12">
-                                            <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
+                                        <div key={exp._id || index} className="relative pr-12">
+                                            <div className="absolute right-0 top-1 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
                                                 {exp.company?.charAt(0) || 'W'}
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white text-right">
                                                     {exp.position}
                                                 </h4>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">{exp.company}</p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                    {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
-                                                    <span className="ml-2 text-gray-400">
-                                                        ({calculateExperience(exp.startDate, exp.endDate)} years)
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 text-right">{exp.company}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 text-right">
+                                                    {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'تاکنون'}
+                                                    <span className="mr-2 text-gray-400">
+                                                        ({calculateExperience(exp.startDate, exp.endDate)} سال)
                                                     </span>
                                                 </p>
                                                 {exp.description && (
-                                                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 text-right">
                                                         {exp.description}
                                                     </p>
                                                 )}
@@ -555,7 +574,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">No experience listed</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ سابقه کاری ذکر نشده است</p>
                             )}
                         </CardContent>
                     </Card>
@@ -565,32 +584,32 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 <TabsContent value="education" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Education</CardTitle>
-                            <CardDescription>Academic background</CardDescription>
+                            <CardTitle className="text-base">تحصیلات</CardTitle>
+                            <CardDescription>پیشینه تحصیلی</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {education.length > 0 ? (
                                 <div className="relative space-y-6">
-                                    <div className="absolute left-5 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
+                                    <div className="absolute right-5 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
                                     {education.map((edu, index) => (
-                                        <div key={edu._id || index} className="relative pl-12">
-                                            <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-medium">
+                                        <div key={edu._id || index} className="relative pr-12">
+                                            <div className="absolute right-0 top-1 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-medium">
                                                 {edu.institution?.charAt(0) || 'E'}
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                                                    {edu.degree} {edu.fieldOfStudy ? `in ${edu.fieldOfStudy}` : ''}
+                                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white text-right">
+                                                    {edu.degree} {edu.fieldOfStudy ? `در ${edu.fieldOfStudy}` : ''}
                                                 </h4>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">{edu.institution}</p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                    {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Present'}
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 text-right">{edu.institution}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 text-right">
+                                                    {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'تاکنون'}
                                                 </p>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">No education listed</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ تحصیلاتی ذکر نشده است</p>
                             )}
                         </CardContent>
                     </Card>
@@ -600,8 +619,8 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 <TabsContent value="skills" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Skills & Expertise</CardTitle>
-                            <CardDescription>Technical and professional skills</CardDescription>
+                            <CardTitle className="text-base">مهارت‌ها و تخصص‌ها</CardTitle>
+                            <CardDescription>مهارت‌های فنی و حرفه‌ای</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {skills.length > 0 ? (
@@ -616,15 +635,15 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                         >
                                             {skill.name}
                                             {skill.level && (
-                                                <span className="ml-1.5 text-xs opacity-70">
-                                                    ({skill.level})
+                                                <span className="mr-1.5 text-xs opacity-70">
+                                                    ({getLevelLabel(skill.level)})
                                                 </span>
                                             )}
                                         </Badge>
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">No skills listed</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ مهارتی ذکر نشده است</p>
                             )}
                         </CardContent>
                     </Card>
@@ -634,8 +653,8 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 <TabsContent value="certifications" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Certifications</CardTitle>
-                            <CardDescription>Professional certifications and credentials</CardDescription>
+                            <CardTitle className="text-base">گواهینامه‌ها</CardTitle>
+                            <CardDescription>گواهینامه‌های حرفه‌ای و مدارک</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {certifications.length > 0 ? (
@@ -646,10 +665,10 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                                 <Award className="w-4 h-4 text-orange-500" />
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                                                <h4 className="text-sm font-medium text-gray-900 dark:text-white text-right">
                                                     {cert.name}
                                                 </h4>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 text-right">
                                                     {cert.issuer} • {formatDate(cert.date)}
                                                 </p>
                                             </div>
@@ -657,7 +676,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">No certifications listed</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ گواهینامه‌ای ذکر نشده است</p>
                             )}
                         </CardContent>
                     </Card>
@@ -667,15 +686,15 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                 <TabsContent value="projects" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-base">Projects</CardTitle>
-                            <CardDescription>Project portfolio</CardDescription>
+                            <CardTitle className="text-base">پروژه‌ها</CardTitle>
+                            <CardDescription>نمونه کارها و پروژه‌ها</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {projects.length > 0 ? (
                                 <div className="space-y-4">
                                     {projects.map((project, index) => (
                                         <div key={project._id || index} className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                                            <h4 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                                            <h4 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2 text-right">
                                                 {project.name}
                                                 {project.link && (
                                                     <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">
@@ -684,7 +703,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                                 )}
                                             </h4>
                                             {project.description && (
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-right">
                                                     {project.description}
                                                 </p>
                                             )}
@@ -692,7 +711,7 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">No projects listed</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-right">هیچ پروژه‌ای ذکر نشده است</p>
                             )}
                         </CardContent>
                     </Card>

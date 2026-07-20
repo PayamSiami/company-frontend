@@ -16,7 +16,7 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
     application,
     viewMode = 'grid'
 }) => {
-    const { applicantId , jobId, aiScore, status, createdAt } = application
+    const { applicantId, jobId, aiScore, status, createdAt } = application
 
     const getScoreColor = (score: number) => {
         if (score >= 70) return 'text-green-600 dark:text-green-400';
@@ -30,18 +30,44 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
         return 'danger';
     };
 
-    console.log(application)
-    if (viewMode == 'list') {
+    const getScoreLabel = (score: number) => {
+        if (score >= 70) return 'بالا';
+        if (score >= 40) return 'متوسط';
+        return 'پایین';
+    };
+
+    const getStatusLabel = (status: string) => {
+        const statusMap: Record<string, string> = {
+            'PENDING': 'در انتظار',
+            'REVIEWING': 'در حال بررسی',
+            'SHORTLISTED': 'انتخاب شده',
+            'REJECTED': 'رد شده',
+            'HIRED': 'استخدام شده',
+            'INTERVIEW_SCHEDULED': 'مصاحبه برنامه‌ریزی شده',
+        };
+        return statusMap[status] || status || 'در انتظار';
+    };
+
+    const formatDate = (date: string) => {
+        if (!date) return 'نامشخص';
+        return new Date(date).toLocaleDateString('fa-IR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
+
+    if (viewMode === 'list') {
         return (
-            <Card className="p-4 hover:shadow-md transition-shadow">
+            <Card className="p-4 hover:shadow-md transition-shadow" dir="rtl">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
                             {applicantId?.username?.charAt(0) || 'U'}
                         </div>
                         <div>
-                            <p className="font-medium text-gray-900 dark:text-white">{applicantId?.username|| 'Unknown'}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{jobId?.title}</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{applicantId?.username || 'ناشناس'}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{jobId?.title || 'موقعیت نامشخص'}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
@@ -52,9 +78,9 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
                             <ProgressBar value={aiScore || 0} max={100} className="w-20 h-1.5" />
                         </div>
                         <Badge variant={getScoreBadgeVariant(aiScore || 0)}>
-                            {aiScore >= 70 ? 'High' : aiScore >= 40 ? 'Medium' : 'Low'}
+                            {getScoreLabel(aiScore || 0)}
                         </Badge>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" aria-label="مشاهده">
                             <Eye className="w-4 h-4" />
                         </Button>
                     </div>
@@ -64,27 +90,25 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
     }
 
     return (
-        <Card className="p-4 hover:shadow-md transition-shadow">
+        <Card className="p-4 hover:shadow-md transition-shadow" dir="rtl">
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold">
-                        {applicantId?.username
-                            ?.charAt(0) || 'U'}
+                        {applicantId?.username?.charAt(0) || 'U'}
                     </div>
                     <div>
-                        <p className="font-medium text-gray-900 dark:text-white">{applicantId?.username
-                            || 'Unknown'}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{jobId?.title}</p>
+                        <p className="font-medium text-gray-900 dark:text-white">{applicantId?.username || 'ناشناس'}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{jobId?.title || 'موقعیت نامشخص'}</p>
                     </div>
                 </div>
                 <Badge variant={getScoreBadgeVariant(aiScore || 0)}>
-                    {aiScore >= 70 ? 'High' : aiScore >= 40 ? 'Medium' : 'Low'}
+                    {getScoreLabel(aiScore || 0)}
                 </Badge>
             </div>
 
             <div className="mt-3">
                 <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">AI Match Score</span>
+                    <span className="text-gray-500 dark:text-gray-400">امتیاز تطابق هوش مصنوعی</span>
                     <span className={cn("font-semibold", getScoreColor(aiScore || 0))}>
                         {aiScore || 0}%
                     </span>
@@ -93,18 +117,18 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
             </div>
 
             <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                <span>Applied: {new Date(createdAt).toLocaleDateString()}</span>
-                <Badge variant="gray" size="sm">{status || 'Pending'}</Badge>
+                <span>تاریخ ثبت: {formatDate(createdAt)}</span>
+                <Badge variant="gray" size="sm">{getStatusLabel(status)}</Badge>
             </div>
 
             <div className="mt-3 flex gap-2">
                 <Button variant="outline" size="sm" className="flex-1 gap-1">
                     <Eye className="w-3.5 h-3.5" />
-                    View
+                    مشاهده
                 </Button>
                 <Button variant="outline" size="sm" className="flex-1 gap-1">
                     <Mail className="w-3.5 h-3.5" />
-                    Contact
+                    تماس
                 </Button>
             </div>
         </Card>

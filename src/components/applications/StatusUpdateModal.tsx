@@ -41,8 +41,8 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
   onClose,
   onUpdate,
   isLoading = false,
-  candidateName = 'Candidate',
-  jobTitle = 'Position'
+  candidateName = 'داوطلب',
+  jobTitle = 'موقعیت شغلی'
 }) => {
   const [status, setStatus] = useState<ApplicationStatusType>(currentStatus);
   const [notes, setNotes] = useState('');
@@ -68,12 +68,12 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
   }, [status]);
 
   const statusOptions = [
-    { value: ApplicationStatus.PENDING, label: 'Pending', icon: Clock, color: 'yellow' },
-    { value: ApplicationStatus.REVIEWING, label: 'Reviewing', icon: Users, color: 'blue' },
-    { value: ApplicationStatus.SHORTLISTED, label: 'Shortlisted', icon: Star, color: 'green' },
-    { value: ApplicationStatus.INTERVIEW_SCHEDULED, label: 'Interview Scheduled', icon: Calendar, color: 'purple' },
-    { value: ApplicationStatus.HIRED, label: 'Hired', icon: CheckCircle, color: 'emerald' },
-    { value: ApplicationStatus.REJECTED, label: 'Rejected', icon: XCircle, color: 'red' },
+    { value: ApplicationStatus.PENDING, label: 'در انتظار', icon: Clock, color: 'yellow' },
+    { value: ApplicationStatus.REVIEWING, label: 'در حال بررسی', icon: Users, color: 'blue' },
+    { value: ApplicationStatus.SHORTLISTED, label: 'انتخاب شده', icon: Star, color: 'green' },
+    { value: ApplicationStatus.INTERVIEW_SCHEDULED, label: 'مصاحبه برنامه‌ریزی شده', icon: Calendar, color: 'purple' },
+    { value: ApplicationStatus.HIRED, label: 'استخدام شده', icon: CheckCircle, color: 'emerald' },
+    { value: ApplicationStatus.REJECTED, label: 'رد شده', icon: XCircle, color: 'red' },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -117,11 +117,23 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
     return icons[statusValue] || AlertCircle;
   };
 
+  const getStatusLabel = (statusValue: ApplicationStatusType) => {
+    const labels = {
+      [ApplicationStatus.PENDING]: 'در انتظار',
+      [ApplicationStatus.REVIEWING]: 'در حال بررسی',
+      [ApplicationStatus.SHORTLISTED]: 'انتخاب شده',
+      [ApplicationStatus.REJECTED]: 'رد شده',
+      [ApplicationStatus.INTERVIEW_SCHEDULED]: 'مصاحبه برنامه‌ریزی شده',
+      [ApplicationStatus.HIRED]: 'استخدام شده',
+    };
+    return labels[statusValue] || statusValue.replace('_', ' ');
+  };
+
   const StatusIcon = getStatusIcon(currentStatus);
 
   return (
     <Modal isOpen onClose={onClose} size="lg" className="max-w-2xl">
-      <div className="p-6 md:p-8">
+      <div className="p-6 md:p-8" dir="rtl">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-start gap-4">
@@ -133,7 +145,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                Update Application Status
+                بروزرسانی وضعیت درخواست
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 {candidateName} • {jobTitle}
@@ -153,7 +165,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
           <div className="bg-gray-50/50 dark:bg-gray-800/50 rounded-2xl p-4 flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Current Status
+                وضعیت فعلی
               </p>
               <div className="flex items-center gap-2 mt-1">
                 <span className={cn(
@@ -161,7 +173,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                   getStatusColor(currentStatus)
                 )}>
                   <StatusIcon className="h-4 w-4" />
-                  {currentStatus.replace('_', ' ')}
+                  {getStatusLabel(currentStatus)}
                 </span>
               </div>
             </div>
@@ -173,7 +185,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
           {/* New Status */}
           <div>
             <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              New Status *
+              وضعیت جدید *
             </label>
             <div className="relative">
               <Select
@@ -192,7 +204,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
             {status !== currentStatus && (
               <p className="mt-1.5 text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
                 <Zap className="h-3 w-3" />
-                Status will change from {currentStatus.replace('_', ' ')} to {status.replace('_', ' ')}
+                وضعیت از {getStatusLabel(currentStatus)} به {getStatusLabel(status)} تغییر خواهد کرد
               </p>
             )}
           </div>
@@ -200,16 +212,16 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
           {/* Notes */}
           <div>
             <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Notes (optional)
+              یادداشت (اختیاری)
             </label>
             <div className="relative">
-              <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <MessageSquare className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className="w-full pl-9 px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
-                placeholder="Add notes about this status change..."
+                className="w-full pr-9 px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none text-right"
+                placeholder="یادداشتی درباره این تغییر وضعیت اضافه کنید..."
               />
             </div>
           </div>
@@ -228,10 +240,10 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                   </div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                      Interview Details
+                      جزئیات مصاحبه
                     </h4>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Schedule the interview for this candidate
+                      زمان مصاحبه را برای این داوطلب تنظیم کنید
                     </p>
                   </div>
                 </div>
@@ -246,7 +258,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                 <div className="p-4 pt-0 space-y-3 border-t border-gray-100 dark:border-gray-800">
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Scheduled Date & Time *
+                      تاریخ و زمان مصاحبه *
                     </label>
                     <Input
                       type="datetime-local"
@@ -262,7 +274,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Duration (minutes)
+                      مدت زمان (دقیقه)
                     </label>
                     <Select
                       value={interviewDetails.duration.toString()}
@@ -271,12 +283,12 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                         duration: parseInt(e.target.value)
                       })}
                       options={[
-                        { value: '15', label: '15 minutes' },
-                        { value: '30', label: '30 minutes' },
-                        { value: '45', label: '45 minutes' },
-                        { value: '60', label: '1 hour' },
-                        { value: '90', label: '1.5 hours' },
-                        { value: '120', label: '2 hours' },
+                        { value: '15', label: '۱۵ دقیقه' },
+                        { value: '30', label: '۳۰ دقیقه' },
+                        { value: '45', label: '۴۵ دقیقه' },
+                        { value: '60', label: '۱ ساعت' },
+                        { value: '90', label: '۱.۵ ساعت' },
+                        { value: '120', label: '۲ ساعت' },
                       ]}
                       className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all"
                     />
@@ -284,10 +296,10 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Location (optional)
+                      مکان (اختیاری)
                     </label>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
                         type="text"
                         value={interviewDetails.location}
@@ -295,18 +307,18 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                           ...interviewDetails,
                           location: e.target.value
                         })}
-                        className="pl-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all"
-                        placeholder="Office address or room number"
+                        className="pr-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all text-right"
+                        placeholder="آدرس دفتر یا شماره اتاق"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Meeting Link (optional)
+                      لینک جلسه (اختیاری)
                     </label>
                     <div className="relative">
-                      <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <LinkIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
                         type="url"
                         value={interviewDetails.meetingLink}
@@ -314,7 +326,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                           ...interviewDetails,
                           meetingLink: e.target.value
                         })}
-                        className="pl-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all"
+                        className="pr-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all text-right"
                         placeholder="https://meet.google.com/..."
                       />
                     </div>
@@ -322,10 +334,10 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Interview Notes (optional)
+                      یادداشت مصاحبه (اختیاری)
                     </label>
                     <div className="relative">
-                      <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <MessageSquare className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
                       <textarea
                         value={interviewDetails.notes}
                         onChange={(e) => setInterviewDetails({
@@ -333,8 +345,8 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
                           notes: e.target.value
                         })}
                         rows={2}
-                        className="w-full pl-9 px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
-                        placeholder="Additional interview notes..."
+                        className="w-full pr-9 px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none text-right"
+                        placeholder="یادداشت‌های اضافی مصاحبه..."
                       />
                     </div>
                   </div>
@@ -352,7 +364,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
               disabled={isLoading}
               className="w-full sm:w-auto"
             >
-              Cancel
+              انصراف
             </Button>
             <Button
               type="submit"
@@ -362,7 +374,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
               className="w-full sm:w-auto gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
               <Send className="h-4 w-4" />
-              {isLoading ? 'Updating...' : 'Update Status'}
+              {isLoading ? 'در حال بروزرسانی...' : 'بروزرسانی وضعیت'}
             </Button>
           </div>
         </form>

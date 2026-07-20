@@ -24,7 +24,7 @@ import {
     Database,
     Trash2,
     AlertTriangle,
-    ChevronRight,
+    ChevronLeft,
     Activity,
     Zap,
     Fingerprint,
@@ -84,7 +84,7 @@ const SettingsPage: React.FC = () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         setIsSaving(false);
         setSaveSuccess(true);
-        toast.success(`${section} settings saved successfully!`);
+        toast.success(`تنظیمات ${section} با موفقیت ذخیره شد!`);
         setTimeout(() => setSaveSuccess(false), 3000);
     };
 
@@ -93,24 +93,24 @@ const SettingsPage: React.FC = () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         setIsSaving(false);
         setSaveSuccess(true);
-        toast.success('Profile updated successfully!');
+        toast.success('پروفایل با موفقیت بروزرسانی شد!');
         setTimeout(() => setSaveSuccess(false), 3000);
     };
 
     const handlePasswordChange = async () => {
         if (securitySettings.newPassword !== securitySettings.confirmPassword) {
-            toast.error('Passwords do not match');
+            toast.error('رمز عبور با تکرار آن مطابقت ندارد');
             return;
         }
         if (securitySettings.newPassword.length < 6) {
-            toast.error('Password must be at least 6 characters');
+            toast.error('رمز عبور باید حداقل ۶ کاراکتر باشد');
             return;
         }
         setIsSaving(true);
         await new Promise(resolve => setTimeout(resolve, 1000));
         setIsSaving(false);
         setSaveSuccess(true);
-        toast.success('Password updated successfully!');
+        toast.success('رمز عبور با موفقیت بروزرسانی شد!');
         setTimeout(() => setSaveSuccess(false), 3000);
         setSecuritySettings({
             ...securitySettings,
@@ -121,28 +121,28 @@ const SettingsPage: React.FC = () => {
     };
 
     const tabs = [
-        { id: 'general', label: 'General', icon: Globe, description: 'Language, timezone, theme' },
-        { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Email alerts and reminders' },
-        { id: 'security', label: 'Security', icon: Shield, description: 'Password, 2FA, session' },
-        { id: 'profile', label: 'Profile', icon: User, description: 'Personal information' },
+        { id: 'general', label: 'عمومی', icon: Globe, description: 'زبان، منطقه زمانی، تم' },
+        { id: 'notifications', label: 'اعلان‌ها', icon: Bell, description: 'هشدارهای ایمیل و یادآوری‌ها' },
+        { id: 'security', label: 'امنیت', icon: Shield, description: 'رمز عبور، احراز هویت دو مرحله‌ای، نشست' },
+        { id: 'profile', label: 'پروفایل', icon: User, description: 'اطلاعات شخصی' },
     ];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Page Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <div className="flex items-center gap-3">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                Settings
-                                <Badge variant="gray" size="sm" className="ml-2">
-                                    <Activity className="w-3 h-3 mr-1" />
-                                    Preferences
+                                تنظیمات
+                                <Badge variant="gray" size="sm" className="mr-2">
+                                    <Activity className="w-3 h-3 ml-1" />
+                                    ترجیحات
                                 </Badge>
                             </h1>
                             <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-                                Manage your account and application settings
+                                تنظیمات حساب کاربری و برنامه خود را مدیریت کنید
                             </p>
                         </div>
                     </div>
@@ -150,7 +150,7 @@ const SettingsPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
                         <Zap className="w-3 h-3 text-yellow-500" />
-                        Settings saved automatically
+                        تنظیمات به طور خودکار ذخیره می‌شوند
                     </span>
                 </div>
             </div>
@@ -159,7 +159,7 @@ const SettingsPage: React.FC = () => {
                 <Alert variant="success" className="animate-fade-in">
                     <div className="flex items-center gap-2">
                         <CheckCircle className="h-5 w-5" />
-                        Settings saved successfully!
+                        تنظیمات با موفقیت ذخیره شد!
                     </div>
                 </Alert>
             )}
@@ -191,11 +191,11 @@ const SettingsPage: React.FC = () => {
                                             isActive ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
                                         )} />
                                     </div>
-                                    <div className="flex-1 text-left">
+                                    <div className="flex-1 text-right">
                                         <p className="font-medium">{tab.label}</p>
                                         <p className="text-xs text-gray-400 dark:text-gray-500">{tab.description}</p>
                                     </div>
-                                    <ChevronRight className={cn(
+                                    <ChevronLeft className={cn(
                                         "h-4 w-4 transition-transform",
                                         isActive ? "text-blue-500" : "text-gray-300 dark:text-gray-600"
                                     )} />
@@ -213,15 +213,15 @@ const SettingsPage: React.FC = () => {
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                     <Globe className="w-5 h-5 text-blue-500" />
-                                    General Settings
+                                    تنظیمات عمومی
                                 </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Configure your global preferences</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">تنظیمات کلی خود را پیکربندی کنید</p>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Language
+                                        زبان
                                     </label>
                                     <select
                                         value={generalSettings.language}
@@ -231,17 +231,18 @@ const SettingsPage: React.FC = () => {
                                         })}
                                         className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                                     >
-                                        <option value="en">English</option>
-                                        <option value="es">Spanish</option>
-                                        <option value="fr">French</option>
-                                        <option value="de">German</option>
-                                        <option value="zh">Chinese</option>
-                                        <option value="ja">Japanese</option>
+                                        <option value="en">انگلیسی</option>
+                                        <option value="fa">فارسی</option>
+                                        <option value="es">اسپانیایی</option>
+                                        <option value="fr">فرانسوی</option>
+                                        <option value="de">آلمانی</option>
+                                        <option value="zh">چینی</option>
+                                        <option value="ja">ژاپنی</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Timezone
+                                        منطقه زمانی
                                     </label>
                                     <select
                                         value={generalSettings.timezone}
@@ -251,10 +252,11 @@ const SettingsPage: React.FC = () => {
                                         })}
                                         className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                                     >
-                                        <option value="America/New_York">Eastern Time</option>
-                                        <option value="America/Chicago">Central Time</option>
-                                        <option value="America/Denver">Mountain Time</option>
-                                        <option value="America/Los_Angeles">Pacific Time</option>
+                                        <option value="Asia/Tehran">تهران (IRST)</option>
+                                        <option value="America/New_York">شرق آمریکا</option>
+                                        <option value="America/Chicago">مرکز آمریکا</option>
+                                        <option value="America/Denver">کوهستانی آمریکا</option>
+                                        <option value="America/Los_Angeles">غرب آمریکا</option>
                                         <option value="Europe/London">GMT</option>
                                         <option value="Europe/Paris">CET</option>
                                         <option value="Asia/Dubai">GST</option>
@@ -264,7 +266,7 @@ const SettingsPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Date Format
+                                        فرمت تاریخ
                                     </label>
                                     <select
                                         value={generalSettings.dateFormat}
@@ -274,14 +276,14 @@ const SettingsPage: React.FC = () => {
                                         })}
                                         className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                                     >
-                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="YYYY/MM/DD">YYYY/MM/DD</option>
                                         <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Theme
+                                        تم
                                     </label>
                                     <div className="flex gap-2">
                                         <button
@@ -294,7 +296,7 @@ const SettingsPage: React.FC = () => {
                                             )}
                                         >
                                             <Sun className="w-4 h-4" />
-                                            <span className="text-sm">Light</span>
+                                            <span className="text-sm">روشن</span>
                                         </button>
                                         <button
                                             onClick={() => setGeneralSettings({ ...generalSettings, theme: 'dark' })}
@@ -306,7 +308,7 @@ const SettingsPage: React.FC = () => {
                                             )}
                                         >
                                             <Moon className="w-4 h-4" />
-                                            <span className="text-sm">Dark</span>
+                                            <span className="text-sm">تاریک</span>
                                         </button>
                                         <button
                                             onClick={() => setGeneralSettings({ ...generalSettings, theme: 'system' })}
@@ -318,18 +320,18 @@ const SettingsPage: React.FC = () => {
                                             )}
                                         >
                                             <Monitor className="w-4 h-4" />
-                                            <span className="text-sm">System</span>
+                                            <span className="text-sm">سیستم</span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <Button
-                                onClick={() => handleSave('general')}
+                                onClick={() => handleSave('عمومی')}
                                 isLoading={isSaving}
                                 className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                             >
                                 <Save className="h-4 w-4" />
-                                Save Changes
+                                ذخیره تغییرات
                             </Button>
                         </div>
                     )}
@@ -340,18 +342,18 @@ const SettingsPage: React.FC = () => {
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                     <Bell className="w-5 h-5 text-blue-500" />
-                                    Notification Settings
+                                    تنظیمات اعلان‌ها
                                 </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Manage your notification preferences</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">ترجیحات اعلان‌های خود را مدیریت کنید</p>
                             </div>
 
                             <div className="space-y-3">
                                 {[
-                                    { id: 'emailNotifications', label: 'Email Notifications', desc: 'Receive email notifications for important updates', icon: Mail },
-                                    { id: 'newApplicationAlerts', label: 'New Application Alerts', desc: 'Get notified when new applications are submitted', icon: BellRing },
-                                    { id: 'interviewReminders', label: 'Interview Reminders', desc: 'Get reminders for upcoming interviews', icon: Bell },
-                                    { id: 'weeklyReports', label: 'Weekly Reports', desc: 'Receive weekly hiring analytics reports', icon: Database },
-                                    { id: 'systemUpdates', label: 'System Updates', desc: 'Get notified about system updates and new features', icon: Settings },
+                                    { id: 'emailNotifications', label: 'اعلان‌های ایمیل', desc: 'دریافت اعلان‌های ایمیل برای به‌روزرسانی‌های مهم', icon: Mail },
+                                    { id: 'newApplicationAlerts', label: 'هشدارهای درخواست جدید', desc: 'هنگام ثبت درخواست جدید اعلان دریافت کنید', icon: BellRing },
+                                    { id: 'interviewReminders', label: 'یادآوری مصاحبه', desc: 'یادآوری مصاحبه‌های پیش‌رو را دریافت کنید', icon: Bell },
+                                    { id: 'weeklyReports', label: 'گزارش‌های هفتگی', desc: 'دریافت گزارش‌های تحلیلی استخدام هفتگی', icon: Database },
+                                    { id: 'systemUpdates', label: 'به‌روزرسانی‌های سیستم', desc: 'از به‌روزرسانی‌های سیستم و ویژگی‌های جدید مطلع شوید', icon: Settings },
                                 ].map((item) => {
                                     const isChecked = notificationSettings[item.id as keyof typeof notificationSettings];
                                     return (
@@ -364,8 +366,8 @@ const SettingsPage: React.FC = () => {
                                                     <item.icon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{item.label}</p>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.desc}</p>
+                                                    <p className="text-sm font-medium text-gray-900 dark:text-white text-right">{item.label}</p>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 text-right">{item.desc}</p>
                                                 </div>
                                             </div>
                                             <input
@@ -382,12 +384,12 @@ const SettingsPage: React.FC = () => {
                                 })}
                             </div>
                             <Button
-                                onClick={() => handleSave('notifications')}
+                                onClick={() => handleSave('اعلان‌ها')}
                                 isLoading={isSaving}
                                 className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                             >
                                 <Save className="h-4 w-4" />
-                                Save Changes
+                                ذخیره تغییرات
                             </Button>
                         </div>
                     )}
@@ -398,37 +400,37 @@ const SettingsPage: React.FC = () => {
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                     <Shield className="w-5 h-5 text-blue-500" />
-                                    Security Settings
+                                    تنظیمات امنیت
                                 </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Manage your security preferences</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">تنظیمات امنیتی خود را مدیریت کنید</p>
                             </div>
 
                             {/* Change Password */}
                             <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-4">
                                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                                     <Key className="h-4 w-4" />
-                                    Change Password
+                                    تغییر رمز عبور
                                 </h4>
                                 <div className="grid grid-cols-1 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Current Password
+                                            رمز عبور فعلی
                                         </label>
                                         <div className="relative">
                                             <Input
                                                 type={showPassword ? 'text' : 'password'}
-                                                placeholder="Enter current password"
+                                                placeholder="رمز عبور فعلی را وارد کنید"
                                                 value={securitySettings.password}
                                                 onChange={(e) => setSecuritySettings({
                                                     ...securitySettings,
                                                     password: e.target.value
                                                 })}
-                                                className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 pr-10"
+                                                className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 pl-10"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowPassword(!showPassword)}
-                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                             >
                                                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                             </button>
@@ -436,11 +438,11 @@ const SettingsPage: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            New Password
+                                            رمز عبور جدید
                                         </label>
                                         <Input
                                             type="password"
-                                            placeholder="Enter new password"
+                                            placeholder="رمز عبور جدید را وارد کنید"
                                             value={securitySettings.newPassword}
                                             onChange={(e) => setSecuritySettings({
                                                 ...securitySettings,
@@ -451,11 +453,11 @@ const SettingsPage: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Confirm New Password
+                                            تکرار رمز عبور جدید
                                         </label>
                                         <Input
                                             type="password"
-                                            placeholder="Confirm new password"
+                                            placeholder="رمز عبور جدید را تکرار کنید"
                                             value={securitySettings.confirmPassword}
                                             onChange={(e) => setSecuritySettings({
                                                 ...securitySettings,
@@ -470,7 +472,7 @@ const SettingsPage: React.FC = () => {
                                     onClick={handlePasswordChange}
                                     isLoading={isSaving}
                                 >
-                                    Update Password
+                                    بروزرسانی رمز عبور
                                 </Button>
                             </div>
 
@@ -482,8 +484,8 @@ const SettingsPage: React.FC = () => {
                                             <Fingerprint className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-gray-900 dark:text-white">Two-Factor Authentication</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Add an extra layer of security to your account</p>
+                                            <p className="text-sm font-medium text-gray-900 dark:text-white text-right">احراز هویت دو مرحله‌ای</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 text-right">یک لایه امنیتی اضافی به حساب خود اضافه کنید</p>
                                         </div>
                                     </div>
                                     <input
@@ -501,7 +503,7 @@ const SettingsPage: React.FC = () => {
                             {/* Session Timeout */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Session Timeout (minutes)
+                                    زمان خاتمه نشست (دقیقه)
                                 </label>
                                 <Input
                                     type="number"
@@ -510,28 +512,28 @@ const SettingsPage: React.FC = () => {
                                         ...securitySettings,
                                         sessionTimeout: e.target.value
                                     })}
-                                    placeholder="30"
+                                    placeholder="۳۰"
                                     className="max-w-xs bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                 />
                             </div>
 
                             <Button
-                                onClick={() => handleSave('security')}
+                                onClick={() => handleSave('امنیت')}
                                 isLoading={isSaving}
                                 className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                             >
                                 <Save className="h-4 w-4" />
-                                Save Changes
+                                ذخیره تغییرات
                             </Button>
 
                             {/* Danger Zone */}
                             <div className="border border-red-200 dark:border-red-800 rounded-xl p-4 bg-red-50 dark:bg-red-900/10 mt-6">
                                 <h4 className="text-sm font-medium text-red-700 dark:text-red-400 flex items-center gap-2">
                                     <AlertTriangle className="h-4 w-4" />
-                                    Danger Zone
+                                    منطقه خطر
                                 </h4>
-                                <p className="text-sm text-red-600 dark:text-red-300 mt-1">
-                                    Permanently delete your account and all associated data
+                                <p className="text-sm text-red-600 dark:text-red-300 mt-1 text-right">
+                                    حساب کاربری و تمام داده‌های مرتبط را به طور دائمی حذف کنید
                                 </p>
                                 <Button
                                     variant="danger"
@@ -539,7 +541,7 @@ const SettingsPage: React.FC = () => {
                                     onClick={() => setShowConfirmModal(true)}
                                 >
                                     <Trash2 className="h-4 w-4" />
-                                    Delete Account
+                                    حذف حساب
                                 </Button>
                             </div>
                         </div>
@@ -551,9 +553,9 @@ const SettingsPage: React.FC = () => {
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                     <User className="w-5 h-5 text-blue-500" />
-                                    Profile Settings
+                                    تنظیمات پروفایل
                                 </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Manage your personal information</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">اطلاعات شخصی خود را مدیریت کنید</p>
                             </div>
 
                             <div className="flex items-center gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
@@ -561,11 +563,11 @@ const SettingsPage: React.FC = () => {
                                     {profileSettings.fullName?.charAt(0) || 'U'}
                                 </div>
                                 <div>
-                                    <p className="font-medium text-gray-900 dark:text-white text-lg">{profileSettings.fullName || 'User'}</p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">{profileSettings.email || 'user@company.com'}</p>
+                                    <p className="font-medium text-gray-900 dark:text-white text-lg text-right">{profileSettings.fullName || 'کاربر'}</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 text-right">{profileSettings.email || 'user@company.com'}</p>
                                     <Button variant="outline" size="sm" className="mt-1 gap-1.5">
                                         <Camera className="w-3.5 h-3.5" />
-                                        Change Avatar
+                                        تغییر آواتار
                                     </Button>
                                 </div>
                             </div>
@@ -573,7 +575,7 @@ const SettingsPage: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Full Name *
+                                        نام کامل *
                                     </label>
                                     <Input
                                         type="text"
@@ -582,13 +584,13 @@ const SettingsPage: React.FC = () => {
                                             ...profileSettings,
                                             fullName: e.target.value
                                         })}
-                                        placeholder="Your full name"
+                                        placeholder="نام کامل خود را وارد کنید"
                                         className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Email *
+                                        ایمیل *
                                     </label>
                                     <Input
                                         type="email"
@@ -597,14 +599,14 @@ const SettingsPage: React.FC = () => {
                                             ...profileSettings,
                                             email: e.target.value
                                         })}
-                                        placeholder="Your email"
+                                        placeholder="ایمیل خود را وارد کنید"
                                         disabled
                                         className="bg-gray-100 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Phone
+                                        تلفن
                                     </label>
                                     <Input
                                         type="tel"
@@ -613,13 +615,13 @@ const SettingsPage: React.FC = () => {
                                             ...profileSettings,
                                             phone: e.target.value
                                         })}
-                                        placeholder="+1 234 567 890"
+                                        placeholder="+98 21 1234 5678"
                                         className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                                        Department
+                                        بخش
                                     </label>
                                     <Input
                                         type="text"
@@ -628,7 +630,7 @@ const SettingsPage: React.FC = () => {
                                             ...profileSettings,
                                             department: e.target.value
                                         })}
-                                        placeholder="e.g., Engineering, HR"
+                                        placeholder="مثال: مهندسی، منابع انسانی"
                                         className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                     />
                                 </div>
@@ -639,7 +641,7 @@ const SettingsPage: React.FC = () => {
                                 className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                             >
                                 <Save className="h-4 w-4" />
-                                Update Profile
+                                بروزرسانی پروفایل
                             </Button>
                         </div>
                     )}
@@ -654,29 +656,29 @@ const SettingsPage: React.FC = () => {
                             <div className="p-2 rounded-xl bg-red-100 dark:bg-red-900/30">
                                 <AlertTriangle className="h-6 w-6" />
                             </div>
-                            <h3 className="text-lg font-semibold">Delete Account</h3>
+                            <h3 className="text-lg font-semibold">حذف حساب</h3>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400 mb-4">
-                            Are you sure you want to delete your account? This action cannot be undone.
-                            All your data, jobs, applications, and company information will be permanently deleted.
+                        <p className="text-gray-600 dark:text-gray-400 mb-4 text-right">
+                            آیا مطمئن هستید که می‌خواهید حساب خود را حذف کنید؟ این عمل قابل بازگشت نیست.
+                            تمام داده‌های شما، مشاغل، درخواست‌ها و اطلاعات شرکت به طور دائمی حذف خواهند شد.
                         </p>
                         <div className="flex justify-end gap-3">
                             <Button
                                 variant="outline"
                                 onClick={() => setShowConfirmModal(false)}
                             >
-                                Cancel
+                                انصراف
                             </Button>
                             <Button
                                 variant="danger"
                                 className="gap-2"
                                 onClick={() => {
-                                    toast.error('Account deletion requested');
+                                    toast.error('درخواست حذف حساب ثبت شد');
                                     setShowConfirmModal(false);
                                 }}
                             >
                                 <Trash2 className="h-4 w-4" />
-                                Delete Account
+                                حذف حساب
                             </Button>
                         </div>
                     </div>

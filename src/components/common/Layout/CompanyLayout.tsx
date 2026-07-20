@@ -10,7 +10,7 @@ import {
   ChevronRight,
   Menu,
   Home,
-  ChevronRight as ChevronRightIcon,
+  ChevronLeft as ChevronLeftIcon,
   Activity,
   X
 } from 'lucide-react';
@@ -21,7 +21,7 @@ interface CompanyLayoutProps {
   children?: React.ReactNode;
 }
 
-// Improved Breadcrumb component with better styling
+// Improved Breadcrumb component with Farsi support
 const Breadcrumb: React.FC<{ pathname: string }> = ({ pathname }) => {
   const segments = pathname.split('/').filter(Boolean);
 
@@ -38,8 +38,34 @@ const Breadcrumb: React.FC<{ pathname: string }> = ({ pathname }) => {
     );
   }
 
+  // Farsi translation mapping for common paths
+  const getFarsiLabel = (segment: string): string => {
+    const translations: Record<string, string> = {
+      'dashboard': 'داشبورد',
+      'jobs': 'مشاغل',
+      'create': 'ایجاد',
+      'applications': 'درخواست‌ها',
+      'candidates': 'داوطلبان',
+      'profile': 'پروفایل',
+      'settings': 'تنظیمات',
+      'analytics': 'تحلیل‌ها',
+      'screening': 'غربالگری',
+      'ai': 'هوش مصنوعی',
+      'reports': 'گزارش‌ها',
+      'team': 'تیم',
+      'messages': 'پیام‌ها',
+      'notifications': 'اعلان‌ها',
+      'calendar': 'تقویم',
+      'documents': 'اسناد',
+      'interviews': 'مصاحبه‌ها',
+      'offers': 'پیشنهادات',
+      'onboarding': 'آماده‌سازی',
+    };
+    return translations[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+  };
+
   return (
-    <nav className="flex items-center gap-1.5 text-sm" aria-label="Breadcrumb">
+    <nav className="flex items-center gap-1.5 text-sm" aria-label="مسیر راهنما">
       <Link 
         to="/dashboard" 
         className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-200"
@@ -49,19 +75,19 @@ const Breadcrumb: React.FC<{ pathname: string }> = ({ pathname }) => {
       {segments.map((segment, index) => {
         const path = '/' + segments.slice(0, index + 1).join('/');
         const isLast = index === segments.length - 1;
-        const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+        const label = getFarsiLabel(segment);
 
         return (
           <React.Fragment key={path}>
-            <ChevronRightIcon className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
+            <ChevronLeftIcon className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
             {isLast ? (
-              <span className="font-medium text-gray-700 dark:text-gray-300 capitalize truncate max-w-50">
+              <span className="font-medium text-gray-700 dark:text-gray-300 truncate max-w-50">
                 {label}
               </span>
             ) : (
               <Link
                 to={path}
-                className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-200 capitalize truncate max-w-37.5"
+                className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-200 truncate max-w-37.5"
               >
                 {label}
               </Link>
@@ -139,13 +165,13 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
   };
 
   const getContentMargin = () => {
-    if (isMobile) return 'ml-0';
-    return isCollapsed ? 'ml-20' : 'ml-72';
+    if (isMobile) return 'mr-0';
+    return isCollapsed ? 'mr-20' : 'mr-72';
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-blue-50/30 dark:from-gray-950 dark:to-blue-950/30">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-blue-50/30 dark:from-gray-950 dark:to-blue-950/30" dir="rtl">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
             <div className="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
@@ -154,7 +180,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
             </div>
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium animate-pulse">
-            Loading your dashboard...
+            در حال بارگذاری داشبورد شما...
           </p>
         </div>
       </div>
@@ -166,7 +192,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950/50">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950/50" dir="rtl">
       {/* Mobile overlay */}
       {isMobile && sidebarOpen && (
         <div
@@ -179,11 +205,11 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-r border-gray-200/50 dark:border-gray-800/50 transition-all duration-300 ease-in-out shadow-xl shadow-gray-200/20 dark:shadow-gray-950/20",
+          "fixed inset-y-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-l border-gray-200/50 dark:border-gray-800/50 transition-all duration-300 ease-in-out shadow-xl shadow-gray-200/20 dark:shadow-gray-950/20",
           getSidebarWidth(),
-          isMobile && !sidebarOpen && "-translate-x-full"
+          isMobile && !sidebarOpen && "translate-x-full"
         )}
-        aria-label="Sidebar navigation"
+        aria-label="ناوبری کناری"
       >
         <Sidebar
           user={user}
@@ -212,7 +238,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
         {/* Page content */}
         <main className="p-4 md:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
-            {/* Breadcrumb area - Improved */}
+            {/* Breadcrumb area - Improved with Farsi */}
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-gray-200/50 dark:border-gray-800/50">
               <Breadcrumb pathname={location.pathname} />
 
@@ -220,7 +246,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
                 {/* AI Status Badge */}
                 <Badge variant="info" size="sm" className="hidden sm:flex items-center gap-1.5 px-3 py-1">
                   <Activity className="w-3 h-3" />
-                  <span className="hidden md:inline">AI Active</span>
+                  <span className="hidden md:inline">هوش مصنوعی فعال</span>
                 </Badge>
 
                 {/* Live indicator */}
@@ -229,7 +255,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                   </span>
-                  <span className="hidden sm:inline font-medium">Live</span>
+                  <span className="hidden sm:inline font-medium">زنده</span>
                 </div>
 
                 {/* Page indicator - shows current section */}
@@ -237,8 +263,8 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
                   <span className="w-px h-4 bg-gray-200 dark:bg-gray-700" />
                   <span className="font-mono">
                     {location.pathname.split('/').filter(Boolean).length > 0 
-                      ? location.pathname.split('/').filter(Boolean).join(' / ')
-                      : 'dashboard'}
+                      ? location.pathname.split('/').filter(Boolean).map(getFarsiLabel).join(' / ')
+                      : 'داشبورد'}
                   </span>
                 </div>
               </div>
@@ -255,51 +281,51 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
         <Footer variant="compact" />
       </div>
 
-      {/* Floating toggle button (desktop) - Improved positioning */}
+      {/* Floating toggle button (desktop) - Improved positioning for RTL */}
       {!isMobile && (
         <button
           onClick={toggleSidebar}
           className={cn(
             "fixed z-40 bottom-6 p-3 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group",
-            isCollapsed ? "left-24" : "left-70",
+            isCollapsed ? "right-24" : "right-70",
             isTransitioning && "opacity-50 pointer-events-none"
           )}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          title={isCollapsed ? "Expand sidebar (Ctrl+B)" : "Collapse sidebar (Ctrl+B)"}
+          aria-label={isCollapsed ? "باز کردن نوار کناری" : "بستن نوار کناری"}
+          title={isCollapsed ? "باز کردن نوار کناری (Ctrl+B)" : "بستن نوار کناری (Ctrl+B)"}
         >
           {isCollapsed ? (
-            <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-          ) : (
             <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
           )}
         </button>
       )}
 
-      {/* Mobile menu button - Improved */}
+      {/* Mobile menu button - Improved for RTL */}
       {isMobile && !sidebarOpen && (
         <button
           onClick={toggleSidebar}
-          className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 active:scale-95 group"
-          aria-label="Open menu"
+          className="fixed bottom-6 left-6 z-40 p-4 rounded-full bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 active:scale-95 group"
+          aria-label="باز کردن منو"
         >
           <Menu className="w-5 h-5" />
         </button>
       )}
 
-      {/* Mobile close button */}
+      {/* Mobile close button - for RTL */}
       {isMobile && sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(false)}
-          className="fixed top-4 right-4 z-50 p-2 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
-          aria-label="Close menu"
+          className="fixed top-4 left-4 z-50 p-2 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
+          aria-label="بستن منو"
         >
           <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
         </button>
       )}
 
-      {/* Keyboard shortcut hint - Improved */}
+      {/* Keyboard shortcut hint - Improved for RTL */}
       {!isMobile && !isCollapsed && (
-        <div className="fixed bottom-6 right-6 z-30 text-xs text-gray-400 dark:text-gray-500 bg-white/95 dark:bg-gray-900/95 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg backdrop-blur-sm select-none flex items-center gap-1.5">
+        <div className="fixed bottom-6 left-6 z-30 text-xs text-gray-400 dark:text-gray-500 bg-white/95 dark:bg-gray-900/95 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg backdrop-blur-sm select-none flex items-center gap-1.5">
           <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-[10px] font-mono text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
             Ctrl
           </kbd>
@@ -307,7 +333,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
           <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-[10px] font-mono text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
             B
           </kbd>
-          <span className="ml-1 text-gray-400 hidden sm:inline">toggle</span>
+          <span className="mr-1 text-gray-400 hidden sm:inline">تغییر وضعیت</span>
         </div>
       )}
 
@@ -319,6 +345,32 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
       )}
     </div>
   );
+};
+
+// Helper function for Farsi translation
+const getFarsiLabel = (segment: string): string => {
+  const translations: Record<string, string> = {
+    'dashboard': 'داشبورد',
+    'jobs': 'مشاغل',
+    'create': 'ایجاد',
+    'applications': 'درخواست‌ها',
+    'candidates': 'داوطلبان',
+    'profile': 'پروفایل',
+    'settings': 'تنظیمات',
+    'analytics': 'تحلیل‌ها',
+    'screening': 'غربالگری',
+    'ai': 'هوش مصنوعی',
+    'reports': 'گزارش‌ها',
+    'team': 'تیم',
+    'messages': 'پیام‌ها',
+    'notifications': 'اعلان‌ها',
+    'calendar': 'تقویم',
+    'documents': 'اسناد',
+    'interviews': 'مصاحبه‌ها',
+    'offers': 'پیشنهادات',
+    'onboarding': 'آماده‌سازی',
+  };
+  return translations[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
 };
 
 export default CompanyLayout;

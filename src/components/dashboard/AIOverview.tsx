@@ -13,7 +13,7 @@ import {
     Activity,
     RefreshCw,
     BarChart3,
-    ChevronRight
+    ChevronLeft
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../common/UI/Card';
 import { Badge } from '../common/UI/Badge';
@@ -68,7 +68,7 @@ const StatCard: React.FC<StatCardProps> = ({
                 "text-xs mt-1 font-medium",
                 trend >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
             )}>
-                {trend >= 0 ? '↑' : '↓'} {Math.abs(trend)}% from last month
+                {trend >= 0 ? '↑' : '↓'} {Math.abs(trend)}% نسبت به ماه قبل
             </p>
         )}
     </div>
@@ -107,50 +107,50 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
 
     const stats = [
         {
-            title: 'Screening Coverage',
+            title: 'پوشش غربالگری',
             value: `${Math.round(screeningCoverage)}%`,
             icon: ChartBarIcon,
             color: 'bg-indigo-500',
-            subtitle: `${totalCandidatesScreened} of ${totalCandidates} screened`,
+            subtitle: `${totalCandidatesScreened} از ${totalCandidates} غربال شده`,
             progress: screeningCoverage,
             trend: 8
         },
         {
-            title: 'Candidates Screened',
+            title: 'داوطلبان غربال شده',
             value: totalCandidatesScreened || 0,
             icon: CheckCircle,
             color: 'bg-green-500',
-            subtitle: 'by AI',
+            subtitle: 'توسط هوش مصنوعی',
             trend: 12
         },
         {
-            title: 'Pending Screening',
+            title: 'در انتظار غربالگری',
             value: candidatesNotScreened || 0,
             icon: Clock,
             color: 'bg-yellow-500',
-            subtitle: 'awaiting analysis',
+            subtitle: 'در انتظار تحلیل',
             trend: -5
         },
         {
-            title: 'Avg. Match Score',
+            title: 'میانگین امتیاز تطابق',
             value: `${Math.round(averageScore)}%`,
             icon: Award,
             color: 'bg-purple-500',
-            subtitle: `based on ${screeningHistory.length} jobs`,
+            subtitle: `بر اساس ${screeningHistory.length} شغل`,
             trend: 3
         },
     ];
 
     return (
-        <Card className={cn("overflow-hidden", className)}>
+        <Card className={cn("overflow-hidden", className)} dir="rtl">
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="flex items-center gap-2">
                         <Brain className="w-5 h-5 text-indigo-500" />
-                        AI Screening Overview
-                        <Badge variant="info" size="sm" className="ml-2">
-                            <Activity className="w-3 h-3 mr-1" />
-                            Live
+                        نمای کلی غربالگری هوش مصنوعی
+                        <Badge variant="info" size="sm" className="mr-2">
+                            <Activity className="w-3 h-3 ml-1" />
+                            زنده
                         </Badge>
                     </CardTitle>
                 </div>
@@ -165,7 +165,7 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                                     : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                             )}
                         >
-                            Overview
+                            نمای کلی
                         </button>
                         <button
                             onClick={() => setViewMode('detailed')}
@@ -176,7 +176,7 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                                     : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                             )}
                         >
-                            Detailed
+                            جزئیات
                         </button>
                     </div>
                     <Button
@@ -204,12 +204,12 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                     <div className="bg-gray-50/50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/50">
                         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
                             <BarChart3 className="w-4 h-4 text-gray-400" />
-                            Match Score Distribution
+                            توزیع امتیازات تطابق
                         </h4>
                         <div className="space-y-2">
                             <div>
                                 <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-green-600 dark:text-green-400">High (70%+)</span>
+                                    <span className="text-green-600 dark:text-green-400">بالا (۷۰٪+)</span>
                                     <span className="font-medium">{highMatch}</span>
                                 </div>
                                 <ProgressBar
@@ -221,7 +221,7 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                             </div>
                             <div>
                                 <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-yellow-600 dark:text-yellow-400">Medium (40-69%)</span>
+                                    <span className="text-yellow-600 dark:text-yellow-400">متوسط (۴۰-۶۹٪)</span>
                                     <span className="font-medium">{mediumMatch}</span>
                                 </div>
                                 <ProgressBar
@@ -233,7 +233,7 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                             </div>
                             <div>
                                 <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-red-600 dark:text-red-400">Low (&lt;40%)</span>
+                                    <span className="text-red-600 dark:text-red-400">پایین (&lt;۴۰٪)</span>
                                     <span className="font-medium">{lowMatch}</span>
                                 </div>
                                 <ProgressBar
@@ -254,15 +254,15 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                             <div className="flex items-center gap-2">
                                 <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                                 <span className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
-                                    {pendingScreening.length} candidates pending screening
+                                    {pendingScreening.length} داوطلب در انتظار غربالگری
                                 </span>
                             </div>
                             <Link
                                 to="/ai/screening"
                                 className="text-sm text-yellow-700 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300 flex items-center gap-1"
                             >
-                                View
-                                <ChevronRight className="w-4 h-4" />
+                                مشاهده
+                                <ChevronLeft className="w-4 h-4" />
                             </Link>
                         </div>
                     </div>
@@ -273,29 +273,29 @@ export const AIOverview: React.FC<AIOverviewProps> = ({
                     <Link to="/ai/screening">
                         <Button variant="outline" size="sm" className="gap-1.5">
                             <Sparkles className="w-4 h-4" />
-                            View Screening
+                            مشاهده غربالگری
                         </Button>
                     </Link>
                     <Link to="/ai/assistant">
                         <Button variant="outline" size="sm" className="gap-1.5">
                             <Zap className="w-4 h-4" />
-                            AI Assistant
+                            دستیار هوش مصنوعی
                         </Button>
                     </Link>
                     <Link to="/ai/analytics">
                         <Button variant="outline" size="sm" className="gap-1.5">
                             <TrendingUp className="w-4 h-4" />
-                            Analytics
+                            تحلیل‌ها
                         </Button>
                     </Link>
                 </div>
 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-2 text-xs text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-gray-800">
-                    <span>Last updated: {new Date().toLocaleString()}</span>
+                    <span>آخرین بروزرسانی: {new Date().toLocaleString('fa-IR')}</span>
                     <span className="flex items-center gap-1">
                         <Activity className="w-3 h-3 text-green-500" />
-                        System active
+                        سیستم فعال
                     </span>
                 </div>
             </CardContent>

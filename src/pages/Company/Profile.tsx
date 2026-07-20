@@ -89,12 +89,10 @@ const CompanyProfilePage: React.FC = () => {
     const [saveSuccess, setSaveSuccess] = useState(false);
 
     useEffect(() => {
-        // Check if company exists
         const checkCompany = async () => {
             try {
                 await dispatch(fetchCompany()).unwrap();
             } catch (error) {
-                // Company doesn't exist, show create form
                 setIsCreating(true);
                 setIsEditing(true);
             }
@@ -152,28 +150,25 @@ const CompanyProfilePage: React.FC = () => {
     };
 
     const handleSave = async () => {
-        // Validate required fields
         if (!formData.name) {
-            toast.error('Company name is required');
+            toast.error('نام شرکت الزامی است');
             return;
         }
 
         try {
             if (isCreating) {
-                // Create new company
                 await dispatch(createCompany(formData)).unwrap();
-                toast.success('Company created successfully!');
+                toast.success('شرکت با موفقیت ایجاد شد!');
                 setIsCreating(false);
             } else {
-                // Update existing company
                 await dispatch(updateCompany(formData)).unwrap();
-                toast.success('Company updated successfully!');
+                toast.success('شرکت با موفقیت بروزرسانی شد!');
             }
             setSaveSuccess(true);
             setIsEditing(false);
             setTimeout(() => setSaveSuccess(false), 3000);
         } catch (error: any) {
-            toast.error(error.message || 'Failed to save company');
+            toast.error(error.message || 'ذخیره شرکت با شکست مواجه شد');
         }
     };
 
@@ -181,24 +176,22 @@ const CompanyProfilePage: React.FC = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            toast.error('Logo size must be less than 5MB');
+            toast.error('حجم لوگو باید کمتر از ۵ مگابایت باشد');
             return;
         }
 
-        // Validate file type
         if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
-            toast.error('Please upload a valid image (JPEG, PNG, GIF, or WEBP)');
+            toast.error('لطفاً یک تصویر معتبر آپلود کنید (JPEG، PNG، GIF یا WEBP)');
             return;
         }
 
         setUploadingLogo(true);
         try {
             await dispatch(uploadCompanyLogo(file)).unwrap();
-            toast.success('Logo uploaded successfully!');
+            toast.success('لوگو با موفقیت آپلود شد!');
         } catch (error: any) {
-            toast.error(error.message || 'Failed to upload logo');
+            toast.error(error.message || 'آپلود لوگو با شکست مواجه شد');
         }
         setUploadingLogo(false);
     };
@@ -236,25 +229,23 @@ const CompanyProfilePage: React.FC = () => {
         }
     };
 
-    // Loading state
     if (isLoading && !company && !isCreating) {
         return (
-            <div className="flex justify-center items-center h-64">
+            <div className="flex justify-center items-center h-64" dir="rtl">
                 <Spinner size="lg" />
             </div>
         );
     }
 
-    // If no company and not creating, show create prompt
     if (!company && !isCreating && !isLoading) {
         return (
-            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50">
+            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50" dir="rtl">
                 <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                     <Building2 className="h-10 w-10 text-gray-300 dark:text-gray-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No Company Profile</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">پروفایل شرکت وجود ندارد</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 max-w-sm mx-auto">
-                    You haven't created a company profile yet. Create one to start posting jobs.
+                    شما هنوز پروفایل شرکت خود را ایجاد نکرده‌اید. برای شروع ثبت آگهی شغلی، یک پروفایل ایجاد کنید.
                 </p>
                 <Button
                     className="mt-4 gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -264,24 +255,24 @@ const CompanyProfilePage: React.FC = () => {
                     }}
                 >
                     <Plus className="w-4 h-4" />
-                    Create Company Profile
+                    ایجاد پروفایل شرکت
                 </Button>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Page Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        {isCreating ? 'Create Company Profile' : 'Company Profile'}
+                        {isCreating ? 'ایجاد پروفایل شرکت' : 'پروفایل شرکت'}
                     </h1>
                     <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
                         {isCreating
-                            ? 'Set up your company profile to start hiring'
-                            : 'Manage your company information and branding'
+                            ? 'پروفایل شرکت خود را برای شروع استخدام تنظیم کنید'
+                            : 'اطلاعات و برندینگ شرکت خود را مدیریت کنید'
                         }
                     </p>
                 </div>
@@ -292,7 +283,7 @@ const CompanyProfilePage: React.FC = () => {
                         className="flex items-center gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     >
                         <Edit className="h-4 w-4" />
-                        Edit Profile
+                        ویرایش پروفایل
                     </Button>
                 )}
             </div>
@@ -302,7 +293,7 @@ const CompanyProfilePage: React.FC = () => {
                 <Alert variant="success" className="animate-fade-in">
                     <div className="flex items-center gap-2">
                         <CheckCircle className="h-5 w-5" />
-                        {isCreating ? 'Company created successfully!' : 'Company profile updated successfully!'}
+                        {isCreating ? 'شرکت با موفقیت ایجاد شد!' : 'پروفایل شرکت با موفقیت بروزرسانی شد!'}
                     </div>
                 </Alert>
             )}
@@ -326,7 +317,7 @@ const CompanyProfilePage: React.FC = () => {
                                 {(isEditing || isCreating) && (
                                     <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                                         <Camera className="w-8 h-8 text-white mb-1" />
-                                        <span className="text-xs text-white">Upload Logo</span>
+                                        <span className="text-xs text-white">آپلود لوگو</span>
                                         <input
                                             type="file"
                                             accept="image/*"
@@ -343,7 +334,7 @@ const CompanyProfilePage: React.FC = () => {
                             </div>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {isEditing || isCreating ? 'Click to upload logo' : 'Company logo'}
+                            {isEditing || isCreating ? 'برای آپلود لوگو کلیک کنید' : 'لوگوی شرکت'}
                         </p>
                     </div>
 
@@ -354,31 +345,31 @@ const CompanyProfilePage: React.FC = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Company Name *
+                                            نام شرکت *
                                         </label>
                                         <Input
                                             name="name"
                                             value={formData.name}
                                             onChange={handleInputChange}
-                                            placeholder="Acme Inc."
+                                            placeholder="شرکت آکمی"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Industry
+                                            صنعت
                                         </label>
                                         <Input
                                             name="industry"
                                             value={formData.industry}
                                             onChange={handleInputChange}
-                                            placeholder="Technology, Finance, Healthcare..."
+                                            placeholder="فناوری، مالی، بهداشت و درمان..."
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Website
+                                            وب‌سایت
                                         </label>
                                         <Input
                                             name="website"
@@ -390,7 +381,7 @@ const CompanyProfilePage: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Company Size
+                                            تعداد کارمندان
                                         </label>
                                         <select
                                             name="companySize"
@@ -398,31 +389,31 @@ const CompanyProfilePage: React.FC = () => {
                                             onChange={handleInputChange}
                                             className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                                         >
-                                            <option value="">Select size</option>
-                                            <option value="1-10">1-10 employees</option>
-                                            <option value="11-50">11-50 employees</option>
-                                            <option value="51-200">51-200 employees</option>
-                                            <option value="201-500">201-500 employees</option>
-                                            <option value="501-1000">501-1000 employees</option>
-                                            <option value="1000+">1000+ employees</option>
+                                            <option value="">انتخاب تعداد</option>
+                                            <option value="1-10">۱-۱۰ کارمند</option>
+                                            <option value="11-50">۱۱-۵۰ کارمند</option>
+                                            <option value="51-200">۵۱-۲۰۰ کارمند</option>
+                                            <option value="201-500">۲۰۱-۵۰۰ کارمند</option>
+                                            <option value="501-1000">۵۰۱-۱۰۰۰ کارمند</option>
+                                            <option value="1000+">۱۰۰۰+ کارمند</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Founded Year
+                                            سال تاسیس
                                         </label>
                                         <Input
                                             name="foundedYear"
                                             type="number"
                                             value={formData.foundedYear}
                                             onChange={handleInputChange}
-                                            placeholder="2020"
+                                            placeholder="۱۴۰۰"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Email
+                                            ایمیل
                                         </label>
                                         <Input
                                             name="email"
@@ -435,13 +426,13 @@ const CompanyProfilePage: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Phone
+                                            تلفن
                                         </label>
                                         <Input
                                             name="phone"
                                             value={formData.phone}
                                             onChange={handleInputChange}
-                                            placeholder="+1 234 567 890"
+                                            placeholder="+98 21 1234 5678"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                     </div>
@@ -450,42 +441,42 @@ const CompanyProfilePage: React.FC = () => {
                                 {/* Location */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Location
+                                        موقعیت مکانی
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
                                         <Input
                                             name="location.address"
                                             value={formData.location.address}
                                             onChange={handleInputChange}
-                                            placeholder="Street Address"
+                                            placeholder="آدرس"
                                             className="col-span-2 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="location.city"
                                             value={formData.location.city}
                                             onChange={handleInputChange}
-                                            placeholder="City"
+                                            placeholder="شهر"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="location.state"
                                             value={formData.location.state}
                                             onChange={handleInputChange}
-                                            placeholder="State"
+                                            placeholder="استان"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="location.country"
                                             value={formData.location.country}
                                             onChange={handleInputChange}
-                                            placeholder="Country"
+                                            placeholder="کشور"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="location.zipCode"
                                             value={formData.location.zipCode}
                                             onChange={handleInputChange}
-                                            placeholder="Zip Code"
+                                            placeholder="کد پستی"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                     </div>
@@ -494,50 +485,50 @@ const CompanyProfilePage: React.FC = () => {
                                 {/* Description */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Description
+                                        توضیحات
                                     </label>
                                     <textarea
                                         name="description"
                                         value={formData.description}
                                         onChange={handleInputChange}
                                         rows={4}
-                                        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                        placeholder="Tell candidates about your company..."
+                                        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-right"
+                                        placeholder="درباره شرکت خود به داوطلبان بگویید..."
                                     />
                                 </div>
 
                                 {/* Social Links */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                        Social Links
+                                        لینک‌های شبکه‌های اجتماعی
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
                                         <Input
                                             name="socialLinks.linkedin"
                                             value={formData.socialLinks.linkedin}
                                             onChange={handleInputChange}
-                                            placeholder="LinkedIn URL"
+                                            placeholder="لینک LinkedIn"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="socialLinks.twitter"
                                             value={formData.socialLinks.twitter}
                                             onChange={handleInputChange}
-                                            placeholder="Twitter URL"
+                                            placeholder="لینک Twitter"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="socialLinks.facebook"
                                             value={formData.socialLinks.facebook}
                                             onChange={handleInputChange}
-                                            placeholder="Facebook URL"
+                                            placeholder="لینک Facebook"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                         <Input
                                             name="socialLinks.instagram"
                                             value={formData.socialLinks.instagram}
                                             onChange={handleInputChange}
-                                            placeholder="Instagram URL"
+                                            placeholder="لینک Instagram"
                                             className="bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
                                         />
                                     </div>
@@ -548,10 +539,10 @@ const CompanyProfilePage: React.FC = () => {
                                         variant="primary"
                                         onClick={handleSave}
                                         isLoading={isUpdating}
-                                        className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                                        className="gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
                                         <Save className="h-4 w-4" />
-                                        {isCreating ? 'Create Company' : 'Save Changes'}
+                                        {isCreating ? 'ایجاد شرکت' : 'ذخیره تغییرات'}
                                     </Button>
                                     <Button
                                         variant="outline"
@@ -559,7 +550,7 @@ const CompanyProfilePage: React.FC = () => {
                                         className="gap-2"
                                     >
                                         <X className="h-4 w-4" />
-                                        Cancel
+                                        انصراف
                                     </Button>
                                 </div>
                             </div>
@@ -574,7 +565,7 @@ const CompanyProfilePage: React.FC = () => {
                                 </div>
 
                                 {company?.description && (
-                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-right">
                                         {company.description}
                                     </p>
                                 )}
@@ -614,13 +605,13 @@ const CompanyProfilePage: React.FC = () => {
                                     {company?.companySize && (
                                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                                             <Users className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                                            {company.companySize} employees
+                                            {company.companySize} کارمند
                                         </div>
                                     )}
                                     {company?.foundedYear && (
                                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                                             <Briefcase className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                                            Founded in {company.foundedYear}
+                                            تاسیس در {company.foundedYear}
                                         </div>
                                     )}
                                 </div>
@@ -672,19 +663,19 @@ const CompanyProfilePage: React.FC = () => {
             {!isCreating && company && !isEditing && (
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card className="p-4 hover:shadow-md transition-shadow">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Jobs</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">کل مشاغل</p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-white">{company.totalJobs || 0}</p>
                     </Card>
                     <Card className="p-4 hover:shadow-md transition-shadow">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Active Jobs</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">مشاغل فعال</p>
                         <p className="text-2xl font-bold text-green-600 dark:text-green-400">{company.activeJobs || 0}</p>
                     </Card>
                     <Card className="p-4 hover:shadow-md transition-shadow">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Applications</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">کل درخواست‌ها</p>
                         <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{company.totalApplications || 0}</p>
                     </Card>
                     <Card className="p-4 hover:shadow-md transition-shadow">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Hires</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">استخدام‌ها</p>
                         <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{company.totalHires || 0}</p>
                     </Card>
                 </div>

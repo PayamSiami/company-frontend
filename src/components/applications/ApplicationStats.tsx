@@ -51,7 +51,7 @@ const StatCard: React.FC<StatCardProps> = ({
               : "text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20"
           )}>
             {trend >= 0 ? '↑' : '↓'} {Math.abs(trend)}%
-            <span className="text-gray-400 dark:text-gray-500 font-normal">vs last month</span>
+            <span className="text-gray-400 dark:text-gray-500 font-normal">نسبت به ماه قبل</span>
           </div>
         )}
         {progress !== undefined && (
@@ -118,65 +118,65 @@ export const ApplicationStats: React.FC = () => {
 
   const mainCards = [
     {
-      title: 'Total Applications',
+      title: 'کل درخواست‌ها',
       value: stats?.total,
       color: 'bg-blue-500',
       trend: 12,
-      subtitle: `${stats?.pending} pending review`
+      subtitle: `${stats?.pending} در انتظار بررسی`
     },
     {
-      title: 'Screening Coverage',
+      title: 'پوشش غربالگری',
       value: `${Math.round(stats?.screeningCoverage)}%`,
       color: 'bg-indigo-500',
       trend: 8,
       progress: stats?.screeningCoverage,
-      subtitle: `${stats?.screenedCount} of ${stats?.total} screened`
+      subtitle: `${stats?.screenedCount} از ${stats?.total} غربال شده`
     },
     {
-      title: 'Shortlisted',
+      title: 'انتخاب شده‌ها',
       value: stats?.shortlisted,
       color: 'bg-green-500',
       trend: 5,
-      subtitle: `${Math.round(stats?.shortlistRate)}% of total`
+      subtitle: `${Math.round(stats?.shortlistRate)}% از کل`
     },
     {
-      title: 'Average AI Score',
+      title: 'میانگین امتیاز هوش مصنوعی',
       value: `${Math.round(stats?.avgScore)}%`,
       color: 'bg-purple-500',
       trend: 3,
       progress: stats?.avgScore,
-      subtitle: `${stats?.highScore} high, ${stats?.mediumScore} medium, ${stats?.lowScore} low`
+      subtitle: `${stats?.highScore} بالا، ${stats?.mediumScore} متوسط، ${stats?.lowScore} پایین`
     }
   ];
 
   const statusCards = [
     {
-      title: 'Pending Review',
+      title: 'در انتظار بررسی',
       value: stats?.pending,
       color: 'bg-yellow-500',
     },
     {
-      title: 'Reviewing',
+      title: 'در حال بررسی',
       value: stats?.reviewing,
       color: 'bg-blue-400',
     },
     {
-      title: 'Interview Scheduled',
+      title: 'مصاحبه برنامه‌ریزی شده',
       value: stats?.interviewScheduled,
       color: 'bg-purple-500',
     },
     {
-      title: 'Rejected',
+      title: 'رد شده‌ها',
       value: stats?.rejected,
       color: 'bg-red-500',
       trend: -2,
     },
     {
-      title: 'Hired',
+      title: 'استخدام شده‌ها',
       value: stats?.hired,
       color: 'bg-emerald-500',
       trend: 10,
-      subtitle: `${Math.round(stats?.conversionRate)}% conversion rate`
+      subtitle: `${Math.round(stats?.conversionRate)}% نرخ تبدیل`
     },
   ];
 
@@ -185,10 +185,8 @@ export const ApplicationStats: React.FC = () => {
     ? applications.reduce((a, b) => (a.aiScore || 0) > (b.aiScore || 0) ? a : b)
     : null;
 
-  console.log(topPerformingJob)
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Main Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {mainCards.map((card, index) => (
@@ -210,13 +208,13 @@ export const ApplicationStats: React.FC = () => {
           <div className="flex items-center gap-2 mb-3">
             <BarChart3 className="w-4 h-4 text-gray-400" />
             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              AI Score Distribution
+              توزیع امتیازات هوش مصنوعی
             </h4>
           </div>
           <div className="space-y-2.5">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-green-600 dark:text-green-400">High (70%+)</span>
+                <span className="text-green-600 dark:text-green-400">بالا (۷۰٪+)</span>
                 <span className="font-medium">{stats.highScore}</span>
               </div>
               <ProgressBar
@@ -228,7 +226,7 @@ export const ApplicationStats: React.FC = () => {
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-yellow-600 dark:text-yellow-400">Medium (40-69%)</span>
+                <span className="text-yellow-600 dark:text-yellow-400">متوسط (۴۰-۶۹٪)</span>
                 <span className="font-medium">{stats.mediumScore}</span>
               </div>
               <ProgressBar
@@ -240,7 +238,7 @@ export const ApplicationStats: React.FC = () => {
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-red-600 dark:text-red-400">Low (&lt;40%)</span>
+                <span className="text-red-600 dark:text-red-400">پایین (&lt;۴۰٪)</span>
                 <span className="font-medium">{stats.lowScore}</span>
               </div>
               <ProgressBar
@@ -258,28 +256,28 @@ export const ApplicationStats: React.FC = () => {
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="w-4 h-4 text-gray-400" />
             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Conversion Funnel
+              قیف تبدیل
             </h4>
           </div>
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="text-gray-600 dark:text-gray-400">Applications</span>
+              <span className="text-gray-600 dark:text-gray-400">درخواست‌ها</span>
               <span className="font-medium">{stats.total}</span>
             </div>
             <div className="flex justify-between text-xs">
-              <span className="text-gray-600 dark:text-gray-400">→ Shortlisted</span>
+              <span className="text-gray-600 dark:text-gray-400">→ انتخاب شده</span>
               <span className="font-medium text-green-600 dark:text-green-400">
                 {stats.shortlisted} ({Math.round(stats.shortlistRate)}%)
               </span>
             </div>
             <div className="flex justify-between text-xs">
-              <span className="text-gray-600 dark:text-gray-400">→ Interviewed</span>
+              <span className="text-gray-600 dark:text-gray-400">→ مصاحبه شده</span>
               <span className="font-medium text-purple-600 dark:text-purple-400">
                 {stats.interviewScheduled} ({Math.round((stats.interviewScheduled / stats.total) * 100)}%)
               </span>
             </div>
             <div className="flex justify-between text-xs border-t border-gray-100 dark:border-gray-800 pt-1.5">
-              <span className="text-gray-600 dark:text-gray-400">→ Hired</span>
+              <span className="text-gray-600 dark:text-gray-400">→ استخدام شده</span>
               <span className="font-medium text-emerald-600 dark:text-emerald-400">
                 {stats.hired} ({Math.round(stats.conversionRate)}%)
               </span>
@@ -292,7 +290,7 @@ export const ApplicationStats: React.FC = () => {
           <div className="flex items-center gap-2 mb-3">
             <Award className="w-4 h-4 text-gray-400" />
             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Top Performing Candidate
+              برترین داوطلب
             </h4>
           </div>
           {topPerformingJob ? (
@@ -302,19 +300,19 @@ export const ApplicationStats: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                  {topPerformingJob?.userId?.username || 'Unknown'}
+                  {topPerformingJob?.userId?.username || 'ناشناس'}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                  {topPerformingJob?.jobIdId?.title} • {topPerformingJob.aiScore || 0}% match
+                  {topPerformingJob?.jobIdId?.title} • {topPerformingJob.aiScore || 0}% تطابق
                 </p>
               </div>
               <div className="flex items-center gap-1 text-amber-500">
                 <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-medium">Top</span>
+                <span className="text-xs font-medium">برتر</span>
               </div>
             </div>
           ) : (
-            <p className="text-sm text-gray-500 dark:text-gray-400">No candidates scored yet</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">هنوز داوطلبی امتیازدهی نشده است</p>
           )}
         </div>
       </div>

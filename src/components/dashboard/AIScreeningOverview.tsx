@@ -53,9 +53,9 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
   };
 
   const getScoreLabel = (score: number) => {
-    if (score >= 70) return 'High Match';
-    if (score >= 40) return 'Medium Match';
-    return 'Low Match';
+    if (score >= 70) return 'تطابق بالا';
+    if (score >= 40) return 'تطابق متوسط';
+    return 'تطابق پایین';
   };
 
   const getScoreBadgeColor = (score: number) => {
@@ -72,20 +72,29 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
     ? screeningHistory.reduce((a, b) => a.avgScore > b.avgScore ? a : b)
     : null;
 
+  const formatDate = (date: string) => {
+    if (!date) return 'نامشخص';
+    return new Date(date).toLocaleDateString('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   return (
     <div className={cn(
       "bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 overflow-hidden",
       className
-    )}>
+    )} dir="rtl">
       {/* Header */}
       <div className="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-              AI Screening Overview
-              <Badge variant="info" size="sm" className="ml-2">
-                <Activity className="w-3 h-3 mr-1" />
-                Live
+              نمای کلی غربالگری هوش مصنوعی
+              <Badge variant="info" size="sm" className="mr-2">
+                <Activity className="w-3 h-3 ml-1" />
+                زنده
               </Badge>
             </h2>
           </div>
@@ -101,7 +110,7 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                   : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               )}
             >
-              Overview
+              نمای کلی
             </button>
             <button
               onClick={() => setViewMode('detailed')}
@@ -112,7 +121,7 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                   : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               )}
             >
-              Detailed
+              جزئیات
             </button>
           </div>
         </div>
@@ -124,7 +133,7 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="gap-1 flex flex-col bg-linear-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-4 border border-indigo-100/50 dark:border-indigo-800/50">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Coverage</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">پوشش</span>
               <ChartBarIcon className="h-5 w-5 text-indigo-500" />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
@@ -137,46 +146,46 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
               color="indigo"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {totalCandidatesScreened} of {totalCandidatesScreened + candidatesNotScreened} screened
+              {totalCandidatesScreened} از {totalCandidatesScreened + candidatesNotScreened} غربال شده
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border border-green-100/50 dark:border-green-800/50">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Screened</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">غربال شده</span>
               <CheckCircle className="h-5 w-5 text-green-500" />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
               {totalCandidatesScreened || 0}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              candidates analyzed
+              داوطلب تحلیل شده
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl p-4 border border-yellow-100/50 dark:border-yellow-800/50">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Pending</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">در انتظار</span>
               <Clock className="h-5 w-5 text-yellow-500" />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
               {candidatesNotScreened || 0}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              awaiting AI analysis
+              در انتظار تحلیل هوش مصنوعی
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-4 border border-blue-100/50 dark:border-blue-800/50">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Avg. Score</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">میانگین امتیاز</span>
               <Award className="h-5 w-5 text-blue-500" />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
               {Math.round(averageScore)}%
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              across {screeningHistory.length} jobs
+              در {screeningHistory.length} شغل
             </p>
           </div>
         </div>
@@ -190,14 +199,14 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-yellow-500" />
-                    Pending AI Screening
+                    در انتظار غربالگری هوش مصنوعی
                     <Badge variant="warning" size="sm">{pendingScreening.length}</Badge>
                   </h3>
                   <button className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
-                    View all
+                    مشاهده همه
                   </button>
                 </div>
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-48 overflow-y-auto pl-1">
                   {pendingScreening.slice(0, 5).map((app) => (
                     <div
                       key={app.id}
@@ -218,10 +227,10 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-xs text-gray-400">
-                          {new Date(app.appliedDate).toLocaleDateString()}
+                          {formatDate(app.appliedDate)}
                         </span>
                         <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-2.5 py-1 rounded-full font-medium">
-                          Pending
+                          در انتظار
                         </span>
                       </div>
                     </div>
@@ -238,7 +247,7 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                     <Award className="w-5 h-5 text-emerald-500" />
                     <div>
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        Best Performing Job
+                        بهترین شغل
                       </p>
                       <p className="text-sm text-gray-600 dark:text-gray-300">
                         {topPerformingJob.jobTitle}
@@ -249,7 +258,7 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                     <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
                       {Math.round(topPerformingJob.avgScore)}%
                     </span>
-                    <Badge variant="success">Top Match</Badge>
+                    <Badge variant="success">بهترین تطابق</Badge>
                   </div>
                 </div>
               </div>
@@ -266,8 +275,8 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <BarChart3 className="w-4 h-4 text-blue-500" />
-                    Screening by Job
-                    <Badge variant="gray" size="sm">{screeningHistory.length} jobs</Badge>
+                    غربالگری بر اساس شغل
+                    <Badge variant="gray" size="sm">{screeningHistory.length} شغل</Badge>
                   </h3>
                 </div>
                 <div className="space-y-2">
@@ -289,7 +298,7 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                               {job.jobTitle}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                              {job.screenedCount} of {job.totalApplicants} screened
+                              {job.screenedCount} از {job.totalApplicants} غربال شده
                             </p>
                           </div>
                         </div>
@@ -324,8 +333,8 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
                             color={job.avgScore >= 70 ? 'green' : job.avgScore >= 40 ? 'yellow' : 'red'}
                           />
                           <div className="flex items-center justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
-                            <span>Posted: {new Date(job.postedDate).toLocaleDateString()}</span>
-                            <span>{job.screenedCount} candidates screened</span>
+                            <span>تاریخ ثبت: {formatDate(job.postedDate)}</span>
+                            <span>{job.screenedCount} داوطلب غربال شده</span>
                           </div>
                         </div>
                       )}
@@ -343,19 +352,19 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
               <Sparkles className="w-8 h-8 text-gray-300 dark:text-gray-600" />
             </div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white">No screening data yet</h3>
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white">هنوز داده‌ای برای غربالگری وجود ندارد</h3>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Start receiving applications to see AI screening insights
+              برای مشاهده بینش‌های غربالگری هوش مصنوعی، دریافت درخواست‌ها را شروع کنید
             </p>
           </div>
         )}
 
         {/* Footer */}
         <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
-          <span>Last updated: {new Date().toLocaleString()}</span>
+          <span>آخرین بروزرسانی: {new Date().toLocaleString('fa-IR')}</span>
           <span className="flex items-center gap-1">
             <Activity className="w-3 h-3 text-green-500" />
-            <span>System active</span>
+            <span>سیستم فعال</span>
           </span>
         </div>
       </div>

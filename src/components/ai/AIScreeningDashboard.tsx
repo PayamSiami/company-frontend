@@ -8,7 +8,7 @@ import {
     BarChart3,
     TrendingUp,
     Eye,
-    ChevronRight,
+    ChevronLeft,
     Activity,
     ArrowUpRight,
     ArrowDownRight,
@@ -41,8 +41,6 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
 }) => {
     const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
 
-    console.log(data?.screeningHistory)
-
     // Calculate stats from applications
     const totalApplications = applications.length;
     const screenedApplications = applications?.filter(app => app.aiScore !== null && app.aiScore !== undefined);
@@ -59,23 +57,23 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
 
     const stats: ScreeningStat[] = [
         {
-            label: 'Total Applications',
+            label: 'کل درخواست‌ها',
             value: totalApplications,
             color: 'bg-blue-500'
         },
         {
-            label: 'Screened',
+            label: 'غربال شده',
             value: screenedApplications?.length,
             change: Math.round(screeningRate),
             color: 'bg-green-500'
         },
         {
-            label: 'Pending',
+            label: 'در انتظار',
             value: pendingApplications?.length,
             color: 'bg-yellow-500'
         },
         {
-            label: 'Average Score',
+            label: 'میانگین امتیاز',
             value: `${Math.round(averageScore)}%`,
             color: 'bg-purple-500'
         }
@@ -93,20 +91,35 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
         return 'danger';
     };
 
+    const getScoreLabel = (score: number) => {
+        if (score >= 70) return 'تطابق بالا';
+        if (score >= 40) return 'تطابق متوسط';
+        return 'تطابق پایین';
+    };
+
+    const formatDate = (date: string) => {
+        if (!date) return 'نامشخص';
+        return new Date(date).toLocaleDateString('fa-IR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
+
     return (
-        <div className={cn("space-y-6", className)}>
+        <div className={cn("space-y-6", className)} dir="rtl">
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        AI Screening Dashboard
-                        <Badge variant="info" size="sm" className="ml-2">
-                            <Activity className="w-3 h-3 mr-1" />
-                            Live
+                        داشبورد غربالگری هوش مصنوعی
+                        <Badge variant="info" size="sm" className="mr-2">
+                            <Activity className="w-3 h-3 ml-1" />
+                            زنده
                         </Badge>
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Monitor AI-powered candidate screening across all jobs
+                        نظارت بر غربالگری داوطلبان مبتنی بر هوش مصنوعی در همه مشاغل
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -122,13 +135,13 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                                         : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                                 )}
                             >
-                                {range}
+                                {range === '7d' ? '۷ روز' : range === '30d' ? '۳۰ روز' : '۹۰ روز'}
                             </button>
                         ))}
                     </div>
                     <Button variant="outline" size="sm" className="gap-1.5">
                         <Download className="w-4 h-4" />
-                        Export
+                        خروجی
                     </Button>
                 </div>
             </div>
@@ -163,16 +176,16 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <BarChart3 className="w-4 h-4 text-gray-400" />
-                            Score Distribution
+                            توزیع امتیازات
                         </CardTitle>
-                        <CardDescription>Breakdown of AI match scores</CardDescription>
+                        <CardDescription>توزیع امتیازات تطابق هوش مصنوعی</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-3">
                             <div>
                                 <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-green-600 dark:text-green-400">High (70%+)</span>
-                                    <span className="font-medium">{highScore?.length} candidates</span>
+                                    <span className="text-green-600 dark:text-green-400">بالا (۷۰٪+)</span>
+                                    <span className="font-medium">{highScore?.length} داوطلب</span>
                                 </div>
                                 <ProgressBar
                                     value={(highScore?.length / totalApplications) * 100}
@@ -183,8 +196,8 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                             </div>
                             <div>
                                 <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-yellow-600 dark:text-yellow-400">Medium (40-69%)</span>
-                                    <span className="font-medium">{mediumScore?.length} candidates</span>
+                                    <span className="text-yellow-600 dark:text-yellow-400">متوسط (۴۰-۶۹٪)</span>
+                                    <span className="font-medium">{mediumScore?.length} داوطلب</span>
                                 </div>
                                 <ProgressBar
                                     value={(mediumScore?.length / totalApplications) * 100}
@@ -195,8 +208,8 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                             </div>
                             <div>
                                 <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-red-600 dark:text-red-400">Low (&lt;40%)</span>
-                                    <span className="font-medium">{lowScore?.length} candidates</span>
+                                    <span className="text-red-600 dark:text-red-400">پایین (&lt;۴۰٪)</span>
+                                    <span className="font-medium">{lowScore?.length} داوطلب</span>
                                 </div>
                                 <ProgressBar
                                     value={(lowScore?.length / totalApplications) * 100}
@@ -207,8 +220,8 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                             </div>
                         </div>
                         <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                            <span>Total screened: <span className="font-semibold text-gray-900 dark:text-white">{screenedApplications?.length}</span></span>
-                            <span>Coverage: <span className="font-semibold text-gray-900 dark:text-white">{Math.round(screeningRate)}%</span></span>
+                            <span>کل غربال شده: <span className="font-semibold text-gray-900 dark:text-white">{screenedApplications?.length}</span></span>
+                            <span>پوشش: <span className="font-semibold text-gray-900 dark:text-white">{Math.round(screeningRate)}%</span></span>
                         </div>
                     </CardContent>
                 </Card>
@@ -217,22 +230,22 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
-                            Quick Actions
+                            اقدامات سریع
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <Link to="/ai/screening">
                             <Button variant="outline" className="w-full justify-start gap-2">
                                 <Eye className="w-4 h-4" />
-                                View All Screening
-                                <ChevronRight className="w-4 h-4 ml-auto" />
+                                مشاهده همه غربالگری‌ها
+                                <ChevronLeft className="w-4 h-4 mr-auto" />
                             </Button>
                         </Link>
                         <Link to="/applications/screening">
                             <Button variant="outline" className="w-full justify-start gap-2">
                                 <Users className="w-4 h-4" />
-                                Review Applications
-                                <Badge variant="danger" size="sm" className="ml-auto">
+                                بررسی درخواست‌ها
+                                <Badge variant="danger" size="sm" className="mr-auto">
                                     {pendingApplications?.length}
                                 </Badge>
                             </Button>
@@ -240,15 +253,15 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                         <Link to="/ai/assistant">
                             <Button variant="outline" className="w-full justify-start gap-2">
                                 <Sparkles className="w-4 h-4" />
-                                AI Job Assistant
-                                <ChevronRight className="w-4 h-4 ml-auto" />
+                                دستیار شغلی هوش مصنوعی
+                                <ChevronLeft className="w-4 h-4 mr-auto" />
                             </Button>
                         </Link>
                         <Link to="/ai/analytics">
                             <Button variant="outline" className="w-full justify-start gap-2">
                                 <TrendingUp className="w-4 h-4" />
-                                View Analytics
-                                <ChevronRight className="w-4 h-4 ml-auto" />
+                                مشاهده تحلیل‌ها
+                                <ChevronLeft className="w-4 h-4 mr-auto" />
                             </Button>
                         </Link>
                     </CardContent>
@@ -261,13 +274,13 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                     <div>
                         <CardTitle className="text-base flex items-center gap-2">
                             <Clock className="w-4 h-4 text-gray-400" />
-                            Screening History
+                            تاریخچه غربالگری
                         </CardTitle>
-                        <CardDescription>Recent AI screening results by job</CardDescription>
+                        <CardDescription>نتایج اخیر غربالگری هوش مصنوعی بر اساس شغل</CardDescription>
                     </div>
                     <Button variant="ghost" size="sm" className="gap-1 text-sm">
-                        View all
-                        <ChevronRight className="w-4 h-4" />
+                        مشاهده همه
+                        <ChevronLeft className="w-4 h-4" />
                     </Button>
                 </CardHeader>
                 <CardContent>
@@ -275,39 +288,39 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                         <table className="w-full">
                             <thead className="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Job Title
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        عنوان شغل
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Applicants
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        متقاضیان
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Screened
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        غربال شده
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Avg. Score
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        میانگین امتیاز
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Status
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        وضعیت
                                     </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                                 {data?.screeningHistory?.map((job: any, id: React.Key) => (
                                     <tr key={id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors">
-                                        <td className="px-4 py-3 text-left">
+                                        <td className="px-4 py-3 text-right">
                                             <span className="text-sm font-medium text-gray-900 dark:text-white">
                                                 {job.jobTitle}
                                             </span>
                                         </td>
-                                        <td className="text-left px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                        <td className="text-right px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                             {job.totalApplicants}
                                         </td>
-                                        <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-left">
+                                        <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-right">
                                             {job.screenedCount} ({Math.round((job.screenedCount / job.totalApplicants) * 100)}%)
                                         </td>
-                                        <td className="px-4 py-3 text-left">
-                                            <div className="flex items-center gap-2">
+                                        <td className="px-4 py-3 text-right">
+                                            <div className="flex items-center justify-end gap-2">
                                                 <span className={cn(
                                                     "text-sm font-semibold",
                                                     getScoreColor(job.avgScore)
@@ -322,9 +335,9 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
                                                 />
                                             </div>
                                         </td>
-                                        <td className="px-4 py-3 text-left">
+                                        <td className="px-4 py-3 text-right">
                                             <Badge variant={getScoreBadgeVariant(job.avgScore)} size="sm">
-                                                {job.avgScore >= 70 ? 'High Match' : job.avgScore >= 40 ? 'Medium Match' : 'Low Match'}
+                                                {getScoreLabel(job.avgScore)}
                                             </Badge>
                                         </td>
                                     </tr>

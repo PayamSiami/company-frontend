@@ -1,5 +1,5 @@
 // frontend-company/src/components/candidates/CandidateCard.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Star, 
@@ -57,18 +57,24 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
     return 'bg-red-50 dark:bg-red-900/20';
   };
 
+  const getMatchScoreLabel = (score: number) => {
+    if (score >= 70) return 'تطابق بالا';
+    if (score >= 40) return 'تطابق متوسط';
+    return 'تطابق پایین';
+  };
+
   const formatDate = (date: string) => {
-    if (!date) return 'N/A';
+    if (!date) return 'نامشخص';
     const d = new Date(date);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - d.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return d.toLocaleDateString();
+    if (diffDays === 0) return 'امروز';
+    if (diffDays === 1) return 'دیروز';
+    if (diffDays < 7) return `${diffDays} روز پیش`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} هفته پیش`;
+    return d.toLocaleDateString('fa-IR');
   };
 
   // List view layout
@@ -76,6 +82,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
     return (
       <div 
         className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+        dir="rtl"
       >
         <div className="flex flex-wrap items-start gap-4">
           {/* Avatar & Info */}
@@ -97,13 +104,13 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
               <div className="flex flex-wrap items-center gap-2">
                 <Link to={`/candidates/${candidate._id}`} className="hover:underline">
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                    {candidate.fullName || 'Unknown'}
+                    {candidate.fullName || 'ناشناس'}
                   </h3>
                 </Link>
                 {isShortlisted && (
                   <Badge variant="success" size="sm" className="flex items-center gap-1">
                     <Star className="w-3 h-3 fill-current" />
-                    Shortlisted
+                    انتخاب شده
                   </Badge>
                 )}
                 {matchScore > 0 && (
@@ -113,7 +120,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                     className={cn("flex items-center gap-1", getMatchScoreBg(matchScore))}
                   >
                     <Zap className="w-3 h-3" />
-                    {matchScore}% Match
+                    {matchScore}% {getMatchScoreLabel(matchScore)}
                   </Badge>
                 )}
               </div>
@@ -150,7 +157,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
               className="flex items-center gap-1.5"
             >
               <Star className={cn("h-4 w-4", isShortlisted && "fill-current")} />
-              {isShortlisted ? 'Shortlisted' : 'Shortlist'}
+              {isShortlisted ? 'انتخاب شده' : 'انتخاب'}
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -160,16 +167,16 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuItem>
-                  <Eye className="w-4 h-4 mr-2" />
-                  View Profile
+                  <Eye className="w-4 h-4 ml-2" />
+                  مشاهده پروفایل
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Send Message
+                  <MessageSquare className="w-4 h-4 ml-2" />
+                  ارسال پیام
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Schedule Interview
+                  <Calendar className="w-4 h-4 ml-2" />
+                  برنامه‌ریزی مصاحبه
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -186,7 +193,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
             ))}
             {remainingSkills > 0 && (
               <Badge variant="gray" size="sm" className="text-xs">
-                +{remainingSkills} more
+                +{remainingSkills} بیشتر
               </Badge>
             )}
           </div>
@@ -199,6 +206,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   return (
     <div 
       className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+      dir="rtl"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
@@ -219,7 +227,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           <div>
             <Link to={`/candidates/${candidate._id}`} className="hover:underline">
               <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                {candidate.fullName || 'Unknown'}
+                {candidate.fullName || 'ناشناس'}
               </h3>
             </Link>
             {candidate.location && (
@@ -263,13 +271,13 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
       <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-sm">
         <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
           <Briefcase className="h-3.5 w-3.5" />
-          <span>{candidate.experience?.length || 0} roles</span>
+          <span>{candidate.experience?.length || 0} سابقه</span>
         </div>
         <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
           <GraduationCap className="h-3.5 w-3.5" />
-          <span>{candidate.education?.length || 0} degrees</span>
+          <span>{candidate.education?.length || 0} مدرک</span>
         </div>
-        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 ml-auto">
+        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 mr-auto">
           <Clock className="h-3.5 w-3.5" />
           <span>{formatDate(candidate.createdAt)}</span>
         </div>
@@ -307,12 +315,12 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           )}
         >
           <Star className={cn("h-4 w-4", isShortlisted && "fill-current")} />
-          {isShortlisted ? 'Shortlisted' : 'Shortlist'}
+          {isShortlisted ? 'انتخاب شده' : 'انتخاب'}
         </Button>
         <Link to={`/candidates/${candidate._id}`} className="flex-1">
           <Button variant="outline" size="sm" className="w-full gap-1.5">
             <Eye className="h-4 w-4" />
-            View
+            مشاهده
           </Button>
         </Link>
         <Button variant="ghost" size="sm" className="p-2 h-9 w-9">

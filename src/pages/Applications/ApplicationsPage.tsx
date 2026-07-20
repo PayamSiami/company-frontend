@@ -54,14 +54,13 @@ const ApplicationsPage: React.FC = () => {
   }, [dispatch]);
 
   const handleExport = () => {
-    toast.success('Applications exported successfully!');
+    toast.success('درخواست‌ها با موفقیت خروجی گرفته شدند!');
   };
 
   const applicationsList = useMemo(() => {
     if (applications && Array.isArray(applications)) {
       return applications;
     }
-    // Fallback: if applications is directly an array
     if (Array.isArray(applications)) {
       return applications;
     }
@@ -109,12 +108,12 @@ const ApplicationsPage: React.FC = () => {
   };
 
   const tabs = [
-    { value: 'all', label: 'All', icon: FileText, count: totalCount },
-    { value: 'pending', label: 'Pending', icon: Clock, count: getCount('PENDING') },
-    { value: 'reviewing', label: 'Reviewing', icon: Users, count: getCount('REVIEWING') },
-    { value: 'shortlisted', label: 'Shortlisted', icon: Star, count: getCount('SHORTLISTED') },
-    { value: 'rejected', label: 'Rejected', icon: XCircle, count: getCount('REJECTED') },
-    { value: 'hired', label: 'Hired', icon: CheckCircle, count: getCount('HIRED') },
+    { value: 'all', label: 'همه', icon: FileText, count: totalCount },
+    { value: 'pending', label: 'در انتظار', icon: Clock, count: getCount('PENDING') },
+    { value: 'reviewing', label: 'در حال بررسی', icon: Users, count: getCount('REVIEWING') },
+    { value: 'shortlisted', label: 'انتخاب شده', icon: Star, count: getCount('SHORTLISTED') },
+    { value: 'rejected', label: 'رد شده', icon: XCircle, count: getCount('REJECTED') },
+    { value: 'hired', label: 'استخدام شده', icon: CheckCircle, count: getCount('HIRED') },
   ];
 
   // ✅ Calculate AI insights safely
@@ -123,21 +122,21 @@ const ApplicationsPage: React.FC = () => {
   const lowMatchCount = applicationsList?.filter(a => a.aiScore && a.aiScore < 40).length || 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Page Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                Applications
-                <Badge variant="info" size="sm" className="ml-2">
-                  <Activity className="w-3 h-3 mr-1" />
-                  {totalCount} total
+                درخواست‌ها
+                <Badge variant="info" size="sm" className="mr-2">
+                  <Activity className="w-3 h-3 ml-1" />
+                  {totalCount} کل
                 </Badge>
               </h1>
               <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-                Manage and review candidate applications
+                مدیریت و بررسی درخواست‌های داوطلبان
               </p>
             </div>
           </div>
@@ -146,7 +145,7 @@ const ApplicationsPage: React.FC = () => {
           {/* Search */}
           <div className="relative">
             <Search className={cn(
-              "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors",
+              "absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors",
               isSearchFocused ? "text-blue-500" : "text-gray-400"
             )} />
             <input
@@ -155,9 +154,9 @@ const ApplicationsPage: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-              placeholder="Search applications..."
+              placeholder="جستجوی درخواست‌ها..."
               className={cn(
-                "pl-9 pr-4 py-2 text-sm border rounded-xl bg-white dark:bg-gray-900 focus:outline-none transition-all w-48 md:w-64",
+                "pr-9 pl-4 py-2 text-sm border rounded-xl bg-white dark:bg-gray-900 focus:outline-none transition-all w-48 md:w-64 text-right",
                 isSearchFocused
                   ? "border-blue-500 ring-2 ring-blue-500/20 dark:ring-blue-400/20"
                   : "border-gray-200 dark:border-gray-700"
@@ -166,7 +165,7 @@ const ApplicationsPage: React.FC = () => {
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 <XCircleIcon className="w-4 h-4" />
               </button>
@@ -181,7 +180,7 @@ const ApplicationsPage: React.FC = () => {
             >
               <Badge variant="success" size="sm" className="px-3 py-1.5 flex items-center gap-1">
                 <CheckCircle className="w-3 h-3" />
-                {selectedIds.length} selected
+                {selectedIds.length} انتخاب شده
               </Badge>
             </motion.div>
           )}
@@ -196,13 +195,13 @@ const ApplicationsPage: React.FC = () => {
             )}
           >
             <Filter className="w-4 h-4" />
-            Filters
+            فیلترها
             {showFilters && <ChevronDown className="w-3 h-3" />}
           </Button>
 
           <Button variant="outline" size="sm" onClick={handleExport} className="gap-1.5">
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Export</span>
+            <span className="hidden sm:inline">خروجی</span>
           </Button>
 
           <Button
@@ -212,7 +211,7 @@ const ApplicationsPage: React.FC = () => {
             onClick={() => window.location.href = '/jobs/create'}
           >
             <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Post Job</span>
+            <span className="hidden sm:inline">ثبت آگهی</span>
           </Button>
         </div>
       </div>
@@ -225,9 +224,9 @@ const ApplicationsPage: React.FC = () => {
               <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">AI Screening Insights</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">بینش‌های غربالگری هوش مصنوعی</p>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                {highMatchCount} high-quality candidates identified
+                {highMatchCount} داوطلب با کیفیت بالا شناسایی شدند
               </p>
             </div>
           </div>
@@ -235,19 +234,19 @@ const ApplicationsPage: React.FC = () => {
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-green-500" />
               <span className="text-gray-600 dark:text-gray-400">
-                {highMatchCount} High Match
+                {highMatchCount} تطابق بالا
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-yellow-500" />
               <span className="text-gray-600 dark:text-gray-400">
-                {mediumMatchCount} Medium Match
+                {mediumMatchCount} تطابق متوسط
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-red-500" />
               <span className="text-gray-600 dark:text-gray-400">
-                {lowMatchCount} Low Match
+                {lowMatchCount} تطابق پایین
               </span>
             </div>
           </div>
@@ -292,7 +291,7 @@ const ApplicationsPage: React.FC = () => {
               >
                 <tab.icon className="w-4 h-4" />
                 <span className="hidden sm:inline">{tab.label}</span>
-                <Badge variant="gray" size="sm" className="ml-0.5">
+                <Badge variant="gray" size="sm" className="mr-0.5">
                   {tab.count}
                 </Badge>
               </TabsTrigger>
@@ -307,16 +306,16 @@ const ApplicationsPage: React.FC = () => {
             onChange={(e) => setSortBy(e.target.value as any)}
             className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="date">Sort by Date</option>
-            <option value="score">Sort by Score</option>
-            <option value="status">Sort by Status</option>
-            <option value="name">Sort by Name</option>
+            <option value="date">مرتب‌سازی بر اساس تاریخ</option>
+            <option value="score">مرتب‌سازی بر اساس امتیاز</option>
+            <option value="status">مرتب‌سازی بر اساس وضعیت</option>
+            <option value="name">مرتب‌سازی بر اساس نام</option>
           </select>
 
           <button
             onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
             className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle sort order"
+            aria-label="تغییر ترتیب مرتب‌سازی"
           >
             <ArrowUpDown className="w-4 h-4 text-gray-500" />
           </button>
@@ -330,7 +329,7 @@ const ApplicationsPage: React.FC = () => {
                   ? "bg-white dark:bg-gray-700 shadow-sm"
                   : "hover:bg-white/50 dark:hover:bg-gray-700/50"
               )}
-              aria-label="Grid view"
+              aria-label="نمایش شبکه‌ای"
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
@@ -342,7 +341,7 @@ const ApplicationsPage: React.FC = () => {
                   ? "bg-white dark:bg-gray-700 shadow-sm"
                   : "hover:bg-white/50 dark:hover:bg-gray-700/50"
               )}
-              aria-label="List view"
+              aria-label="نمایش لیستی"
             >
               <List className="w-4 h-4" />
             </button>
@@ -353,20 +352,20 @@ const ApplicationsPage: React.FC = () => {
       {/* Results count */}
       <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
         <span>
-          Showing <span className="font-medium text-gray-900 dark:text-white">{filteredApplications.length}</span> applications
+          نمایش <span className="font-medium text-gray-900 dark:text-white">{filteredApplications.length}</span> درخواست
           {searchTerm && (
-            <span className="ml-1">matching "<span className="font-medium">{searchTerm}</span>"</span>
+            <span className="mr-1">مطابق با "<span className="font-medium">{searchTerm}</span>"</span>
           )}
         </span>
         <div className="flex items-center gap-2">
           <Badge variant="gray" size="sm" className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
-            {activeTab !== 'all' ? activeTab.replace('_', ' ') : 'All'}
+            {activeTab !== 'all' ? activeTab.replace('_', ' ') : 'همه'}
           </Badge>
           {filteredApplications.length > 0 && (
             <Badge variant="gray" size="sm" className="flex items-center gap-1">
               <Users className="w-3 h-3" />
-              {filteredApplications.length} total
+              {filteredApplications.length} کل
             </Badge>
           )}
         </div>
@@ -390,11 +389,11 @@ const ApplicationsPage: React.FC = () => {
           <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
             <FileText className="h-10 w-10 text-gray-300 dark:text-gray-600" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No applications found</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">هیچ درخواستی یافت نشد</h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 max-w-md mx-auto">
             {searchTerm || activeTab !== 'all'
-              ? 'Try adjusting your search or filters to find what you\'re looking for.'
-              : 'Start posting jobs to receive applications from qualified candidates.'}
+              ? 'سعی کنید جستجو یا فیلترهای خود را تنظیم کنید تا آنچه را که به دنبال آن هستید پیدا کنید.'
+              : 'برای دریافت درخواست از داوطلبان واجد شرایط، ثبت آگهی شغلی را شروع کنید.'}
           </p>
           {(searchTerm || activeTab !== 'all') && (
             <Button
@@ -406,7 +405,7 @@ const ApplicationsPage: React.FC = () => {
               }}
             >
               <XCircleIcon className="w-4 h-4" />
-              Clear filters
+              پاک کردن فیلترها
             </Button>
           )}
           {!searchTerm && activeTab === 'all' && (
@@ -415,7 +414,7 @@ const ApplicationsPage: React.FC = () => {
               onClick={() => window.location.href = '/jobs/create'}
             >
               <Plus className="w-4 h-4" />
-              Post Your First Job
+              ثبت اولین آگهی شغلی
             </Button>
           )}
         </motion.div>

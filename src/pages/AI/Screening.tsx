@@ -26,7 +26,7 @@ import { cn } from '../../lib/utils';
 import { useAppDispatch } from '../../store/hooks';
 
 type FilterType = 'all' | 'screened' | 'pending' | 'high' | 'medium' | 'low';
-type SortByType = 'score' | 'date' | 'name'; // Added type
+type SortByType = 'score' | 'date' | 'name';
 
 const AIScreeningPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -56,8 +56,6 @@ const AIScreeningPage: React.FC = () => {
         return filtered
     }, [applications, filter, searchTerm, sortBy]);
 
-    console.log(filteredApplications)
-
     const stats = useMemo(() => {
         const screenedApps = applications?.filter(a => a.aiScore !== null && a.aiScore !== undefined);
         const screenedCount = screenedApps?.length;
@@ -77,60 +75,60 @@ const AIScreeningPage: React.FC = () => {
     }, [applications]);
 
     const filterOptions: { value: FilterType; label: string; icon: React.ElementType }[] = [
-        { value: 'all', label: 'All', icon: Users },
-        { value: 'screened', label: 'Screened', icon: CheckCircle },
-        { value: 'pending', label: 'Pending', icon: Clock },
-        { value: 'high', label: 'High Match', icon: Star },
-        { value: 'medium', label: 'Medium Match', icon: Award },
-        { value: 'low', label: 'Low Match', icon: XCircle },
+        { value: 'all', label: 'همه', icon: Users },
+        { value: 'screened', label: 'غربال شده', icon: CheckCircle },
+        { value: 'pending', label: 'در انتظار', icon: Clock },
+        { value: 'high', label: 'تطابق بالا', icon: Star },
+        { value: 'medium', label: 'تطابق متوسط', icon: Award },
+        { value: 'low', label: 'تطابق پایین', icon: XCircle },
     ];
 
     if (isLoading && applications.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center h-64 space-y-4">
+            <div className="flex flex-col items-center justify-center h-64 space-y-4" dir="rtl">
                 <div className="relative">
                     <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
                     <div className="absolute inset-0 flex items-center justify-center">
                         <Brain className="w-6 h-6 text-indigo-500" />
                     </div>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">Loading screening data...</p>
+                <p className="text-gray-500 dark:text-gray-400">در حال بارگذاری داده‌های غربالگری...</p>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             {/* Page Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <div className="flex items-center gap-3">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                AI Screening
-                                <Badge variant="info" size="sm" className="ml-2">
-                                    <Activity className="w-3 h-3 mr-1" />
-                                    {stats.screened} screened
+                                غربالگری هوش مصنوعی
+                                <Badge variant="info" size="sm" className="mr-2">
+                                    <Activity className="w-3 h-3 ml-1" />
+                                    {stats.screened} غربال شده
                                 </Badge>
                             </h1>
                             <p className="flex text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-                                Automatically screen candidates using AI
+                                غربالگری خودکار داوطلبان با استفاده از هوش مصنوعی
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Stats Grid - Improved responsiveness */}
+            {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 {[
-                    { label: 'Total', value: stats.total, color: 'text-gray-900 dark:text-white' },
-                    { label: 'Screened', value: stats.screened, color: 'text-green-600 dark:text-green-400', progress: (stats.screened / stats.total) * 100 || 0, progressColor: 'green' },
-                    { label: 'Pending', value: stats.pending, color: 'text-yellow-600 dark:text-yellow-400', progress: (stats.pending / stats.total) * 100 || 0, progressColor: 'yellow' },
-                    { label: 'High Match', value: stats.high, color: 'text-emerald-600 dark:text-emerald-400' },
-                    { label: 'Medium Match', value: stats.medium, color: 'text-blue-600 dark:text-blue-400' },
-                    { label: 'Low Match', value: stats.low, color: 'text-red-600 dark:text-red-400' },
-                    { label: 'Avg Score', value: `${Math.round(stats.averageScore)}%`, color: 'text-indigo-600 dark:text-indigo-400' },
+                    { label: 'کل', value: stats.total, color: 'text-gray-900 dark:text-white' },
+                    { label: 'غربال شده', value: stats.screened, color: 'text-green-600 dark:text-green-400', progress: (stats.screened / stats.total) * 100 || 0, progressColor: 'green' },
+                    { label: 'در انتظار', value: stats.pending, color: 'text-yellow-600 dark:text-yellow-400', progress: (stats.pending / stats.total) * 100 || 0, progressColor: 'yellow' },
+                    { label: 'تطابق بالا', value: stats.high, color: 'text-emerald-600 dark:text-emerald-400' },
+                    { label: 'تطابق متوسط', value: stats.medium, color: 'text-blue-600 dark:text-blue-400' },
+                    { label: 'تطابق پایین', value: stats.low, color: 'text-red-600 dark:text-red-400' },
+                    { label: 'میانگین امتیاز', value: `${Math.round(stats.averageScore)}%`, color: 'text-indigo-600 dark:text-indigo-400' },
                 ].map((stat, index) => (
                     <div key={index} className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-3 hover:shadow-md transition-all">
                         <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
@@ -165,27 +163,27 @@ const AIScreeningPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                     {/* Search */}
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search candidates..."
-                            className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-48 md:w-56"
-                            aria-label="Search candidates"
+                            placeholder="جستجوی داوطلبان..."
+                            className="pr-9 pl-4 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-48 md:w-56 text-right"
+                            aria-label="جستجوی داوطلبان"
                         />
                     </div>
 
                     {/* Sort */}
                     <select
                         value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as SortByType)} // Fixed type casting
+                        onChange={(e) => setSortBy(e.target.value as SortByType)}
                         className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        aria-label="Sort applications"
+                        aria-label="مرتب‌سازی درخواست‌ها"
                     >
-                        <option value="score">Sort by Score</option>
-                        <option value="date">Sort by Date</option>
-                        <option value="name">Sort by Name</option>
+                        <option value="score">مرتب‌سازی بر اساس امتیاز</option>
+                        <option value="date">مرتب‌سازی بر اساس تاریخ</option>
+                        <option value="name">مرتب‌سازی بر اساس نام</option>
                     </select>
 
                     {/* View toggle */}
@@ -198,7 +196,7 @@ const AIScreeningPage: React.FC = () => {
                                     ? "bg-white dark:bg-gray-700 shadow-sm"
                                     : "hover:bg-white/50 dark:hover:bg-gray-700/50"
                             )}
-                            aria-label="Grid view"
+                            aria-label="نمایش شبکه‌ای"
                         >
                             <FileText className="w-4 h-4" />
                         </button>
@@ -210,7 +208,7 @@ const AIScreeningPage: React.FC = () => {
                                     ? "bg-white dark:bg-gray-700 shadow-sm"
                                     : "hover:bg-white/50 dark:hover:bg-gray-700/50"
                             )}
-                            aria-label="List view"
+                            aria-label="نمایش لیستی"
                         >
                             <List className="w-4 h-4" />
                         </button>
@@ -218,21 +216,25 @@ const AIScreeningPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Screening Dashboard - Only show if data exists */}
+            {/* Screening Dashboard */}
             {screeningData && Object.keys(screeningData).length > 0 && (
                 <AIScreeningDashboard data={screeningData} />
             )}
 
             {/* Results count */}
             <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                <span>Showing {filteredApplications?.length} candidates</span>
+                <span>نمایش {filteredApplications?.length} داوطلب</span>
                 <span className="flex items-center gap-2">
                     <Badge variant="gray" size="sm">
-                        {filter} filter
+                        {filter === 'all' ? 'همه' : 
+                         filter === 'screened' ? 'غربال شده' :
+                         filter === 'pending' ? 'در انتظار' :
+                         filter === 'high' ? 'تطابق بالا' :
+                         filter === 'medium' ? 'تطابق متوسط' : 'تطابق پایین'} فیلتر
                     </Badge>
                     {searchTerm && (
                         <Badge variant="gray" size="sm">
-                            Search: "{searchTerm}"
+                            جستجو: "{searchTerm}"
                         </Badge>
                     )}
                 </span>
@@ -259,9 +261,9 @@ const AIScreeningPage: React.FC = () => {
                     <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                         <Users className="h-10 w-10 text-gray-300 dark:text-gray-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No applications found</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">هیچ درخواستی یافت نشد</h3>
                     <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                        {searchTerm ? 'No results match your search criteria' : 'Try adjusting your filters or search terms'}
+                        {searchTerm ? 'هیچ نتیجه‌ای با معیارهای جستجوی شما مطابقت ندارد' : 'سعی کنید فیلترها یا عبارت جستجوی خود را تنظیم کنید'}
                     </p>
                     {(filter !== 'all' || searchTerm) && (
                         <Button
@@ -272,7 +274,7 @@ const AIScreeningPage: React.FC = () => {
                                 setSearchTerm('');
                             }}
                         >
-                            Clear all filters
+                            پاک کردن همه فیلترها
                         </Button>
                     )}
                 </div>

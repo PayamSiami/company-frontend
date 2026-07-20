@@ -11,7 +11,7 @@ import {
   Lock,
   Eye,
   EyeOff,
-  ArrowRight,
+  ArrowLeft,
   Sparkles,
   Shield,
   CheckCircle,
@@ -48,14 +48,14 @@ const LoginPage: React.FC = () => {
 
     const newErrors: Record<string, string> = {};
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'ایمیل الزامی است';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'لطفاً یک ایمیل معتبر وارد کنید';
     }
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'رمز عبور الزامی است';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = 'رمز عبور باید حداقل ۶ کاراکتر باشد';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -88,7 +88,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-gray-900 dark:to-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-gray-900 dark:to-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden" dir="rtl">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl animate-pulse" />
@@ -97,38 +97,27 @@ const LoginPage: React.FC = () => {
       </div>
 
       <div className="relative z-10 sm:mx-auto sm:w-full sm:max-w-md">
-        {/* Logo */}
-        <div className="flex justify-center">
-          <div className="relative group">
-            <div className="w-16 h-16 bg-linear-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
-              <Building2 className="h-8 w-8 text-white" />
-            </div>
-            <div className="absolute -top-1 -right-1 animate-pulse">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-            </div>
-          </div>
-        </div>
 
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 dark:text-white">
-          Welcome Back
+          خوش آمدید
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-          Sign in to manage your jobs and candidates
+          برای مدیریت فرصت‌های شغلی و داوطلبان وارد شوید
         </p>
 
         {/* Feature badges */}
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-gray-200/50 dark:border-gray-700/50">
             <Shield className="w-3 h-3 text-blue-500" />
-            Secure Login
+            ورود امن
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-gray-200/50 dark:border-gray-700/50">
             <CheckCircle className="w-3 h-3 text-green-500" />
-            AI Powered
+            مبتنی بر AI
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-gray-200/50 dark:border-gray-700/50">
             <Zap className="w-3 h-3 text-yellow-500" />
-            Real-time
+            بلادرنگ
           </span>
         </div>
       </div>
@@ -158,12 +147,12 @@ const LoginPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email Address
+              <label htmlFor="email" className="flex text-sm font-medium text-gray-700 dark:text-gray-300">
+                آدرس ایمیل
               </label>
               <div className="mt-1 relative group">
                 <div className={cn(
-                  "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-200",
+                  "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none transition-colors duration-200",
                   isFocused === 'email' ? 'text-blue-500' : 'text-gray-400'
                 )}>
                   <Mail className="h-5 w-5" />
@@ -176,12 +165,13 @@ const LoginPage: React.FC = () => {
                   onFocus={() => setIsFocused('email')}
                   onBlur={() => setIsFocused(null)}
                   className={cn(
-                    "pl-10 transition-all duration-200",
+                    "pr-10 transition-all duration-200 ltr text-left",
                     isFocused === 'email' && "border-blue-500 ring-2 ring-blue-500/20",
                     errors.email && "border-red-500 ring-2 ring-red-500/20"
                   )}
-                  placeholder="you@company.com"
+                  placeholder="example@email.com"
                   autoComplete="email"
+                  dir="ltr"
                 />
               </div>
               {errors.email && (
@@ -191,12 +181,12 @@ const LoginPage: React.FC = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
+              <label htmlFor="password" className="flex text-sm font-medium text-gray-700 dark:text-gray-300">
+                رمز عبور
               </label>
               <div className="mt-1 relative group">
                 <div className={cn(
-                  "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-200",
+                  "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none transition-colors duration-200",
                   isFocused === 'password' ? 'text-blue-500' : 'text-gray-400'
                 )}>
                   <Lock className="h-5 w-5" />
@@ -209,18 +199,18 @@ const LoginPage: React.FC = () => {
                   onFocus={() => setIsFocused('password')}
                   onBlur={() => setIsFocused(null)}
                   className={cn(
-                    "pl-10 pr-10 transition-all duration-200",
+                    "pr-10 pl-10 transition-all duration-200 text-right",
                     isFocused === 'password' && "border-blue-500 ring-2 ring-blue-500/20",
                     errors.password && "border-red-500 ring-2 ring-red-500/20"
                   )}
-                  placeholder="Enter your password"
+                  placeholder="رمز عبور خود را وارد کنید"
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  aria-label={showPassword ? 'پنهان کردن رمز عبور' : 'نمایش رمز عبور'}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -244,8 +234,8 @@ const LoginPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded transition-all"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-                  Remember me
+                <label htmlFor="remember-me" className="mr-2 flex text-sm text-gray-700 dark:text-gray-300">
+                  مرا به خاطر بسپار
                 </label>
               </div>
 
@@ -255,7 +245,7 @@ const LoginPage: React.FC = () => {
                   onClick={handleForgotPassword}
                   className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                 >
-                  Forgot password?
+                  رمز عبور را فراموش کرده‌اید؟
                 </button>
               </div>
             </div>
@@ -269,10 +259,10 @@ const LoginPage: React.FC = () => {
               isLoading={isLoading}
               disabled={isLoading}
             >
-
-              Sign in
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                ورود
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              </span>
               <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Button>
           </form>
@@ -285,7 +275,7 @@ const LoginPage: React.FC = () => {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white/80 dark:bg-gray-900/80 text-gray-500 dark:text-gray-400">
-                  Or continue with
+                  یا ادامه با
                 </span>
               </div>
             </div>
@@ -303,7 +293,7 @@ const LoginPage: React.FC = () => {
                   <Google className="w-5 h-5" />
                 )} */}
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:inline">
-                  Google
+                  گوگل
                 </span>
               </button>
               <button
@@ -318,7 +308,7 @@ const LoginPage: React.FC = () => {
                   <Github className="w-5 h-5" />
                 )} */}
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:inline">
-                  GitHub
+                  گیت‌هاب
                 </span>
               </button>
               <button
@@ -333,7 +323,7 @@ const LoginPage: React.FC = () => {
                   <Linkedin className="w-5 h-5" />
                 )} */}
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:inline">
-                  LinkedIn
+                  لینکدین
                 </span>
               </button>
             </div>
@@ -342,13 +332,13 @@ const LoginPage: React.FC = () => {
           {/* Register Link */}
           <div className="mt-6">
             <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account?{' '}
+              حساب کاربری ندارید؟{' '}
               <Link
                 to="/register"
                 className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
               >
-                Create one now
-                <ArrowRight className="inline w-4 h-4 ml-1" />
+                ایجاد کنید
+                <ArrowLeft className="inline w-4 h-4 mr-1" />
               </Link>
             </div>
           </div>
@@ -358,20 +348,20 @@ const LoginPage: React.FC = () => {
             <div className="flex items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400">
               <span className="flex items-center gap-1">
                 <Shield className="w-3 h-3" />
-                Secure
+                امن
               </span>
               <span className="w-px h-3 bg-gray-300 dark:bg-gray-600" />
               <span className="flex items-center gap-1">
                 <Fingerprint className="w-3 h-3" />
-                Encrypted
+                رمزنگاری شده
               </span>
               <span className="w-px h-3 bg-gray-300 dark:bg-gray-600" />
               <Link to="/terms" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                Terms
+                قوانین
               </Link>
               <span className="w-px h-3 bg-gray-300 dark:bg-gray-600" />
               <Link to="/privacy" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                Privacy
+                حریم خصوصی
               </Link>
             </div>
           </div>

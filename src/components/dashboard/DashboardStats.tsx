@@ -25,7 +25,7 @@ interface StatCardProps {
   subtitle?: string;
   trend?: number;
   progress?: number;
-  badge?: string;
+  badge?: string | React.ReactNode;
   onClick?: () => void;
 }
 
@@ -113,7 +113,7 @@ const StatCard: React.FC<StatCardProps> = ({
               <span>{Math.abs(trend)}%</span>
             </div>
             <span className="text-xs text-gray-400 dark:text-gray-500">
-              vs last month
+              نسبت به ماه قبل
             </span>
           </div>
         )}
@@ -152,39 +152,39 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
 
   const cards = [
     {
-      title: 'Total Jobs',
+      title: 'کل مشاغل',
       value: stats.totalJobs,
       color: 'bg-blue-500',
       gradient: 'bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20',
-      subtitle: `${stats.activeJobs} active positions`,
+      subtitle: `${stats.activeJobs} موقعیت فعال`,
       trend: showTrends ? trends.totalJobs : undefined,
       onClick: () => console.log('Navigate to jobs'),
     },
     {
-      title: 'Total Applications',
+      title: 'کل درخواست‌ها',
       value: stats.totalApplications,
       color: 'bg-purple-500',
       gradient: 'bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20',
-      subtitle: `${stats.pendingApplications} pending review`,
+      subtitle: `${stats.pendingApplications} در انتظار بررسی`,
       trend: showTrends ? trends.totalApplications : undefined,
-      badge: `${applicationToJobRatio}/job`,
+      badge: `${applicationToJobRatio}/شغل`,
       onClick: () => console.log('Navigate to applications'),
     },
     {
-      title: 'Shortlisted',
+      title: 'انتخاب شده‌ها',
       value: stats.shortlistedCandidates,
       color: 'bg-green-500',
       gradient: 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20',
-      subtitle: `${shortlistRate.toFixed(1)}% of applications`,
+      subtitle: `${shortlistRate.toFixed(1)}% از درخواست‌ها`,
       trend: showTrends ? trends.shortlisted : undefined,
       onClick: () => console.log('Navigate to shortlisted'),
     },
     {
-      title: 'AI Screening Coverage',
+      title: 'پوشش غربالگری هوش مصنوعی',
       value: `${Math.round(stats.screeningCoverage)}%`,
       color: 'bg-indigo-500',
       gradient: 'bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20',
-      subtitle: `${stats.aiScreenedCount} candidates screened`,
+      subtitle: `${stats.aiScreenedCount} داوطلب غربال شده`,
       progress: stats.screeningCoverage,
       trend: showTrends ? trends.screeningCoverage : undefined,
       badge: <Sparkles className="w-3 h-3" />,
@@ -193,7 +193,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
   ];
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-4", className)} dir="rtl">
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card: any, index) => (

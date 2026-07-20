@@ -52,23 +52,23 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
   const activeFilterCount = Object.values(filters).filter(v => v && v !== '').length;
 
   const statusOptions = [
-    { value: '', label: 'All Statuses' },
-    { value: ApplicationStatus.PENDING, label: 'Pending', icon: Clock },
-    { value: ApplicationStatus.REVIEWING, label: 'Reviewing', icon: Users },
-    { value: ApplicationStatus.SHORTLISTED, label: 'Shortlisted', icon: Star },
-    { value: ApplicationStatus.REJECTED, label: 'Rejected', icon: X },
-    { value: ApplicationStatus.INTERVIEW_SCHEDULED, label: 'Interview Scheduled', icon: Calendar },
-    { value: ApplicationStatus.HIRED, label: 'Hired', icon: Check },
+    { value: '', label: 'همه وضعیت‌ها' },
+    { value: ApplicationStatus.PENDING, label: 'در انتظار', icon: Clock },
+    { value: ApplicationStatus.REVIEWING, label: 'در حال بررسی', icon: Users },
+    { value: ApplicationStatus.SHORTLISTED, label: 'انتخاب شده', icon: Star },
+    { value: ApplicationStatus.REJECTED, label: 'رد شده', icon: X },
+    { value: ApplicationStatus.INTERVIEW_SCHEDULED, label: 'مصاحبه برنامه‌ریزی شده', icon: Calendar },
+    { value: ApplicationStatus.HIRED, label: 'استخدام شده', icon: Check },
   ];
 
   const scoreOptions = [
-    { value: '', label: 'Any Score' },
-    { value: '0', label: '0%+' },
-    { value: '20', label: '20%+' },
-    { value: '40', label: '40%+' },
-    { value: '60', label: '60%+' },
-    { value: '80', label: '80%+' },
-    { value: '90', label: '90%+' },
+    { value: '', label: 'هر امتیازی' },
+    { value: '0', label: '۰٪+' },
+    { value: '20', label: '۲۰٪+' },
+    { value: '40', label: '۴۰٪+' },
+    { value: '60', label: '۶۰٪+' },
+    { value: '80', label: '۸۰٪+' },
+    { value: '90', label: '۹۰٪+' },
   ];
 
   const handleChange = (field: string, value: string) => {
@@ -157,7 +157,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
   }, [isOpen]);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} dir="rtl">
       {/* Toggle Button */}
       <button
         ref={buttonRef}
@@ -171,10 +171,10 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
           focus:outline-none focus:ring-2 focus:ring-blue-500/20
         `}
         aria-expanded={isOpen}
-        aria-label="Toggle filters"
+        aria-label="تغییر وضعیت فیلترها"
       >
         <Filter className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`} />
-        <span>Filters</span>
+        <span>فیلترها</span>
         {activeFilterCount > 0 && (
           <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-semibold text-white bg-blue-500 rounded-full">
             {activeFilterCount}
@@ -188,9 +188,9 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
         <div
           ref={panelRef}
           className={`
-            absolute right-0 mt-2 w-96 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-800/50 z-50 overflow-hidden
-            transition-all duration-200 transform origin-top-right
-            ${isAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2'}
+            absolute left-0 mt-2 w-96 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-800/50 z-50 overflow-hidden
+            transition-all duration-200 transform origin-top-left
+            ${isAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2'}
           `}
         >
           {/* Header */}
@@ -200,19 +200,19 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
                 <SlidersHorizontal className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Filter Applications
+                فیلتر کردن درخواست‌ها
               </h3>
             </div>
             <div className="flex items-center gap-1.5">
               {activeFilterCount > 0 && (
                 <span className="text-xs text-gray-400">
-                  {activeFilterCount} active
+                  {activeFilterCount} فعال
                 </span>
               )}
               <button
                 onClick={closePanel}
                 className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                aria-label="Close filters"
+                aria-label="بستن فیلترها"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -224,16 +224,16 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             {/* Search */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Search
+                جستجو
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   type="text"
                   value={filters.search}
                   onChange={(e) => handleChange('search', e.target.value)}
-                  placeholder="Search by name or job title..."
-                  className="pl-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all"
+                  placeholder="جستجو بر اساس نام یا عنوان شغل..."
+                  className="pr-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all text-right"
                 />
               </div>
             </div>
@@ -241,7 +241,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             {/* Status */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Status
+                وضعیت
               </label>
               <Select
                 value={filters.status}
@@ -254,7 +254,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             {/* Min Score */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Minimum AI Score
+                حداقل امتیاز هوش مصنوعی
               </label>
               <Select
                 value={filters.minScore}
@@ -267,25 +267,25 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             {/* Date Range */}
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Date Range
+                محدوده تاریخ
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="date"
                     value={filters.dateFrom}
                     onChange={(e) => handleChange('dateFrom', e.target.value)}
-                    className="pl-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all"
+                    className="pr-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all text-right"
                   />
                 </div>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="date"
                     value={filters.dateTo}
                     onChange={(e) => handleChange('dateTo', e.target.value)}
-                    className="pl-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all"
+                    className="pr-9 bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 transition-all text-right"
                   />
                 </div>
               </div>
@@ -294,7 +294,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             {/* Active Filters Preview */}
             {activeFilterCount > 0 && (
               <div className="pt-2">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Active filters:</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">فیلترهای فعال:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {Object.entries(filters).map(([key, value]) => {
                     if (!value || value === '') return null;
@@ -314,7 +314,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
                         {label}
                         <button
                           onClick={() => handleChange(key, '')}
-                          className="ml-0.5 hover:text-blue-900 dark:hover:text-blue-100"
+                          className="mr-0.5 hover:text-blue-900 dark:hover:text-blue-100"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -336,7 +336,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
               disabled={activeFilterCount === 0}
             >
               <RefreshCw className="w-4 h-4" />
-              Clear All
+              پاک کردن همه
             </Button>
             <Button
               variant="primary"
@@ -345,7 +345,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
               className="flex-1 gap-1.5 justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
               <Check className="w-4 h-4" />
-              Apply Filters
+              اعمال فیلترها
             </Button>
           </div>
         </div>
