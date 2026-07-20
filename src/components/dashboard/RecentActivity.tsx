@@ -3,15 +3,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
     Clock,
-    CheckCircle,
-    XCircle,
     Users,
     Briefcase,
     FileText,
     Star,
     Calendar,
     ArrowLeft,
-    UserPlus,
     Sparkles,
     Activity,
     Eye
@@ -184,7 +181,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
                                     key={activity.id}
                                     className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
                                 >
-                                    <div className={cn("p-2 rounded-lg flex-shrink-0", colorClass)}>
+                                    <div className={cn("p-2 rounded-lg shrink-0", colorClass)}>
                                         <Icon className="w-4 h-4" />
                                     </div>
                                     <div className="flex-1 min-w-0">

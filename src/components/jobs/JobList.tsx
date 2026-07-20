@@ -33,6 +33,7 @@ import {
     DropdownMenuTrigger,
 } from '../common/UI/DropdownMenu';
 import { cn } from '../../lib/utils';
+import { formatDate } from '../../utils/utils';
 
 interface Job {
     _id: string;
@@ -92,15 +93,6 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
     };
 
     const statusConfig = getStatusConfig(job.status);
-
-    const formatDate = (date: string) => {
-        if (!date) return 'نامشخص';
-        return new Date(date).toLocaleDateString('fa-IR', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    };
 
     const getJobTypeLabel = (type: string) => {
         const types: Record<string, string> = {

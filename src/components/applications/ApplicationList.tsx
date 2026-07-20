@@ -106,11 +106,6 @@ export const ApplicationList: React.FC<ApplicationListProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
-  const handleStatusChange = async (id: string, status: ApplicationStatus, notes?: string) => {
-    await dispatch(updateApplicationStatus({ id, data: { status, notes } }));
-    setStatusModal(null);
-  };
-
   const toggleSelect = (id: string) => {
     const newSelected = selectedIds.includes(id)
       ? selectedIds.filter(i => i !== id)
@@ -549,7 +544,6 @@ export const ApplicationList: React.FC<ApplicationListProps> = ({
           applicationId={statusModal.id}
           currentStatus={statusModal.currentStatus}
           onClose={() => setStatusModal(null)}
-          onUpdate={handleStatusChange}
         />
       )}
     </div>

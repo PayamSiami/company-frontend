@@ -6,6 +6,7 @@ import { Badge } from '../common/UI/Badge';
 import { ProgressBar } from '../common/UI/ProgressBar';
 import { Button } from '../common/UI/Button';
 import { cn } from '../../lib/utils';
+import { formatDate } from '../../utils/utils';
 
 interface AIScoreCardProps {
     application: any;
@@ -46,15 +47,6 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
             'INTERVIEW_SCHEDULED': 'مصاحبه برنامه‌ریزی شده',
         };
         return statusMap[status] || status || 'در انتظار';
-    };
-
-    const formatDate = (date: string) => {
-        if (!date) return 'نامشخص';
-        return new Date(date).toLocaleDateString('fa-IR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
     };
 
     if (viewMode === 'list') {

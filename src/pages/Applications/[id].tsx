@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../store';
 import {
     fetchApplicationById,
-    updateApplicationStatus
 } from '../../store/slices/applications.slice';
 import { ApplicationDetail } from '../../components/applications/ApplicationDetail';
 import { StatusUpdateModal } from '../../components/applications/StatusUpdateModal';
@@ -48,17 +47,6 @@ const ApplicationDetailPage: React.FC = () => {
             dispatch(fetchApplicationById(id));
         }
     }, [dispatch, id]);
-
-    const handleStatusUpdate = async (status: string, notes?: string, interviewDetails?: any) => {
-        if (id) {
-            await dispatch(updateApplicationStatus({
-                id,
-                data: { status, notes, ...(interviewDetails && { interviewDetails }) }
-            }));
-            setShowStatusModal(false);
-            toast.success('وضعیت درخواست با موفقیت به‌روزرسانی شد!');
-        }
-    };
 
     const handleBack = () => {
         navigate('/applications');
@@ -182,7 +170,7 @@ const ApplicationDetailPage: React.FC = () => {
                         size="sm"
                         onClick={() => setShowStatusModal(true)}
                         disabled={isUpdating}
-                        className="gap-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                        className="gap-1.5 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                     >
                         <Edit className="w-4 h-4" />
                         تغییر وضعیت
@@ -246,13 +234,11 @@ const ApplicationDetailPage: React.FC = () => {
             <ApplicationDetail application={selectedApplication} />
 
             {/* Status Update Modal */}
-            {showStatusModal && (
+            {selectedApplication && showStatusModal && (
                 <StatusUpdateModal
                     applicationId={selectedApplication._id}
                     currentStatus={selectedApplication.status}
                     onClose={() => setShowStatusModal(false)}
-                    onUpdate={handleStatusUpdate}
-                    isLoading={isUpdating}
                 />
             )}
         </div>

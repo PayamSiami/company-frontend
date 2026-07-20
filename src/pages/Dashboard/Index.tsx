@@ -40,7 +40,9 @@ import type { AppDispatch } from '../../store';
 import { DashboardStats } from '../../components/dashboard/DashboardStats';
 import { AIScreeningOverview } from '../../components/dashboard/AIScreeningOverview';
 import { DashboardCharts } from '../../components/dashboard/DashboardCharts';
-import { RecentActivity } from '../../components/dashboard/RecentActivity';
+import RecentActivity from '../../components/dashboard/RecentActivity';
+import RecentApplications from '../../components/applications/RecentApplications';
+import TableSkeleton from '../../components/ui/TableSkeleton';
 
 // Types for AI Insights from backend
 interface AIInsight {
@@ -71,22 +73,6 @@ const StatsSkeleton: React.FC = () => (
   </div>
 );
 
-const TableSkeleton: React.FC = () => (
-  <div className="space-y-3">
-    {[...Array(5)].map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-3">
-        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
-        <div className="flex-1 space-y-2">
-          <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-          <div className="w-24 h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        </div>
-        <div className="w-20 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-      </div>
-    ))}
-  </div>
-);
-
 const DashboardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -96,8 +82,6 @@ const DashboardPage: React.FC = () => {
   const stats = useSelector(selectDashboardStats);
   const screeningData = useSelector(selectAIScreeningData);
   const isLoading = useSelector(selectDashboardLoading);
-  const applications = useSelector(selectApplications);
-  const applicationsLoading = useSelector(selectApplicationsLoading);
 
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
@@ -120,15 +104,6 @@ const DashboardPage: React.FC = () => {
     if (hour < 12) return 'صبح بخیر';
     if (hour < 18) return 'عصر بخیر';
     return 'شب بخیر';
-  };
-
-  const formatDate = (date: string) => {
-    if (!date) return 'نامشخص';
-    return new Date(date).toLocaleDateString('fa-IR', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    });
   };
 
   // Generate AI Insights from real screening data
@@ -195,46 +170,6 @@ const DashboardPage: React.FC = () => {
     }
   }, [screeningData]);
 
-  const getStatusBadge = (status: string) => {
-    const config: Record<string, { variant: 'warning' | 'info' | 'success' | 'danger', label: string }> = {
-      pending: { variant: 'warning', label: 'در انتظار' },
-      reviewing: { variant: 'info', label: 'در حال بررسی' },
-      shortlisted: { variant: 'success', label: 'انتخاب شده' },
-      rejected: { variant: 'danger', label: 'رد شده' },
-    };
-    return config[status] || config.pending;
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 70) return 'text-green-600 dark:text-green-400';
-    if (score >= 40) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
-  };
-
-  // Convert applications to activity format for RecentActivity
-  const convertApplicationsToActivities = (apps: any[]): any => {
-    if (!apps || apps.length === 0) return [];
-
-    return apps.map((app: any) => ({
-      id: app._id,
-      type: app.status === 'shortlisted' ? 'shortlist' :
-        app.status === 'interviewing' ? 'interview' :
-          app.status === 'hired' ? 'candidate' : 'application',
-      title: `${app.applicantId?.username || 'داوطلب'} برای ${app.jobId?.title || 'موقعیت شغلی'} درخواست داد`,
-      description: `${app.applicantId?.username || 'داوطلب'} - ${app.jobId?.title || 'بدون شغل'}`,
-      timestamp: app.createdAt || app.appliedAt || new Date(),
-      status: app.status === 'pending' ? 'pending' :
-        app.status === 'shortlisted' ? 'completed' :
-          app.status === 'interviewing' ? 'in-progress' :
-            app.status === 'rejected' ? 'rejected' :
-              app.status === 'hired' ? 'completed' : undefined,
-      link: `/applications/${app._id}`,
-      user: {
-        name: app.applicantId?.username || 'داوطلب ناشناس'
-      }
-    }));
-  };
-
   // Loading state
   if (isLoading && !stats) {
     return (
@@ -295,7 +230,7 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       {/* Welcome Section - Improved */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -446,138 +381,11 @@ const DashboardPage: React.FC = () => {
         </Card>
       )}
 
-      {/* ✅ Recent Activity & Applications - Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Applications Table */}
-        <div className="lg:col-span-2">
-          <Card className="border-gray-200/50 dark:border-gray-800/50 h-full">
-            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
-              <div>
-                <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
-                  <FileText className="w-5 h-5 text-gray-400" />
-                  درخواست‌های اخیر
-                </CardTitle>
-                <CardDescription>آخرین درخواست‌های داوطلبان</CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Filter className="w-4 h-4" />
-                  فیلتر
-                </Button>
-                <Link to="/applications">
-                  <Button variant="ghost" size="sm" className="gap-1 text-gray-600 dark:text-gray-400">
-                    مشاهده همه
-                    <ChevronLeft className="w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-4">
-              {applicationsLoading && applications?.length === 0 ? (
-                <TableSkeleton />
-              ) : applications?.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-100 dark:border-gray-800">
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          داوطلب
-                        </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          موقعیت شغلی
-                        </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          وضعیت
-                        </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          امتیاز AI
-                        </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          تاریخ درخواست
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          عملیات
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                      {applications.slice(0, 5).map((app: any) => {
-                        const statusConfig = getStatusBadge(app.status);
-                        return (
-                          <tr key={app._id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
-                            <td className="px-4 py-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium flex-shrink-0">
-                                  {app?.applicantId?.username?.charAt(0) || '?'}
-                                </div>
-                                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                  {app?.applicantId?.username || 'ناشناس'}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
-                              {app?.jobId?.title || 'نامشخص'}
-                            </td>
-                            <td className="px-4 py-3">
-                              <Badge variant={statusConfig.variant} size="sm">
-                                {statusConfig.label}
-                              </Badge>
-                            </td>
-                            <td className="px-4 py-3">
-                              <div className="flex items-center gap-2">
-                                <span className={cn("text-sm font-semibold", getScoreColor(app.aiScore || 0))}>
-                                  {app.aiScore || 0}%
-                                </span>
-                                <ProgressBar
-                                  value={app.aiScore || 0}
-                                  max={100}
-                                  className="w-12 h-1.5"
-                                  color={app.aiScore >= 70 ? 'green' : app.aiScore >= 40 ? 'yellow' : 'red'}
-                                />
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                              {formatDate(app.createdAt)}
-                            </td>
-                            <td className="px-4 py-3 text-left">
-                              <Link to={`/applications/${app._id}`}>
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <Eye className="w-4 h-4 text-gray-400" />
-                                </Button>
-                              </Link>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <FileText className="w-8 h-8 text-gray-300 dark:text-gray-600" />
-                  </div>
-                  <p className="text-gray-500 dark:text-gray-400">هنوز درخواستی وجود ندارد</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">با ثبت اولین آگهی شغلی، دریافت درخواست‌ها را شروع کنید</p>
-                  <Link to="/jobs/create">
-                    <Button variant="outline" size="sm" className="mt-4">
-                      <Plus className="w-4 h-4 ml-2" />
-                      ثبت اولین آگهی شغلی
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+      {/* ✅ Recent Activity & Applications */}
+      <RecentActivity />
 
-        {/* ✅ Recent Activity Sidebar */}
-        <div className="lg:col-span-1">
-          <RecentActivity
-            activities={convertApplicationsToActivities(applications)}
-            limit={5}
-          />
-        </div>
+      <div className="flex flex-col gap-6 relative">
+        <RecentApplications />
       </div>
 
       {/* Quick Actions - Improved */}

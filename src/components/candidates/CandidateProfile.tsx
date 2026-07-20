@@ -21,6 +21,7 @@ import { Badge } from '../common/UI/Badge';
 import { Button } from '../common/UI/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../common/UI/Tabs';
 import { cn } from '../../lib/utils';
+import { formatDate } from '../../utils/utils';
 
 interface Skill {
     _id?: string;
@@ -142,15 +143,6 @@ export const CandidateProfile: React.FC<CandidateProfileProps> = ({
     const certifications = resume?.certifications || [];
     const languages = resume?.languages || [];
     const projects = resume?.projects || [];
-
-    const formatDate = (date: string) => {
-        if (!date) return 'نامشخص';
-        return new Date(date).toLocaleDateString('fa-IR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    };
 
     const calculateExperience = (startDate: string, endDate?: string) => {
         if (!startDate) return 0;

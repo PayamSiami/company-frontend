@@ -97,15 +97,6 @@ export const AIScreeningDashboard: React.FC<AIScreeningDashboardProps> = ({
         return 'تطابق پایین';
     };
 
-    const formatDate = (date: string) => {
-        if (!date) return 'نامشخص';
-        return new Date(date).toLocaleDateString('fa-IR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
-
     return (
         <div className={cn("space-y-6", className)} dir="rtl">
             {/* Header */}

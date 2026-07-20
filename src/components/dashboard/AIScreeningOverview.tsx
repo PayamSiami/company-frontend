@@ -16,6 +16,7 @@ import { ProgressBar } from '../common/UI/ProgressBar';
 import { Badge } from '../common/UI/Badge';
 import { cn } from '../../lib/utils';
 import type { AIScreeningDataDto } from '../../types';
+import { formatDate } from '../../utils/utils';
 
 interface AIScreeningOverviewProps {
   data: AIScreeningDataDto;
@@ -71,15 +72,6 @@ export const AIScreeningOverview: React.FC<AIScreeningOverviewProps> = ({
   const topPerformingJob = screeningHistory.length > 0
     ? screeningHistory.reduce((a, b) => a.avgScore > b.avgScore ? a : b)
     : null;
-
-  const formatDate = (date: string) => {
-    if (!date) return 'نامشخص';
-    return new Date(date).toLocaleDateString('fa-IR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
 
   return (
     <div className={cn(

@@ -42,6 +42,7 @@ import { useAppDispatch } from '../../store/hooks';
 import CandidateResume from '../../components/candidates/CandidateResume';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/common/UI/Card';
 import { Badge } from '../../components/common/UI/Badge';
+import { formatDate } from '../../utils/utils';
 
 // Types based on API response
 interface CandidateData {
@@ -206,15 +207,6 @@ const CandidateProfilePage: React.FC = () => {
             reject: { color: 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300', label: 'عدم تایید' },
         };
         return map[recommendation || ''] || { color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300', label: 'بدون ارزیابی' };
-    };
-
-    const formatDate = (date: string) => {
-        if (!date) return 'نامشخص';
-        return new Date(date).toLocaleDateString('fa-IR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
     };
 
     if (isLoading && !selectedCandidate) {

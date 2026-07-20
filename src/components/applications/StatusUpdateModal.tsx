@@ -24,13 +24,15 @@ import { Input } from '../common/UI/Input';
 import { Select } from '../common/UI/Select';
 import { Modal } from '../common/UI/Modal';
 import { cn } from '../../lib/utils';
+import { updateApplicationStatus } from '../../store/slices/applications.slice';
+import { toast } from 'sonner';
+import type { AppDispatch, RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface StatusUpdateModalProps {
   applicationId: string;
   currentStatus: ApplicationStatusType;
   onClose: () => void;
-  onUpdate: (id: string, status: ApplicationStatusType, notes?: string, interviewDetails?: any) => void;
-  isLoading?: boolean;
   candidateName?: string;
   jobTitle?: string;
 }
@@ -39,12 +41,11 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
   applicationId,
   currentStatus,
   onClose,
-  onUpdate,
-  isLoading = false,
   candidateName = 'داوطلب',
   jobTitle = 'موقعیت شغلی'
 }) => {
   const [status, setStatus] = useState<ApplicationStatusType>(currentStatus);
+  const dispatch = useDispatch<AppDispatch>();
   const [notes, setNotes] = useState('');
   const [showInterviewDetails, setShowInterviewDetails] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -55,6 +56,23 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
     meetingLink: '',
     notes: '',
   });
+
+  const { isLoading } = useSelector(
+    (state: RootState) => state.applications
+  );
+
+
+  const handleStatusUpdate = async (status: string, notes?: string, interviewDetails?: any) => {
+    if (applicationId) {
+      await dispatch(updateApplicationStatus({
+        id: applicationId,
+        data: { status, notes, ...(interviewDetails && { interviewDetails }) }
+      }));
+      onClose();
+      toast.success('وضعیت درخواست با موفقیت به‌روزرسانی شد!');
+    }
+  };
+
 
   // Auto-show interview details when status is INTERVIEW_SCHEDULED
   useEffect(() => {
@@ -90,7 +108,7 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
       };
     }
 
-    onUpdate(applicationId, status, notes || undefined, interviewDetailsData);
+    handleStatusUpdate(status, notes || undefined, interviewDetailsData);
   };
 
   const getStatusColor = (statusValue: ApplicationStatusType) => {
