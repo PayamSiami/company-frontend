@@ -91,7 +91,7 @@ export const fetchJobs = createAsyncThunk(
   ) => {
     try {
       const { data }: any = await jobsApi.getAll(params);
-      return data?.data;
+      return data?.data?.jobs;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch jobs",
@@ -116,10 +116,10 @@ export const fetchJobById = createAsyncThunk(
 
 export const createJob = createAsyncThunk(
   "jobs/create",
-  async (data: CreateJobDto, { rejectWithValue }) => {
+  async (body: CreateJobDto, { rejectWithValue }) => {
     try {
-      const response = await jobsApi.create(data);
-      return response.data;
+      const { data }: any = await jobsApi.create(body);
+      return data.data;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to create job",

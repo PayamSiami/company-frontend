@@ -1,12 +1,12 @@
 // frontend-company/src/components/candidates/CandidateCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Star, 
-  MapPin, 
-  Briefcase, 
-  GraduationCap, 
-  Mail, 
+import {
+  Star,
+  MapPin,
+  Briefcase,
+  GraduationCap,
+  Mail,
   Phone,
   Calendar,
   Clock,
@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '../common/UI/Badge';
 import { Button } from '../common/UI/Button';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -42,8 +42,33 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   viewMode = 'grid',
   matchScore = 0,
 }) => {
-  const topSkills = candidate.skills?.slice(0, 6) || [];
-  const remainingSkills = candidate.skills?.length - 6 || 0;
+  // Helper function to extract skill names
+  const getSkillNames = (skills: any[]): string[] => {
+    if (!skills || !Array.isArray(skills)) return [];
+    return skills.map((skill: any) => {
+      // If skill is a string, return it directly
+      if (typeof skill === 'string') return skill;
+      // If skill is an object with name property, return the name
+      if (typeof skill === 'object' && skill.name) return skill.name;
+      return '';
+    }).filter(Boolean);
+  };
+
+  const skillNames = getSkillNames(candidate?.skills);
+  const topSkills = skillNames.slice(0, 6);
+  const remainingSkills = skillNames.length - 6;
+
+  // Helper function to get experience count
+  const getExperienceCount = (experience: any[]): number => {
+    if (!experience || !Array.isArray(experience)) return 0;
+    return experience.length;
+  };
+
+  // Helper function to get education count
+  const getEducationCount = (education: any[]): number => {
+    if (!education || !Array.isArray(education)) return 0;
+    return education.length;
+  };
 
   const getMatchScoreColor = (score: number) => {
     if (score >= 70) return 'text-green-600 dark:text-green-400';
@@ -69,7 +94,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - d.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'امروز';
     if (diffDays === 1) return 'دیروز';
     if (diffDays < 7) return `${diffDays} روز پیش`;
@@ -77,19 +102,52 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
     return d.toLocaleDateString('fa-IR');
   };
 
+  // Helper to get full name
+  const getFullName = (candidate: any): string => {
+    if (candidate) return candidate.resume.personalInfo.firstName + " " + candidate.resume.personalInfo.lastName;
+    else return "-"
+  };
+
+  // Helper to get location
+  const getLocation = (candidate: any): string => {
+    if (candidate) return candidate.resume.personalInfo.location;
+    return '-';
+  };
+
+  // Helper to get email
+  const getEmail = (candidate: any): string => {
+    if (!candidate) return '';
+    if (candidate.email) return candidate.email;
+    if (candidate.user?.email) return candidate.user.email;
+    return '-';
+  };
+
+  // Helper to get phone
+  const getPhone = (candidate: any): string => {
+    if (candidate) return candidate.resume.personalInfo.phone;
+    return '-';
+  };
+
+  const fullName = getFullName(candidate);
+  const location = getLocation(candidate);
+  const email = getEmail(candidate);
+  const phone = getPhone(candidate);
+  const experienceCount = getExperienceCount(candidate?.resume?.experience);
+  const educationCount = getEducationCount(candidate?.resume?.education);
+
   // List view layout
   if (viewMode === 'list') {
     return (
-      <div 
+      <div
         className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
         dir="rtl"
       >
         <div className="flex flex-wrap items-start gap-4">
           {/* Avatar & Info */}
           <div className="flex items-start gap-4 flex-1 min-w-0">
-            <div className="relative flex-shrink-0">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-lg shadow-lg shadow-blue-500/25">
-                {candidate.fullName?.charAt(0) || 'C'}
+            <div className="relative shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-lg shadow-lg shadow-blue-500/25">
+                {fullName.charAt(0) || 'C'}
               </div>
               {isShortlisted && (
                 <div className="absolute -top-1 -right-1">
@@ -102,9 +160,9 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
 
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <Link to={`/candidates/${candidate._id}`} className="hover:underline">
+                <Link to={`/candidates/${candidate?._id}`} className="hover:underline">
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                    {candidate.fullName || 'ناشناس'}
+                    {fullName}
                   </h3>
                 </Link>
                 {isShortlisted && (
@@ -114,9 +172,9 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                   </Badge>
                 )}
                 {matchScore > 0 && (
-                  <Badge 
-                    variant="info" 
-                    size="sm" 
+                  <Badge
+                    variant="info"
+                    size="sm"
                     className={cn("flex items-center gap-1", getMatchScoreBg(matchScore))}
                   >
                     <Zap className="w-3 h-3" />
@@ -126,22 +184,22 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
               </div>
 
               <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                {candidate.email && (
+                {email && (
                   <div className="flex items-center gap-1">
                     <Mail className="h-3.5 w-3.5" />
-                    <span className="truncate max-w-[150px]">{candidate.email}</span>
+                    <span className="truncate max-w-37.5">{email}</span>
                   </div>
                 )}
-                {candidate.phone && (
+                {phone && (
                   <div className="flex items-center gap-1">
                     <Phone className="h-3.5 w-3.5" />
-                    <span>{candidate.phone}</span>
+                    <span>{phone}</span>
                   </div>
                 )}
-                {candidate.location && (
+                {location && (
                   <div className="flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5" />
-                    <span>{candidate.location}</span>
+                    <span>{location}</span>
                   </div>
                 )}
               </div>
@@ -204,16 +262,16 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
 
   // Grid view layout (default)
   return (
-    <div 
-      className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+    <div
+      className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative"
       dir="rtl"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-3">
-          <div className="relative flex-shrink-0">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-shadow">
-              {candidate.fullName?.charAt(0) || 'C'}
+          <div className="relative shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-shadow">
+              {fullName.charAt(0) || 'C'}
             </div>
             {isShortlisted && (
               <div className="absolute -top-1 -right-1">
@@ -225,15 +283,15 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           </div>
 
           <div>
-            <Link to={`/candidates/${candidate._id}`} className="hover:underline">
+            <Link to={`/candidates/${candidate?._id}`} className="hover:underline">
               <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                {candidate.fullName || 'ناشناس'}
+                {fullName}
               </h3>
             </Link>
-            {candidate.location && (
+            {location && (
               <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 <MapPin className="h-3.5 w-3.5" />
-                {candidate.location}
+                {location}
               </div>
             )}
           </div>
@@ -253,16 +311,16 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
 
       {/* Contact Info */}
       <div className="space-y-1.5 text-sm text-gray-600 dark:text-gray-400">
-        {candidate.email && (
+        {email && (
           <div className="flex items-center gap-2">
-            <Mail className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
-            <span className="truncate">{candidate.email}</span>
+            <Mail className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+            <span className="truncate">{email}</span>
           </div>
         )}
-        {candidate.phone && (
+        {phone && (
           <div className="flex items-center gap-2">
-            <Phone className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
-            <span>{candidate.phone}</span>
+            <Phone className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+            <span>{phone}</span>
           </div>
         )}
       </div>
@@ -271,15 +329,15 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
       <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-sm">
         <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
           <Briefcase className="h-3.5 w-3.5" />
-          <span>{candidate.experience?.length || 0} سابقه</span>
+          <span>{experienceCount} سابقه</span>
         </div>
         <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
           <GraduationCap className="h-3.5 w-3.5" />
-          <span>{candidate.education?.length || 0} مدرک</span>
+          <span>{educationCount} مدرک</span>
         </div>
         <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 mr-auto">
           <Clock className="h-3.5 w-3.5" />
-          <span>{formatDate(candidate.createdAt)}</span>
+          <span>{formatDate(candidate?.appliedDate || candidate?.createdAt)}</span>
         </div>
       </div>
 
@@ -311,13 +369,13 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           }}
           className={cn(
             "flex-1 gap-1.5 transition-all",
-            isShortlisted && "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+            isShortlisted && "bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
           )}
         >
           <Star className={cn("h-4 w-4", isShortlisted && "fill-current")} />
           {isShortlisted ? 'انتخاب شده' : 'انتخاب'}
         </Button>
-        <Link to={`/candidates/${candidate._id}`} className="flex-1">
+        <Link to={`/candidates/${candidate?._id}`} className="flex-1">
           <Button variant="outline" size="sm" className="w-full gap-1.5">
             <Eye className="h-4 w-4" />
             مشاهده
@@ -329,7 +387,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
       </div>
 
       {/* Hover glow effect */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-500/0 via-blue-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
     </div>
   );
 };

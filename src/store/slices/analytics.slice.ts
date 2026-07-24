@@ -51,7 +51,7 @@ export const fetchScreeningStats = createAsyncThunk(
   'analytics/fetchScreeningStats',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get('/analytics/screening-stats');
+      const response = await apiClient.get('/ai-screening');
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch screening stats');

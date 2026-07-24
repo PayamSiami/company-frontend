@@ -10,7 +10,7 @@ export const candidatesApi = {
   getAll: async (
     params?: CandidateFiltersDto,
   ): Promise<{ data: ICandidate[] }> => {
-    const response = await apiClient.get<ICandidate[]>("/employer/candidates", {
+    const response = await apiClient.get<ICandidate[]>("/candidates", {
       params: {
         search: params?.search,
         skills: params?.skills?.join(","),
@@ -29,7 +29,7 @@ export const candidatesApi = {
    */
   getById: async (id: string): Promise<{ data: ICandidate }> => {
     const response = await apiClient.get<ICandidate>(
-      `/employer/candidates/${id}`,
+      `/candidates/${id}`,
     );
     return { data: response.data };
   },
@@ -43,7 +43,7 @@ export const candidatesApi = {
     const response = await apiClient.post<{
       success: boolean;
       message: string;
-    }>(`/employer/candidates/${candidateId}/shortlist`);
+    }>(`/candidates/${candidateId}/shortlist`);
     return { data: response.data };
   },
 
@@ -56,7 +56,7 @@ export const candidatesApi = {
     const response = await apiClient.delete<{
       success: boolean;
       message: string;
-    }>(`/employer/candidates/${candidateId}/shortlist`);
+    }>(`/candidates/${candidateId}/shortlist`);
     return { data: response.data };
   },
 
@@ -65,7 +65,7 @@ export const candidatesApi = {
    */
   getApplications: async (candidateId: string): Promise<{ data: any[] }> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}`,
+      `/candidates/${candidateId}`,
     );
     return { data: response.data };
   },
@@ -75,7 +75,7 @@ export const candidatesApi = {
    */
   getResume: async (candidateId: string): Promise<{ data: any }> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}/resume`,
+      `/candidates/${candidateId}/resume`,
     );
     return { data: response.data };
   },
@@ -85,7 +85,7 @@ export const candidatesApi = {
    */
   getAnalytics: async (candidateId: string): Promise<{ data: any }> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}/analytics`,
+      `/candidates/${candidateId}/analytics`,
     );
     return { data: response.data };
   },
@@ -95,7 +95,7 @@ export const candidatesApi = {
    */
   getSkills: async (candidateId: string): Promise<{ data: string[] }> => {
     const response = await apiClient.get<string[]>(
-      `/employer/candidates/${candidateId}/skills`,
+      `/candidates/${candidateId}/skills`,
     );
     return { data: response.data };
   },
@@ -105,7 +105,7 @@ export const candidatesApi = {
    */
   getExperience: async (candidateId: string): Promise<{ data: any[] }> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}/experience`,
+      `/candidates/${candidateId}/experience`,
     );
     return { data: response.data };
   },
@@ -115,7 +115,7 @@ export const candidatesApi = {
    */
   getEducation: async (candidateId: string): Promise<{ data: any[] }> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}/education`,
+      `/candidates/${candidateId}/education`,
     );
     return { data: response.data };
   },
@@ -125,7 +125,7 @@ export const candidatesApi = {
    */
   downloadResume: async (candidateId: string): Promise<Blob> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}/resume/download`,
+      `/candidates/${candidateId}/resume/download`,
       {
         responseType: "blob",
       },
@@ -143,7 +143,7 @@ export const candidatesApi = {
     const response = await apiClient.post<{
       success: boolean;
       message: string;
-    }>(`/employer/candidates/${candidateId}/message`, { message });
+    }>(`/candidates/${candidateId}/message`, { message });
     return { data: response.data };
   },
 
@@ -167,7 +167,7 @@ export const candidatesApi = {
       success: boolean;
       message: string;
       interviewId: string;
-    }>(`/employer/candidates/${candidateId}/schedule-interview`, data);
+    }>(`/candidates/${candidateId}/schedule-interview`, data);
     return { data: response.data };
   },
 
@@ -180,7 +180,7 @@ export const candidatesApi = {
     const response = await apiClient.get<{
       status: string;
       lastActivity: string;
-    }>(`/employer/candidates/${candidateId}/status`);
+    }>(`/candidates/${candidateId}/status`);
     return { data: response.data };
   },
 
@@ -194,7 +194,7 @@ export const candidatesApi = {
     const response = await apiClient.patch<{
       success: boolean;
       message: string;
-    }>(`/employer/candidates/${candidateId}/status`, { status });
+    }>(`/candidates/${candidateId}/status`, { status });
     return { data: response.data };
   },
 
@@ -211,7 +211,7 @@ export const candidatesApi = {
       success: boolean;
       message: string;
       noteId: string;
-    }>(`/employer/candidates/${candidateId}/notes`, { note });
+    }>(`/candidates/${candidateId}/notes`, { note });
     return { data: response.data };
   },
 
@@ -224,7 +224,7 @@ export const candidatesApi = {
     data: { id: string; note: string; createdAt: string; createdBy: string }[];
   }> => {
     const response = await apiClient.get(
-      `/employer/candidates/${candidateId}/notes`,
+      `/candidates/${candidateId}/notes`,
     );
     return { data: response.data };
   },
@@ -234,7 +234,7 @@ export const candidatesApi = {
    */
   search: async (keyword: string): Promise<{ data: ICandidate[] }> => {
     const response = await apiClient.get<ICandidate[]>(
-      `/employer/candidates/search`,
+      `/candidates/search`,
       {
         params: { keyword },
       },
@@ -249,7 +249,7 @@ export const candidatesApi = {
     jobId: string,
   ): Promise<{ data: ICandidate[] }> => {
     const response = await apiClient.get<ICandidate[]>(
-      `/employer/candidates/recommendations`,
+      `/candidates/recommendations`,
       {
         params: { jobId },
       },
@@ -269,7 +269,7 @@ export const candidatesApi = {
       averageSkills: number;
     };
   }> => {
-    const response = await apiClient.get("/employer/candidates/stats");
+    const response = await apiClient.get("/candidates/stats");
     return { data: response.data };
   },
 };

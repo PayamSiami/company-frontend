@@ -11,7 +11,7 @@ export const companyApi = {
    * Get company profile
    */
   getProfile: async (): Promise<{ data: ICompany }> => {
-    const response = await apiClient.get<ICompany>("/employer/company");
+    const response = await apiClient.get<ICompany>("/company");
     return { data: response.data };
   },
 
@@ -22,7 +22,7 @@ export const companyApi = {
     data: UpdateCompanyDto,
   ): Promise<{ data: ICompany }> => {
     const response = await apiClient.put<ICompany>(
-      "/employer/company",
+      "/company",
       data,
     );
     return { data: response.data };
@@ -34,7 +34,7 @@ export const companyApi = {
   createProfile: async (
     data: CreateCompanyDto,
   ): Promise<{ data: ICompany }> => {
-    const response = await apiClient.post<ICompany>("/employer/company", data);
+    const response = await apiClient.post<ICompany>("/company", data);
     return { data: response.data };
   },
 
@@ -46,7 +46,7 @@ export const companyApi = {
     formData.append("logo", file);
 
     const response = await apiClient.post<{ logoUrl: string }>(
-      "/employer/company/upload-logo",
+      "/company/upload-logo",
       formData,
       {
         headers: {
@@ -61,7 +61,7 @@ export const companyApi = {
    * Get company settings
    */
   getSettings: async (): Promise<{ data: any }> => {
-    const response = await apiClient.get("/employer/company/settings");
+    const response = await apiClient.get("/company/settings");
     return { data: response.data };
   },
 
@@ -69,7 +69,7 @@ export const companyApi = {
    * Update company settings
    */
   updateSettings: async (data: any): Promise<{ data: any }> => {
-    const response = await apiClient.put("/employer/company/settings", data);
+    const response = await apiClient.put("/company/settings", data);
     return { data: response.data };
   },
 
@@ -77,7 +77,7 @@ export const companyApi = {
    * Get company team members
    */
   getTeamMembers: async (): Promise<{ data: any[] }> => {
-    const response = await apiClient.get("/employer/company/team");
+    const response = await apiClient.get("/company/team");
     return { data: response.data };
   },
 
@@ -89,7 +89,7 @@ export const companyApi = {
     role: string;
   }): Promise<{ data: any }> => {
     const response = await apiClient.post(
-      "/employer/company/team/invite",
+      "/company/team/invite",
       data,
     );
     return { data: response.data };
@@ -101,7 +101,7 @@ export const companyApi = {
   removeTeamMember: async (
     userId: string,
   ): Promise<{ data: { success: boolean } }> => {
-    const response = await apiClient.delete(`/employer/company/team/${userId}`);
+    const response = await apiClient.delete(`/company/team/${userId}`);
     return { data: response.data };
   },
 
@@ -113,7 +113,7 @@ export const companyApi = {
     role: string,
   ): Promise<{ data: any }> => {
     const response = await apiClient.put(
-      `/employer/company/team/${userId}/role`,
+      `/company/team/${userId}/role`,
       { role },
     );
     return { data: response.data };

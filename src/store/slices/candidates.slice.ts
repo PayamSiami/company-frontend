@@ -66,7 +66,7 @@ export const fetchCandidates = createAsyncThunk(
   async (params: CandidateFiltersDto, { rejectWithValue }) => {
     try {
       const { data }: any = await candidatesApi.getAll(params);
-      return data?.data;
+      return data?.data?.candidates;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch candidates",

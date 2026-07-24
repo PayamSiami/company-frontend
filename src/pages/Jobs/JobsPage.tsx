@@ -82,6 +82,8 @@ const JobsPage: React.FC = () => {
     return filtered;
   }, [jobs, activeTab, searchTerm, sortBy, sortOrder]);
 
+  console.log(jobs)
+
   const stats = useMemo(() => ({
     total: jobs?.length,
     active: jobs?.filter(j => j.status === 'OPEN').length,

@@ -6,9 +6,10 @@ export enum ApplicationStatus {
   PENDING = "pending",
   REVIEWING = "reviewing",
   SHORTLISTED = "shortlisted",
-  REJECTED = "rejected",
-  INTERVIEW_SCHEDULED = "interview_scheduled",
+  INTERVIEWING = "interviewing",
   HIRED = "hired",
+  REJECTED = "rejected",
+  WITHDRAWN = "withdrawn",
 }
 
 export const enum JobStatus {

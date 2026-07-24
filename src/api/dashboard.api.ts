@@ -4,10 +4,10 @@ import {  type AIScreeningDataDto, type DashboardStatsDto } from '../types/dto.t
 
 export const dashboardApi = {
   getStats: () => 
-    apiClient.get<DashboardStatsDto>('/employer/dashboard/stats'),
+    apiClient.get<DashboardStatsDto>('/stats'),
   
   getAIScreeningData: () => 
-    apiClient.get<AIScreeningDataDto>('/employer/dashboard/ai-screening'),
+    apiClient.get<AIScreeningDataDto>('/ai-screening'),
   
   getRecentActivity: (limit: number = 10) => 
     apiClient.get(`/employer/dashboard/recent-activity?limit=${limit}`),

@@ -257,11 +257,7 @@ export const JobList: React.FC<JobListProps> = ({
     jobs,
     view = 'list',
     loading = false,
-    onDelete,
-    onDuplicate,
-    onArchive,
-    onPublish,
-    onClose
+    onSelect,
 }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -269,11 +265,8 @@ export const JobList: React.FC<JobListProps> = ({
 
     const handleAction = (action: string, id: string) => {
         switch (action) {
-            case 'delete': onDelete?.(id); break;
-            case 'duplicate': onDuplicate?.(id); break;
-            case 'archive': onArchive?.(id); break;
-            case 'publish': onPublish?.(id); break;
-            case 'close': onClose?.(id); break;
+            // case 'delete': onDelete?.(id); break;
+            case 'duplicate': onSelect?.(id); break;
             case 'view':
             case 'edit':
                 break;

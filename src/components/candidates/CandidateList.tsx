@@ -86,14 +86,14 @@ export const CandidateList: React.FC<CandidateListProps> = ({
     if (candidates.length === 0) {
         return (
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 p-12 text-center" dir="rtl">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-linear-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
                     <Users className="h-10 w-10 text-blue-500" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">هیچ داوطلبی یافت نشد</h3>
                 <p className="text-gray-500 dark:text-gray-400 mt-1 max-w-sm mx-auto">
                     برای جذب داوطلبان واجد شرایط به شرکت خود، ثبت آگهی شغلی را شروع کنید.
                 </p>
-                <Button className="mt-4 gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                <Button className="mt-4 gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                     <UserPlus className="w-4 h-4" />
                     ثبت آگهی شغلی
                 </Button>

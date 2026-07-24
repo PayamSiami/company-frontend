@@ -4,7 +4,7 @@ import type { CreateJobDto, IJob, UpdateJobDto } from "../types";
 
 export const jobsApi = {
   getAll: (params?: { status?: string; isActive?: boolean }) =>
-    apiClient.get<IJob[]>("/employer/jobs", { params }),
+    apiClient.get<IJob[]>("/jobs", { params }),
 
   getById: (id: string) => apiClient.get<IJob>(`/jobs/${id}`),
 
@@ -45,27 +45,27 @@ export const jobsApi = {
   },
 
   update: (id: string, data: UpdateJobDto) =>
-    apiClient.put<IJob>(`/employer/jobs/${id}`, data),
+    apiClient.put<IJob>(`/jobs/${id}`, data),
 
-  delete: (id: string) => apiClient.delete(`/employer/jobs/${id}`),
+  delete: (id: string) => apiClient.delete(`/jobs/${id}`),
 
   publish: (id: string) =>
-    apiClient.patch<IJob>(`/employer/jobs/${id}/publish`),
+    apiClient.patch<IJob>(`/jobs/${id}/publish`),
 
-  close: (id: string) => apiClient.patch<IJob>(`/employer/jobs/${id}/close`),
+  close: (id: string) => apiClient.patch<IJob>(`/jobs/${id}/close`),
 
   getApplications: (jobId: string) =>
-    apiClient.get(`/employer/jobs/${jobId}/applications`),
+    apiClient.get(`/jobs/${jobId}/applications`),
 
   getAnalytics: async (timeRange?: string): Promise<any> => {
-    const response = await apiClient.get("/jobs/employer/analytics", {
+    const response = await apiClient.get("/jobs/analytics", {
       params: { timeRange: timeRange || "30d" },
     });
     return response.data.data;
   },
   getCandidateRecommendations: async (params?: any): Promise<any> => {
     const response = await apiClient.get(
-      "/employer/candidates/recommendations",
+      "/candidates/recommendations",
       {
         params,
       },

@@ -36,6 +36,7 @@ const CandidatesPage: React.FC = () => {
   const { candidates, isLoading, shortlistedIds } = useSelector(
     (state: RootState) => state.candidates
   );
+  console.log(candidates)
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortBy, setSortBy] = useState<SortBy>('newest');
@@ -43,7 +44,7 @@ const CandidatesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'shortlisted' | 'new'>('all');
 
   useEffect(() => {
-    dispatch(fetchCandidates());
+    dispatch(fetchCandidates({}));
     dispatch(fetchCandidateStats());
   }, [dispatch]);
 
@@ -92,7 +93,7 @@ const CandidatesPage: React.FC = () => {
     { value: 'all', label: 'همه کارجویان', icon: Users, count: candidates.length },
     { value: 'shortlisted', label: 'منتخب‌ها', icon: Star, count: shortlistedIds.length },
     {
-      value: 'new', label: 'جدید این هفته', icon: Clock, count: candidates.filter(c => {
+      value: 'new', label: 'جدید این هفته', icon: Clock, count: candidates?.filter(c => {
         const weekAgo = new Date();
         weekAgo.setDate(weekAgo.getDate() - 7);
         return new Date(c.createdAt) >= weekAgo;
@@ -173,7 +174,7 @@ const CandidatesPage: React.FC = () => {
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200/50 dark:border-gray-800/50 p-4 hover:shadow-md transition-all">
           <p className="text-sm text-gray-500 dark:text-gray-400">جدید این هفته</p>
           <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
-            {candidates.filter(c => {
+            {candidates?.filter(c => {
               const weekAgo = new Date();
               weekAgo.setDate(weekAgo.getDate() - 7);
               return new Date(c.createdAt) >= weekAgo;
