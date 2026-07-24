@@ -14,21 +14,12 @@ import {
     File,
     FileCheck,
     Upload,
-    ExternalLink,
 } from 'lucide-react';
 import { Badge } from '../common/UI/Badge';
 import { Button } from '../common/UI/Button';
 import { ProgressBar } from '../common/UI/ProgressBar';
 import { Modal } from '../common/UI/Modal';
 import { toast } from 'sonner';
-
-interface PdfFile {
-    filename: string;
-    path: string;
-    size: number;
-    mimeType: string;
-    uploadedAt: string;
-}
 
 interface CandidateResumeProps {
     resumes?: any;
@@ -153,7 +144,7 @@ const ResumeCard: React.FC<{
         <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 hover:shadow-md transition-shadow" dir="rtl">
             <div className="flex items-start gap-4">
                 {/* Icon */}
-                <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex-shrink-0">
+                <div className="p-3 rounded-xl bg-linear-to-br from-blue-500 to-purple-500 shrink-0">
                     <FileText className="w-6 h-6 text-white" />
                 </div>
 

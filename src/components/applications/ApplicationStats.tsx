@@ -79,7 +79,7 @@ export const ApplicationStats: React.FC = () => {
     const shortlisted = applications?.filter(a => a.status === 'shortlisted').length;
     const rejected = applications?.filter(a => a.status === 'rejected').length;
     const hired = applications?.filter(a => a.status === 'hired').length;
-    const interviewScheduled = applications?.filter(a => a.status === 'interview_scheduled').length;
+    const interviewScheduled = applications?.filter(a => a?.status === 'interviewing').length;
 
     const screenedApps = applications?.filter(a => a.aiScore !== null && a.aiScore !== undefined);
     const avgScore = screenedApps?.length > 0

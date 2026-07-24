@@ -85,13 +85,13 @@ const ScreeningPage: React.FC = () => {
             filtered = filtered.filter(app => app.aiScore !== null && app.aiScore !== undefined && app.aiScore < 40);
         }
 
-        if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            filtered = filtered.filter(app =>
-                app.candidateName?.toLowerCase().includes(term) ||
-                app.jobTitle?.toLowerCase().includes(term)
-            );
-        }
+        // if (searchTerm) {
+        //     const term = searchTerm.toLowerCase();
+        //     filtered = filtered.filter(app =>
+        //         app.candidateName?.toLowerCase().includes(term) ||
+        //         app.jobTitle?.toLowerCase().includes(term)
+        //     );
+        // }
 
         return filtered;
     }, [applications, filter, searchTerm]);

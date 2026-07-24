@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import  { Component } from 'react';
 import type { ReactNode, ErrorInfo } from 'react';
 import { Button } from './UI/Button';
 import { AlertCircle, Home } from 'lucide-react';

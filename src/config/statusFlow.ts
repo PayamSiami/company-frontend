@@ -2,20 +2,12 @@
 import { ApplicationStatus } from "../types";
 import {
   Clock,
-  Users,
   Star,
   Calendar,
   CheckCircle,
   XCircle,
   UserMinus,
-  UserCheck,
-  UserX,
-  Briefcase,
-  FileText,
   Eye,
-  ThumbsUp,
-  ThumbsDown,
-  MessageSquare,
 } from "lucide-react";
 
 export interface StatusFlowConfig {

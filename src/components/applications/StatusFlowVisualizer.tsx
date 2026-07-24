@@ -6,14 +6,6 @@ import { cn } from '../../lib/utils';
 import {
     ChevronRight,
     CheckCircle2,
-    XCircle,
-    Clock,
-    UserMinus,
-    Star,
-    Calendar,
-    Eye,
-    Users,
-    UserCheck
 } from 'lucide-react';
 
 interface StatusFlowVisualizerProps {

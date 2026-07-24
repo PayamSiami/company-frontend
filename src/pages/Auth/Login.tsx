@@ -6,13 +6,11 @@ import { Button } from '../../components/common/UI/Button';
 import { Input } from '../../components/common/UI/Input';
 import { Alert } from '../../components/common/UI/Alert';
 import {
-  Building2,
   Mail,
   Lock,
   Eye,
   EyeOff,
   ArrowLeft,
-  Sparkles,
   Shield,
   CheckCircle,
   Fingerprint,

@@ -5,7 +5,6 @@ import type {
   AIJobGenerationDto,
   AIScreeningResponseDto,
   AISalarySuggestionResponseDto,
-  AIResumeAnalysisDto,
   AIResumeAnalysisResponseDto,
   AIInterviewQuestionsDto,
   AIInterviewQuestionsResponseDto,

@@ -47,44 +47,6 @@ interface MetricCardProps {
   isLoading?: boolean;
 }
 
-interface AnalyticsData {
-  metrics: {
-    hiringEfficiency: number;
-    candidateQuality: number;
-    timeToHire: number;
-    aiAccuracy: number;
-  };
-  screeningStats: {
-    total: number;
-    high: number;
-    medium: number;
-    low: number;
-    accuracy: number;
-    avgScore: number;
-  };
-  hiringFunnel: Array<{
-    stage: string;
-    count: number;
-    percentage: number;
-  }>;
-  performanceMetrics: {
-    totalScreenings: number;
-    avgProcessingTime: number;
-    predictionAccuracy: number;
-    jobsWithAI: number;
-    jobsTotal: number;
-  };
-  performanceHistory: Array<{
-    date: string;
-    value: number;
-  }>;
-  trends: {
-    screenings: number;
-    processingTime: number;
-    accuracy: number;
-  };
-}
-
 const MetricCard: React.FC<MetricCardProps> = ({
   title,
   value,

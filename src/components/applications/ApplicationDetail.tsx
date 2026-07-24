@@ -34,24 +34,24 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
   const [expandedSections, setExpandedSections] = useState<string[]>(['summary', 'screening']);
 
   const getStatusColor = (status: string) => {
-    const colors = {
+    const colors: any = {
       [ApplicationStatus.PENDING]: 'warning',
       [ApplicationStatus.REVIEWING]: 'info',
       [ApplicationStatus.SHORTLISTED]: 'success',
       [ApplicationStatus.REJECTED]: 'danger',
-      [ApplicationStatus.INTERVIEW_SCHEDULED]: 'purple',
+      [ApplicationStatus.INTERVIEWING]: 'purple',
       [ApplicationStatus.HIRED]: 'emerald',
     };
     return colors[status as ApplicationStatus] || 'gray';
   };
 
   const getStatusIcon = (status: string) => {
-    const icons = {
+    const icons: any = {
       [ApplicationStatus.PENDING]: Clock,
       [ApplicationStatus.REVIEWING]: User,
       [ApplicationStatus.SHORTLISTED]: Star,
       [ApplicationStatus.REJECTED]: XCircle,
-      [ApplicationStatus.INTERVIEW_SCHEDULED]: Calendar,
+      [ApplicationStatus.INTERVIEWING]: Calendar,
       [ApplicationStatus.HIRED]: CheckCircle,
     };
     return icons[status as ApplicationStatus] || AlertCircle;
@@ -63,7 +63,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = ({ applicatio
       'REVIEWING': 'در حال بررسی',
       'SHORTLISTED': 'انتخاب شده',
       'REJECTED': 'رد شده',
-      'INTERVIEW_SCHEDULED': 'مصاحبه برنامه‌ریزی شده',
+      'INTERVIEWING': 'مصاحبه برنامه‌ریزی شده',
       'HIRED': 'استخدام شده',
     };
     return labels[status] || status?.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase());

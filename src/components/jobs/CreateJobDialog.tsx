@@ -124,7 +124,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
     onSuccess,
 }) => {
     const dispatch = useAppDispatch();
-    const [formData, setFormData] = useState<JobFormData>(initialFormData);
+    const [formData, setFormData]: any = useState<JobFormData>(initialFormData);
     const [currentInput, setCurrentInput] = useState('');
     const [currentInputType, setCurrentInputType] = useState<'benefit' | 'skill'>('benefit');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -132,7 +132,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
     const [activeStep, setActiveStep] = useState(0);
 
     const handleChange = (field: string, value: any) => {
-        setFormData(prev => ({
+        setFormData((prev: any) => ({
             ...prev,
             [field]: value,
         }));
@@ -142,7 +142,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
     };
 
     const handleNestedChange = (parent: string, field: string, value: any) => {
-        setFormData(prev => ({
+        setFormData((prev: { [x: string]: any; }) => ({
             ...prev,
             [parent]: {
                 ...prev[parent as keyof JobFormData] as any,
@@ -153,7 +153,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
 
     const handleAddItem = (type: 'skills') => {
         if (!currentInput.trim()) return;
-        setFormData(prev => ({
+        setFormData((prev: { [x: string]: any; }) => ({
             ...prev,
             [type]: [...prev[type], currentInput.trim()],
         }));
@@ -161,9 +161,9 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
     };
 
     const handleRemoveItem = (type: 'skills', index: number) => {
-        setFormData(prev => ({
+        setFormData((prev: { [x: string]: any[]; }) => ({
             ...prev,
-            [type]: prev[type].filter((_, i) => i !== index),
+            [type]: prev[type].filter((_: any, i: number) => i !== index),
         }));
     };
 
@@ -531,7 +531,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                     </Button>
                                 </div>
                                 <div className="flex flex-wrap gap-1.5">
-                                    {formData.skills.map((skill, index) => (
+                                    {formData.skills.map((skill: any, index: number) => (
                                         <Badge key={index} variant="gray" className="flex items-center gap-1">
                                             {skill}
                                             <button

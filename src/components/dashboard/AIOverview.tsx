@@ -15,7 +15,7 @@ import {
     BarChart3,
     ChevronLeft
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../common/UI/Card';
+import { Card, CardContent, CardHeader, CardTitle } from '../common/UI/Card';
 import { Badge } from '../common/UI/Badge';
 import { Button } from '../common/UI/Button';
 import { ProgressBar } from '../common/UI/ProgressBar';

@@ -13,7 +13,6 @@ import {
   Award,
   MessageSquare,
   Brain,
-  Wand2,
   X,
   Trash2,
   Download,

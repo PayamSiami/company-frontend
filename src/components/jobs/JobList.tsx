@@ -128,7 +128,7 @@ const JobCard: React.FC<{ job: Job; onAction?: (action: string, id: string) => v
                             <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
                                 {job.title}
                             </h3>
-                            <Badge variant={statusConfig.variant} size="sm" className="flex items-center gap-1 flex-shrink-0">
+                            <Badge variant={statusConfig.variant} size="sm" className="flex items-center gap-1 shrink-0">
                                 <statusConfig.icon className="w-3 h-3" />
                                 {statusConfig.label}
                             </Badge>
@@ -257,16 +257,16 @@ export const JobList: React.FC<JobListProps> = ({
     jobs,
     view = 'list',
     loading = false,
-    onSelect,
+    // onSelect,
 }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState<string>('all');
     const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'applications' | 'title'>('newest');
 
-    const handleAction = (action: string, id: string) => {
+    const handleAction = (action: string, ) => {
         switch (action) {
             // case 'delete': onDelete?.(id); break;
-            case 'duplicate': onSelect?.(id); break;
+            // case 'duplicate': onSelect?.(id); break;
             case 'view':
             case 'edit':
                 break;

@@ -9,7 +9,6 @@ import {
   BarChart3,
   ChevronDown,
   ChevronUp,
-  Brain,
   Activity
 } from 'lucide-react';
 import { ProgressBar } from '../common/UI/ProgressBar';

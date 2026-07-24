@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../store';
 import {
   bulkUpdateApplications,
-  updateApplicationStatus,
   setPage,
 } from '../../store/slices/applications.slice';
 import { ApplicationStatus, type IApplication } from '../../types/model.types';
@@ -53,12 +52,12 @@ interface ApplicationListProps {
 }
 
 const StatusBadge: React.FC<{ status: ApplicationStatus }> = ({ status }) => {
-  const config = {
+  const config: any = {
     [ApplicationStatus.PENDING]: { color: 'warning', label: 'در انتظار', icon: Clock },
     [ApplicationStatus.REVIEWING]: { color: 'info', label: 'در حال بررسی', icon: Users },
     [ApplicationStatus.SHORTLISTED]: { color: 'success', label: 'انتخاب شده', icon: CheckCircle },
     [ApplicationStatus.REJECTED]: { color: 'danger', label: 'رد شده', icon: XCircle },
-    [ApplicationStatus.INTERVIEW_SCHEDULED]: { color: 'purple', label: 'مصاحبه', icon: Calendar },
+    [ApplicationStatus.INTERVIEWING]: { color: 'purple', label: 'مصاحبه', icon: Calendar },
     [ApplicationStatus.HIRED]: { color: 'emerald', label: 'استخدام شده', icon: Award },
   };
 

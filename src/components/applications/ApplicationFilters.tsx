@@ -57,7 +57,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
     { value: ApplicationStatus.REVIEWING, label: 'در حال بررسی', icon: Users },
     { value: ApplicationStatus.SHORTLISTED, label: 'انتخاب شده', icon: Star },
     { value: ApplicationStatus.REJECTED, label: 'رد شده', icon: X },
-    { value: ApplicationStatus.INTERVIEW_SCHEDULED, label: 'مصاحبه برنامه‌ریزی شده', icon: Calendar },
+    { value: ApplicationStatus.INTERVIEWING, label: 'مصاحبه برنامه‌ریزی شده', icon: Calendar },
     { value: ApplicationStatus.HIRED, label: 'استخدام شده', icon: Check },
   ];
 

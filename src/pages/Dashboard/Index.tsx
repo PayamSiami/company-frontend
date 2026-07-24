@@ -5,10 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   FileText,
   Sparkles,
-  Eye,
   ArrowLeft,
   ChevronLeft,
-  Filter,
   UserCheck,
   Target,
   TrendingUp,
@@ -19,7 +17,6 @@ import {
 import { Button } from '../../components/common/UI/Button';
 import { Badge } from '../../components/common/UI/Badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/common/UI/Card';
-import { ProgressBar } from '../../components/common/UI/ProgressBar';
 import { cn } from '../../lib/utils';
 import {
   fetchDashboardStats,
@@ -30,8 +27,6 @@ import {
 } from '../../store/slices/dashboard.slice';
 import {
   fetchApplications,
-  selectApplications,
-  selectApplicationsLoading
 } from '../../store/slices/applications.slice';
 import { useAuth } from '../../hooks/useAuth';
 import type { AppDispatch } from '../../store';

@@ -138,7 +138,7 @@ const CandidateRecommendations: React.FC = () => {
         setTimeout(fetchRecommendations, 100);
     };
 
-    const handleStatusChange = async (candidateId: string, newStatus: string) => {
+    const handleStatusChange = async (_candidateId: string, newStatus: string) => {
         try {
             toast.success(`وضعیت داوطلب با موفقیت به ${newStatus} تغییر یافت`);
             fetchRecommendations();
@@ -151,7 +151,7 @@ const CandidateRecommendations: React.FC = () => {
         navigate(`/employer/candidates/${candidateId}/resume`);
     };
 
-    const handleDownloadResume = async (candidateId: string) => {
+    const handleDownloadResume = async (_candidateId: string) => {
         try {
             toast.success("رزومه با موفقیت دانلود شد");
         } catch (error) {
