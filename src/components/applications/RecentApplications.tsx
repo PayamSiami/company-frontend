@@ -92,15 +92,15 @@ export default function RecentApplications() {
                                                         <td className="px-4 py-3">
                                                             <div className="flex items-center gap-3">
                                                                 <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium flex-shrink-0">
-                                                                    {app?.resumeId?.personalInfo?.firstName?.charAt(0) || '?'}
+                                                                    {app?.resume?.personalInfo?.firstName?.charAt(0) || '?'}
                                                                 </div>
                                                                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                                                    {app?.resumeId?.personalInfo?.firstName + ' ' + app?.resumeId?.personalInfo?.lastName || 'ناشناس'}
+                                                                    {app?.resume?.personalInfo?.firstName + ' ' + app?.resume?.personalInfo?.lastName || 'ناشناس'}
                                                                 </span>
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-3 text-start text-sm text-gray-600 dark:text-gray-300">
-                                                            {app?.jobId?.title || 'نامشخص'}
+                                                            {app?.job?.title || 'نامشخص'}
                                                         </td>
                                                         <td className="px-4 py-3 text-start text-sm text-gray-600 dark:text-gray-300">
                                                             <Badge variant={statusConfig.variant} size="sm">
