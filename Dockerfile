@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Build the panel app
 COPY package*.json ./
-COPY .env.production ./
+# COPY .env.production ./
 RUN npm ci
 
 COPY . .
