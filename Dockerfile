@@ -1,5 +1,15 @@
 FROM node:20-alpine AS builder
+
 WORKDIR /app
+
+# ✅ Accept build argument
+ARG VITE_API_URL
+
+# ✅ Set as environment variable for the build
+ENV VITE_API_URL=$VITE_API_URL
+
+# ✅ Print for debugging (optional)
+RUN echo "Building with VITE_API_URL: $VITE_API_URL"
 
 # Build the panel app
 COPY package*.json ./
