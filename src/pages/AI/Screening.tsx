@@ -54,7 +54,7 @@ const AIScreeningPage: React.FC = () => {
         });
 
         return filtered
-    }, [applications, filter, searchTerm, sortBy]);
+    }, [applications, filter]);
 
     const stats = useMemo(() => {
         const screenedApps = applications?.filter(a => a.aiScore !== null && a.aiScore !== undefined);

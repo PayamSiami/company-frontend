@@ -73,7 +73,7 @@ const JobsAnalyticsPage: React.FC = () => {
             setExporting(true);
             // TODO: Implement export functionality
             toast.success('گزارش با موفقیت خروجی گرفته شد!');
-        } catch (error) {
+        } catch {
             toast.error('خروجی گرفتن گزارش با شکست مواجه شد');
         } finally {
             setExporting(false);

@@ -60,6 +60,7 @@ interface JobFormData {
     openings: number;
     applicationDeadline: string;
     expiresAt: string;
+    company: string; // Added - required by backend CreateJobDto
 }
 
 const initialFormData: JobFormData = {
@@ -81,6 +82,7 @@ const initialFormData: JobFormData = {
     openings: 1,
     applicationDeadline: '',
     expiresAt: '',
+    company: '', // Added - required by backend
 };
 
 const steps = [
@@ -180,6 +182,7 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
         if (step === 0) {
             if (!formData.title.trim()) newErrors.title = 'عنوان شغل الزامی است';
             if (!formData.description.trim()) newErrors.description = 'شرح شغل الزامی است';
+            if (!formData.company.trim()) newErrors.company = 'شرکت الزامی است';
         }
 
         if (step === 1) {
@@ -347,6 +350,21 @@ export const CreateJobDialog: React.FC<CreateJobDialogProps> = ({
                                         </button>
                                     ))}
                                 </div>
+                            </div>
+
+                            <div>
+                                <label className="flex text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    شرکت *
+                                </label>
+                                <Input
+                                    value={formData.company}
+                                    onChange={(e) => handleChange('company', e.target.value)}
+                                    placeholder="نام شرکت"
+                                    error={!!errors.company}
+                                />
+                                {errors.company && (
+                                    <p className="mt-1 flex text-sm text-red-600">{errors.company}</p>
+                                )}
                             </div>
                         </div>
                     )}
