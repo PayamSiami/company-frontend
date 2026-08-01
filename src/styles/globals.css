@@ -1,9 +1,21 @@
-/* frontend-company/src/styles/globals.css */
-
 /* ✅ Tailwind v4 - Import everything at once */
 @import "tailwindcss";
 
-/* ==================== Your Custom Styles ==================== */
+/* ✅ Tailwind v4 - Add custom theme configuration */
+@theme {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-border: var(--border);
+  
+  --font-sans: 'Vazirmatn', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+  
+  --radius-lg: 0.5rem;
+  --radius-md: 0.375rem;
+  --radius-sm: 0.25rem;
+}
+
+/* ==================== CSS Variables ==================== */
 
 :root {
   --text: #6b6375;
@@ -17,8 +29,8 @@
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Vazirmatn', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Vazirmatn', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
@@ -57,81 +69,215 @@
   }
 }
 
-/* ==================== Layout Styles ==================== */
+/* ==================== Base Styles ==================== */
 
-#root {
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  margin: 0;
-  font-family: 'Vazirmatn', sans-serif;
-}
+  body {
+    margin: 0;
+    min-height: 100svh;
+    font-family: 'Vazirmatn', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+  }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
+  #root {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    border-inline: 1px solid var(--border);
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: var(--bg);
+  }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading);
+    font-weight: 500;
+    color: var(--text-h);
+  }
 
-@media (max-width: 1024px) {
   h1 {
-    font-size: 36px;
-    margin: 20px 0;
+    font-size: 56px;
+    letter-spacing: -1.68px;
+    margin: 32px 0;
   }
-}
 
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-}
-
-@media (max-width: 1024px) {
   h2 {
+    font-size: 24px;
+    line-height: 118%;
+    letter-spacing: -0.24px;
+    margin: 0 0 8px;
+  }
+
+  h3 {
     font-size: 20px;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--text-h);
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background: var(--code-bg);
+    color: var(--text-h);
+  }
+
+  pre {
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+  }
+
+  @media (max-width: 1024px) {
+    h1 {
+      font-size: 36px;
+      margin: 20px 0;
+    }
+    h2 {
+      font-size: 20px;
+    }
   }
 }
 
-p {
-  margin: 0;
+/* ==================== Component Styles ==================== */
+
+@layer components {
+  .container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+  }
+
+  .btn-outline:hover {
+    background: var(--code-bg);
+    border-color: var(--text-h);
+  }
+
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+  }
+
+  .input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.2s ease;
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: var(--text-h);
+  }
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
-
-/* ==================== Custom Utility Classes ==================== */
+/* ==================== Utility Classes ==================== */
 
 @layer utilities {
   .shimmer {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  .dark .shimmer {
+    background: linear-gradient(90deg, #1f2028 25%, #2e303a 50%, #1f2028 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -161,7 +307,22 @@ code {
     transform: translateY(-4px);
     box-shadow: var(--shadow);
   }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
+
+/* ==================== Animations ==================== */
 
 @keyframes shimmer {
   0% {
@@ -170,6 +331,34 @@ code {
   100% {
     background-position: -200% 0;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
 }
 
 /* ==================== Scrollbar Styles ==================== */
@@ -187,6 +376,7 @@ code {
 ::-webkit-scrollbar-thumb {
   background: #c1c7cd;
   border-radius: 4px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -203,4 +393,16 @@ code {
   ::-webkit-scrollbar-thumb:hover {
     background: #3a3c4a;
   }
+}
+
+/* ==================== Selection Styles ==================== */
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+::-moz-selection {
+  background: var(--accent);
+  color: #fff;
 }
