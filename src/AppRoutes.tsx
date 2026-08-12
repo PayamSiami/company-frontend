@@ -11,6 +11,7 @@ import Unauthorized from './pages/Unauthorized';
 import CandidateRecommendations from './pages/Candidates/CandidateRecommendations';
 import { AIAnalyticsPage, AIPage } from './pages/AI';
 import { CompanyTeamPage } from './pages/Company';
+import ActivityPage from './pages/Activities/Index';
 
 // Lazy load pages
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Index'));
@@ -70,6 +71,12 @@ export const AppRoutes: React.FC = () => {
           <Route path="company/profile" element={<CompanyProfilePage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="company/team" element={<CompanyTeamPage />} />
+
+          <Route path="activities" element={
+            <ProtectedRoute>
+              <ActivityPage />
+            </ProtectedRoute>
+          } />
         </Route>
 
         {/* 404 */}

@@ -376,7 +376,7 @@ const DashboardPage: React.FC = () => {
         </Card>
       )}
 
-      {/* ✅ Recent Activity & Applications */}
+      {/* Recent Activity & Applications */}
       <RecentActivity />
 
       <div className="flex flex-col gap-6 relative">

@@ -40,7 +40,6 @@ export const useAuth = () => {
       setValidationErrors({});
       try {
         const result = await dispatch(login(data)).unwrap();
-        navigate("/dashboard");
         return result;
       } catch (error: any) {
         if (error?.errors) {

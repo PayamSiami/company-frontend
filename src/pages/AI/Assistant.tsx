@@ -59,7 +59,6 @@ const AIAssistantPage: React.FC = () => {
   const generatedContent = useSelector(selectGeneratedJob)
   const error = useSelector(selectAIError)
   const isGenerating = useSelector(selectIsGenerating)
-  console.log(generatedContent)
 
   const [jobData, setJobData] = useState<JobData>({
     title: '',

@@ -36,7 +36,6 @@ const CandidatesPage: React.FC = () => {
   const { candidates, isLoading, shortlistedIds } = useSelector(
     (state: RootState) => state.candidates
   );
-  console.log(candidates)
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortBy, setSortBy] = useState<SortBy>('newest');

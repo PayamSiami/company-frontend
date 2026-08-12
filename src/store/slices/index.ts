@@ -1,6 +1,6 @@
-// frontend-company/src/store/slices/index.ts
 export { default as authReducer } from "./auth.slice";
 export { default as dashboardReducer } from "./dashboard.slice";
+export { default as activityReducer } from "./activity.slice";
 export { default as applicationsReducer } from "./applications.slice";
 export { default as jobsReducer } from "./jobs.slice";
 export { default as companyReducer } from "./company.slice";
