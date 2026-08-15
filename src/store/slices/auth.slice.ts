@@ -21,7 +21,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: authTokenManager.getUser(),
+  user: authTokenManager.getUser()?.user ?? null,
   accessToken: authTokenManager.getAccessToken(),
   refreshToken: authTokenManager.getRefreshToken(),
   isAuthenticated: authTokenManager.hasTokens(),
@@ -36,7 +36,7 @@ export const login = createAsyncThunk('auth/login', async (data: LoginDto, { rej
   try {
     const response = await authApi.login(data)
     authTokenManager.setTokens(response.data.token, response.data.refreshToken || '')
-    authTokenManager.setUser(response.data.user)
+    authTokenManager.setUser(response.data)
     return response
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || 'Login failed')
@@ -49,7 +49,7 @@ export const register = createAsyncThunk(
     try {
       const response = await authApi.register(data)
       authTokenManager.setTokens(response.data.token, response.data.refreshToken || '')
-      authTokenManager.setUser(response.data.user)
+      authTokenManager.setUser(response.data)
       return response
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Registration failed')
@@ -114,9 +114,10 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<AuthResponseDto>) => {
       state.user = action.payload.data.user
       state.accessToken = action.payload.data.token
+      state.refreshToken = action.payload.data.refreshToken ?? null
       state.isAuthenticated = true
-      authTokenManager.setTokens(action.payload.data.token, '')
-      authTokenManager.setUser(action.payload.data.user)
+      authTokenManager.setTokens(action.payload.data.token, action.payload.data.refreshToken || '')
+      authTokenManager.setUser(action.payload.data)
     },
     clearCredentials: (state) => {
       state.user = null
@@ -149,6 +150,7 @@ const authSlice = createSlice({
         state.isLoading = false
         state.user = action.payload.data.user
         state.accessToken = action.payload.data.token
+        state.refreshToken = action.payload.data.refreshToken ?? null
         state.isAuthenticated = true
         state.error = null
         state.success = 'Login successful!'
@@ -167,6 +169,7 @@ const authSlice = createSlice({
         state.isLoading = false
         state.user = action.payload.data.user
         state.accessToken = action.payload.data.token
+        state.refreshToken = action.payload.data.refreshToken ?? null
         state.isAuthenticated = true
         state.error = null
         state.success = 'Registration successful!'
@@ -200,7 +203,9 @@ const authSlice = createSlice({
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.isVerifying = false
-        state.user = action.payload
+        state.user = action.payload.user
+        state.accessToken = action.payload.token
+        state.refreshToken = action.payload.refreshToken ?? null
         state.isAuthenticated = true
       })
       .addCase(getCurrentUser.rejected, (state) => {

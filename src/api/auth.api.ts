@@ -78,8 +78,8 @@ export const authApi = {
   /**
    * Get current user profile
    */
-  getCurrentUser: async (): Promise<AuthResponseDto["user"]> => {
-    const response = await apiClient.get<AuthResponseDto["user"]>("/auth/me");
+  getCurrentUser: async (): Promise<AuthResponseDto> => {
+    const response = await apiClient.get<AuthResponseDto>("/auth/me");
     return response.data;
   },
 
@@ -155,7 +155,7 @@ export const authApi = {
    */
   checkAuth: async (): Promise<{
     authenticated: boolean;
-    user?: AuthResponseDto["user"];
+    user?: AuthResponseDto;
   }> => {
     try {
       const response = await apiClient.get("/auth/check");
@@ -170,8 +170,8 @@ export const authApi = {
    */
   updateProfile: async (
     data: UpdateProfileDto,
-  ): Promise<AuthResponseDto["user"]> => {
-    const response = await apiClient.put<AuthResponseDto["user"]>(
+  ): Promise<AuthResponseDto> => {
+    const response = await apiClient.put<AuthResponseDto>(
       "/auth/profile",
       data,
     );
@@ -230,14 +230,14 @@ export const authTokenManager = {
   /**
    * Store user data
    */
-  setUser: (user: AuthResponseDto["user"]): void => {
+  setUser: (user: AuthResponseDto["data"]): void => {
     localStorage.setItem("user", JSON.stringify(user));
   },
 
   /**
    * Get stored user data
    */
-  getUser: (): AuthResponseDto["user"] | null => {
+  getUser: (): AuthResponseDto["data"] | null => {
     const userData = localStorage.getItem("user");
     return userData ? JSON.parse(userData) : null;
   },
