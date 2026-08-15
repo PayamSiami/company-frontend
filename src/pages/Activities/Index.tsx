@@ -370,8 +370,6 @@ const FilterBar: React.FC<{
     setSelectedType,
     selectedStatus,
     setSelectedStatus,
-    onReset,
-    totalCount,
 }) => {
         const [isFilterOpen, setIsFilterOpen] = useState(false);
 
