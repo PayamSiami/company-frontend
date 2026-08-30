@@ -94,7 +94,7 @@ const ScreeningPage: React.FC = () => {
         // }
 
         return filtered;
-    }, [applications, filter, searchTerm]);
+    }, [applications, filter]);
 
     if (isLoading && applications.length === 0) {
         return (

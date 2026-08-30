@@ -48,7 +48,7 @@ export const useAuth = () => {
         throw error;
       }
     },
-    [dispatch, navigate],
+    [dispatch],
   );
 
   const handleRegister = useCallback(

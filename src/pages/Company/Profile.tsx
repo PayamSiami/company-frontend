@@ -133,7 +133,7 @@ const CompanyProfilePage: React.FC = () => {
         const checkCompany = async () => {
             try {
                 await dispatch(fetchCompany()).unwrap();
-            } catch (error) {
+            } catch {
                 setIsCreating(true);
                 setIsEditing(true);
             }

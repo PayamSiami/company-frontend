@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Sparkles,
@@ -103,11 +103,7 @@ const CandidateRecommendations: React.FC = () => {
         dispatch(fetchJobs({ isActive: true }));
     }, [dispatch]);
 
-    useEffect(() => {
-        fetchRecommendations();
-    }, [pagination.page, selectedJob, minScore, dispatch]);
-
-    const fetchRecommendations = async () => {
+    const fetchRecommendations = useCallback(async () => {
         const skillsArray = searchSkills
             .split(",")
             .map((s) => s.trim())
@@ -121,7 +117,11 @@ const CandidateRecommendations: React.FC = () => {
             experienceMin: experienceMin ? parseInt(experienceMin) : undefined,
             experienceMax: experienceMax ? parseInt(experienceMax) : undefined,
         }));
-    };
+    }, [dispatch, pagination.limit, searchSkills, selectedJob, minScore, experienceMin, experienceMax]);
+
+    useEffect(() => {
+        fetchRecommendations();
+    }, [fetchRecommendations, pagination.page]);
 
     const handleApplyFilters = () => {
         setPagination({ ...pagination, page: 1 });
@@ -142,7 +142,7 @@ const CandidateRecommendations: React.FC = () => {
         try {
             toast.success(`وضعیت داوطلب با موفقیت به ${newStatus} تغییر یافت`);
             fetchRecommendations();
-        } catch (error) {
+        } catch {
             toast.error("تغییر وضعیت داوطلب با شکست مواجه شد");
         }
     };
@@ -154,7 +154,7 @@ const CandidateRecommendations: React.FC = () => {
     const handleDownloadResume = async (_candidateId: string) => {
         try {
             toast.success("رزومه با موفقیت دانلود شد");
-        } catch (error) {
+        } catch {
             toast.error("دانلود رزومه با شکست مواجه شد");
         }
     };

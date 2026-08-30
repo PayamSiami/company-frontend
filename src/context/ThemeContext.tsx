@@ -1,16 +1,6 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-
-type Theme = 'light' | 'dark' | 'system';
-
-interface ThemeContextType {
-  theme: Theme;
-  resolvedTheme: 'light' | 'dark';
-  setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
-  isTransitioning: boolean;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+// frontend-company/src/context/ThemeContext.tsx
+import React, { useEffect, useState, useCallback } from 'react';
+import { ThemeContext, type Theme } from './theme';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Read initial theme directly from localStorage to avoid initial state mismatch
@@ -107,12 +97,4 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
-
-export default ThemeContext;
+export default ThemeProvider;

@@ -51,7 +51,7 @@ const activitySlice = createSlice({
 })
 
 // ==================== Actions ====================
-export const {} = activitySlice.actions
+// No actions - this slice is managed entirely by async thunks
 
 // ==================== Selectors ====================
 export const selectActivity = (state: { activity: ActivityState }) => state.activity.activity

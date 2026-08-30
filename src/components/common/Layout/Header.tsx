@@ -32,7 +32,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuShortcut,
 } from '../UI/DropdownMenu';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../hooks/useTheme';
 
 // ✅ Define proper types
 interface Notification {

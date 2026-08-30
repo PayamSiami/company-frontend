@@ -69,7 +69,7 @@ const ApplicationsPage: React.FC = () => {
 
   const totalCount = useMemo(() => {
     return applicationsList.length;
-  }, [applications, applicationsList]);
+  }, [applicationsList]);
 
   // Filter and sort applications
   const filteredApplications = useMemo(() => {
@@ -100,7 +100,7 @@ const ApplicationsPage: React.FC = () => {
     }
 
     return filtered;
-  }, [applicationsList, activeTab, searchTerm, sortBy, sortOrder]);
+  }, [applicationsList, activeTab, searchTerm]);
 
   // ✅ Calculate counts safely
   const getCount = (status: string) => {

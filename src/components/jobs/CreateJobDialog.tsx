@@ -22,18 +22,16 @@ import { toast } from 'sonner';
 import { useAppDispatch } from '../../store/hooks';
 
 
-export const JOB_TYPES = [
+const JOB_TYPES = [
     "full-time",
     "part-time",
     "contract",
     "internship",
 ] as const;
-export const EXPERIENCE_LEVELS = ["entry", "mid", "senior", "lead"] as const;
-export const WORK_MODES = ["remote", "hybrid", "on-site"] as const;
+const WORK_MODES = ["remote", "hybrid", "on-site"] as const;
 
-export type JobType = (typeof JOB_TYPES)[number];
-export type ExperienceLevel = (typeof EXPERIENCE_LEVELS)[number];
-export type WorkMode = (typeof WORK_MODES)[number];
+type JobType = (typeof JOB_TYPES)[number];
+type WorkMode = (typeof WORK_MODES)[number];
 
 interface CreateJobDialogProps {
     open: boolean;

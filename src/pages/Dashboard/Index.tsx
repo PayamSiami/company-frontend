@@ -1,5 +1,5 @@
 // frontend-company/src/pages/Dashboard/index.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -81,18 +81,18 @@ const DashboardPage: React.FC = () => {
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
 
-  // Fetch data on mount
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     await Promise.all([
       dispatch(fetchDashboardStats()),
       dispatch(fetchAIScreeningData()),
       dispatch(fetchApplications())
     ]);
-  };
+  }, [dispatch]);
+
+  // Fetch data on mount
+  useEffect(() => {
+    loadDashboardData();
+  }, [loadDashboardData]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();

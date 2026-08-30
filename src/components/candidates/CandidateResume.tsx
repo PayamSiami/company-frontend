@@ -307,7 +307,7 @@ export const CandidateResume: React.FC<CandidateResumeProps> = ({
             toast.success('رزومه با موفقیت آپلود شد!');
             setShowUploadModal(false);
             setSelectedFile(null);
-        } catch (error) {
+        } catch {
             toast.error('آپلود رزومه با شکست مواجه شد');
         } finally {
             setUploading(false);

@@ -1,5 +1,5 @@
 // frontend-company/src/components/applications/ApplicationFilters.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { setFilters } from '../../store/slices/applications.slice';
 import { ApplicationStatus } from '../../types';
@@ -120,12 +120,12 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
     setIsAnimating(true);
   };
 
-  const closePanel = () => {
+  const closePanel = useCallback(() => {
     setIsAnimating(false);
     setTimeout(() => setIsOpen(false), 200);
     if (onClose)
       onClose()
-  };
+  }, [onClose]);
 
   // Handle click outside
   useEffect(() => {
@@ -142,7 +142,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [closePanel]);
 
   // Handle Escape key
   useEffect(() => {
@@ -154,7 +154,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen]);
+  }, [isOpen, closePanel]);
 
   return (
     <div className={`relative ${className}`} dir="rtl">

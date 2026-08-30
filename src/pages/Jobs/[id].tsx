@@ -70,7 +70,7 @@ const JobDetailPage: React.FC = () => {
             try {
                 await dispatch(publishJob(id)).unwrap();
                 toast.success('شغل با موفقیت منتشر شد!');
-            } catch (error) {
+            } catch {
                 toast.error('انتشار شغل با شکست مواجه شد');
             }
         }
@@ -81,7 +81,7 @@ const JobDetailPage: React.FC = () => {
             try {
                 await dispatch(closeJob(id)).unwrap();
                 toast.success('شغل با موفقیت بسته شد!');
-            } catch (error) {
+            } catch {
                 toast.error('بستن شغل با شکست مواجه شد');
             }
         }
@@ -93,7 +93,7 @@ const JobDetailPage: React.FC = () => {
                 await dispatch(deleteJob(id)).unwrap();
                 toast.success('شغل با موفقیت حذف شد!');
                 navigate('/jobs');
-            } catch (error) {
+            } catch {
                 toast.error('حذف شغل با شکست مواجه شد');
             }
         }

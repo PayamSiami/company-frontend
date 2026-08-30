@@ -272,7 +272,7 @@ interface DropdownMenuShortcutProps extends React.HTMLAttributes<HTMLSpanElement
 }
 
 export const DropdownMenuShortcut: React.FC<DropdownMenuShortcutProps> = ({
-    children,
+    children: _children,
     className,
     ...props
 }) => {

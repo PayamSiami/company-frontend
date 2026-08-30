@@ -80,7 +80,7 @@ const JobsPage: React.FC = () => {
     }
 
     return filtered;
-  }, [jobs, activeTab, searchTerm, sortBy, sortOrder]);
+  }, [jobs, activeTab, searchTerm]);
 
   const stats = useMemo(() => ({
     total: jobs?.length,

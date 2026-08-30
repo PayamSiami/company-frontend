@@ -137,6 +137,16 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
     }
   }, [location, isMobile]);
 
+  const toggleSidebar = useCallback(() => {
+    setIsTransitioning(true);
+    if (isMobile) {
+      setSidebarOpen(!sidebarOpen);
+    } else {
+      setIsCollapsed(!isCollapsed);
+    }
+    setTimeout(() => setIsTransitioning(false), 300);
+  }, [isMobile, sidebarOpen, isCollapsed]);
+
   // Keyboard shortcut for sidebar toggle (Ctrl+B)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -147,17 +157,7 @@ export const CompanyLayout: React.FC<CompanyLayoutProps> = ({ children }) => {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isMobile, sidebarOpen, isCollapsed]);
-
-  const toggleSidebar = useCallback(() => {
-    setIsTransitioning(true);
-    if (isMobile) {
-      setSidebarOpen(!sidebarOpen);
-    } else {
-      setIsCollapsed(!isCollapsed);
-    }
-    setTimeout(() => setIsTransitioning(false), 300);
-  }, [isMobile, sidebarOpen, isCollapsed]);
+  }, [isMobile, sidebarOpen, isCollapsed, toggleSidebar]);
 
   const getSidebarWidth = () => {
     if (isMobile) return sidebarOpen ? 'w-72' : 'w-0';
