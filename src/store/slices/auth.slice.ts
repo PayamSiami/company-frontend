@@ -75,7 +75,7 @@ export const getCurrentUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data }: any = await authApi.getCurrentUser()
-      authTokenManager.setUser(data)
+      // authTokenManager.setUser(data)
       return data
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch user')
@@ -203,7 +203,7 @@ const authSlice = createSlice({
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.isVerifying = false
-        state.user = action.payload.user
+        state.user = action.payload
         state.accessToken = action.payload.token
         state.refreshToken = action.payload.refreshToken ?? null
         state.isAuthenticated = true

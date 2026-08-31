@@ -1,6 +1,6 @@
-// frontend-company/src/pages/Applications/Index.tsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../../store';
 import { ApplicationList } from '../../components/applications/ApplicationList';
 import { ApplicationFilters } from '../../components/applications/ApplicationFilters';
@@ -39,6 +39,7 @@ type ApplicationStatus = 'all' | 'pending' | 'reviewing' | 'shortlisted' | 'reje
 
 const ApplicationsPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { applications, isLoading } = useSelector((state: RootState) => state.applications);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -208,7 +209,7 @@ const ApplicationsPage: React.FC = () => {
             variant="primary"
             size="sm"
             className="gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
-            onClick={() => window.location.href = '/jobs/create'}
+            onClick={() => navigate('/jobs?create=1')}
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">ثبت آگهی</span>
@@ -411,7 +412,7 @@ const ApplicationsPage: React.FC = () => {
           {!searchTerm && activeTab === 'all' && (
             <Button
               className="mt-4 gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              onClick={() => window.location.href = '/jobs/create'}
+              onClick={() => navigate('/jobs?create=1')}
             >
               <Plus className="w-4 h-4" />
               ثبت اولین آگهی شغلی

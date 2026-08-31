@@ -48,6 +48,7 @@ export const AppRoutes: React.FC = () => {
 
           {/* Job Routes */}
           <Route path="jobs" element={<JobsPage />} />
+          <Route path="jobs/create" element={<Navigate to="/jobs?create=1" replace />} />
           <Route path="jobs/:id" element={<JobDetailPage />} />
           <Route path="jobs/analytics" element={<JobsAnalyticsPage />} />
 

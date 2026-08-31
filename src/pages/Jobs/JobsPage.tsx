@@ -1,6 +1,7 @@
 // frontend-company/src/pages/Jobs/index.tsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { RootState } from '../../store';
 import { JobList } from '../../components/jobs/JobList';
 import { JobFilters } from '../../components/jobs/JobFilters';
@@ -36,10 +37,12 @@ type JobStatus = 'all' | 'active' | 'pending' | 'closed' | 'draft' | 'expired' |
 
 const JobsPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { jobs, isLoading } = useSelector((state: RootState) => state.jobs);
   const [view, setView] = useState<ViewMode>('list');
   const [showFilters, setShowFilters] = useState(false);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showCreateDialog, setShowCreateDialog] = useState(() => searchParams.get('create') === '1');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'title' | 'applications' | 'status'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -328,7 +331,12 @@ const JobsPage: React.FC = () => {
       {/* Create Job Dialog */}
       <CreateJobDialog
         open={showCreateDialog}
-        onOpenChange={setShowCreateDialog}
+        onOpenChange={(open) => {
+          setShowCreateDialog(open);
+          if (!open) {
+            navigate('/jobs', { replace: true });
+          }
+        }}
       />
     </div>
   );
