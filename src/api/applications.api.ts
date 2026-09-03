@@ -1,7 +1,10 @@
 // frontend-company/src/api/applications.api.ts
 import { apiClient } from "./axios.config";
 import type { IApplication } from "../types/model.types";
-import type { UpdateApplicationStatusDto } from "../types/dto.types";
+import type {
+  ApplicationsListResponseDto,
+  UpdateApplicationStatusDto,
+} from "../types/dto.types";
 
 // ✅ Token is automatically added by axios interceptor
 // The interceptor adds: Authorization: Bearer ${token}
@@ -18,15 +21,18 @@ export const applicationsApi = {
     dateFrom?: string;
     dateTo?: string;
   }) => {
-    return apiClient.get<IApplication[]>("/applications/employer", {
-      params: {
-        status: params?.status,
-        jobId: params?.jobId,
-        minScore: params?.minScore,
-        dateFrom: params?.dateFrom,
-        dateTo: params?.dateTo,
+    return apiClient.get<{ data: ApplicationsListResponseDto }>(
+      "/applications/employer",
+      {
+        params: {
+          status: params?.status,
+          jobId: params?.jobId,
+          minScore: params?.minScore,
+          dateFrom: params?.dateFrom,
+          dateTo: params?.dateTo,
+        },
       },
-    });
+    );
   },
 
   /**
@@ -34,7 +40,7 @@ export const applicationsApi = {
    * ✅ Token added by interceptor
    */
   getById: (id: string) => {
-    return apiClient.get<IApplication>(`/applications/${id}`);
+    return apiClient.get<{ data: IApplication }>(`/applications/${id}`);
   },
 
   /**

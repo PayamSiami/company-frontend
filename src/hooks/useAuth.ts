@@ -41,9 +41,11 @@ export const useAuth = () => {
       try {
         const result = await dispatch(login(data)).unwrap();
         return result;
-      } catch (error: any) {
-        if (error?.errors) {
-          setValidationErrors(error.errors);
+      } catch (error) {
+        if (typeof error === 'object' && error !== null && 'errors' in error) {
+          setValidationErrors(
+            (error as { errors: Record<string, string> }).errors,
+          );
         }
         throw error;
       }
@@ -58,9 +60,11 @@ export const useAuth = () => {
         const result = await dispatch(register(data)).unwrap();
         navigate("/dashboard");
         return result;
-      } catch (error: any) {
-        if (error?.errors) {
-          setValidationErrors(error.errors);
+      } catch (error) {
+        if (typeof error === 'object' && error !== null && 'errors' in error) {
+          setValidationErrors(
+            (error as { errors: Record<string, string> }).errors,
+          );
         }
         throw error;
       }

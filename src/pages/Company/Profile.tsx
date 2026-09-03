@@ -13,6 +13,7 @@ import { Input } from '../../components/common/UI/Input';
 import { Card } from '../../components/common/UI/Card';
 import { Spinner } from '../../components/common/UI/Spinner';
 import { Alert } from '../../components/common/UI/Alert';
+import { getErrorMessage } from '../../api/apiError';
 import {
     Building2,
     Globe,
@@ -230,8 +231,8 @@ const CompanyProfilePage: React.FC = () => {
             setSaveSuccess(true);
             setIsEditing(false);
             setTimeout(() => setSaveSuccess(false), 3000);
-        } catch (error: any) {
-            toast.error(error.message || 'ذخیره شرکت با شکست مواجه شد');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'ذخیره شرکت با شکست مواجه شد'));
         }
     };
 
@@ -253,8 +254,8 @@ const CompanyProfilePage: React.FC = () => {
         try {
             await dispatch(uploadCompanyLogo(file)).unwrap();
             toast.success('لوگو با موفقیت آپلود شد!');
-        } catch (error: any) {
-            toast.error(error.message || 'آپلود لوگو با شکست مواجه شد');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'آپلود لوگو با شکست مواجه شد'));
         }
         setUploadingLogo(false);
     };

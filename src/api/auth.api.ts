@@ -4,6 +4,7 @@ import type {
   LoginDto,
   RegisterDto,
   AuthResponseDto,
+  CurrentUserResponseDto,
   ForgotPasswordDto,
   ResetPasswordDto,
   VerifyEmailDto,
@@ -77,9 +78,10 @@ export const authApi = {
 
   /**
    * Get current user profile
+   * Backend returns the user with tokens flattened at the top level.
    */
-  getCurrentUser: async (): Promise<AuthResponseDto> => {
-    const response = await apiClient.get<AuthResponseDto>("/auth/me");
+  getCurrentUser: async (): Promise<CurrentUserResponseDto> => {
+    const response = await apiClient.get<CurrentUserResponseDto>("/auth/me");
     return response.data;
   },
 
@@ -229,15 +231,16 @@ export const authTokenManager = {
 
   /**
    * Store user data
+   * Accepts both the login response (`{ token, user }`) and the flat `/auth/me` payload.
    */
-  setUser: (user: AuthResponseDto["data"]): void => {
+  setUser: (user: AuthResponseDto["data"] | CurrentUserResponseDto): void => {
     localStorage.setItem("user", JSON.stringify(user));
   },
 
   /**
    * Get stored user data
    */
-  getUser: (): AuthResponseDto["data"] | null => {
+  getUser: (): AuthResponseDto["data"] | CurrentUserResponseDto | null => {
     const userData = localStorage.getItem("user");
     return userData ? JSON.parse(userData) : null;
   },

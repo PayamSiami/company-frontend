@@ -21,6 +21,7 @@ import { Modal } from '../common/UI/Modal';
 import { cn } from '../../lib/utils';
 import { updateApplicationStatus } from '../../store/slices/applications.slice';
 import { toast } from 'sonner';
+import { getErrorMessage } from '../../api/apiError';
 import type { AppDispatch } from '../../store';
 import { useDispatch } from 'react-redux';
 import { StatusFlowVisualizer } from './StatusFlowVisualizer';
@@ -105,8 +106,8 @@ export const StatusUpdateModal: React.FC<StatusUpdateModalProps> = ({
 
       toast.success(`وضعیت درخواست به ${STATUS_FLOW[status]?.labelFa || status} تغییر یافت`);
       onSuccess?.();
-    } catch (error: any) {
-      toast.error(error.message || 'خطا در بروزرسانی وضعیت');
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'خطا در بروزرسانی وضعیت'));
     } finally {
       setIsLoading(false);
     }

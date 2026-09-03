@@ -176,14 +176,20 @@ export interface IJob {
 export interface IApplication {
   _id: string;
   candidateId: string;
-  jobId: string;
+  /** Populated by the backend; may be an id string when not populated */
+  jobId: IJob | string;
   resumeId: string;
   coverLetter?: string;
   expectedSalary?: number;
   availableFrom?: Date | string;
   status: ApplicationStatus;
   aiScore?: number;
-  userId: any;
+  /** Populated by the backend; may be an id string when not populated */
+  userId: {
+    _id: string;
+    username?: string;
+    email?: string;
+  } | string;
   aiScreeningData?: {
     skillMatch: number;
     experienceMatch: number;

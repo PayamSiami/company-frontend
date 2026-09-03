@@ -6,6 +6,7 @@ export type {
   LoginDto,
   RegisterDto,
   AuthResponseDto,
+  CurrentUserResponseDto,
   ForgotPasswordDto,
   ResetPasswordDto,
   VerifyEmailDto,
@@ -13,21 +14,22 @@ export type {
   ResendVerificationDto,
   SocialLoginDto,
   UpdateProfileDto,
-  
+
   // Company DTOs
   CreateCompanyDto,
   UpdateCompanyDto,
   CompanyResponseDto,
-  
+
   // Job DTOs
   CreateJobDto,
   UpdateJobDto,
   JobFiltersDto,
-  
+
   // Application DTOs
   CreateApplicationDto,
   UpdateApplicationStatusDto,
   ApplicationFiltersDto,
+  ApplicationsListResponseDto,
   BulkApplicationUpdateDto,
   
   // Dashboard DTOs

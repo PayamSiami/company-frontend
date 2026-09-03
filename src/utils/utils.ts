@@ -1,6 +1,8 @@
-export const formatDate = (date: string) => {
+export const formatDate = (date: Date | string | number | undefined | null): string => {
   if (!date) return "نامشخص";
-  return new Date(date).toLocaleDateString("fa-IR", {
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return "نامشخص";
+  return parsed.toLocaleDateString("fa-IR", {
     month: "long",
     day: "numeric",
     year: "numeric",

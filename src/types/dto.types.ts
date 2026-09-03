@@ -1,5 +1,27 @@
 // frontend-company/src/types/dto.types.ts
 
+import type { IApplication } from './model.types'
+
+// ==================== APPLICATIONS RESPONSE DTOs ====================
+
+/** Body of `GET /applications/employer` → `{ data: { applications, pagination } }` */
+export interface ApplicationsListResponseDto {
+  applications: IApplication[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+  }
+}
+
+/**
+ * Body of `GET /auth/me`: user fields with tokens flattened at the top level.
+ */
+export type CurrentUserResponseDto = AuthResponseDto['data']['user'] & {
+  token: string
+  refreshToken?: string
+}
+
 // ==================== AUTH DTOs ====================
 
 export interface LoginDto {

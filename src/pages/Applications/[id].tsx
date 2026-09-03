@@ -125,7 +125,7 @@ const ApplicationDetailPage: React.FC = () => {
                 <div className="flex items-start gap-4">
                     <div className="flex items-center gap-3">
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            {selectedApplication?.userId?.username || 'کاربر ناشناس'}
+                            {typeof selectedApplication?.userId === 'object' ? (selectedApplication.userId.username ?? 'کاربر ناشناس') : 'کاربر ناشناس'}
                         </h1>
                         <Badge variant={getStatusBadgeVariant(selectedApplication.status)}>
                             {getStatusFarsiText(selectedApplication.status)}

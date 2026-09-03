@@ -34,31 +34,9 @@ import {
     selectActivityPagination,
 } from '../../store/slices/activity.slice';
 import type { AppDispatch } from '../../store';
+import type { ActivityItem, ActivityPagination } from '../../types/activity.types';
 
-// Types
-interface ActivityItem {
-    id: string;
-    type: 'generation' | 'job' | 'application' | 'shortlist' | 'interview' | 'candidate' | 'ai';
-    title: string;
-    description?: string;
-    score: number | null;
-    timestamp: string;
-    status: 'pending' | 'completed' | 'in-progress' | 'rejected';
-    time: string;
-    link?: string;
-    jobTitle?: string;
-    metadata?: {
-        jobId?: string;
-        isActive?: boolean;
-    };
-}
-
-interface PaginationData {
-    page: number;
-    limit: number;
-    total: number;
-    pages: number;
-}
+interface PaginationData extends ActivityPagination {}
 
 // Constants
 const ACTIVITY_TYPES = [

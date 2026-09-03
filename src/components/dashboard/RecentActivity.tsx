@@ -17,24 +17,8 @@ import { Badge } from '../common/UI/Badge';
 import { cn } from '../../lib/utils';
 import { fetchActivity, selectActivity, selectActivityLoading } from '../../store/slices/activity.slice';
 import type { AppDispatch } from '../../store';
+import type { ActivityItem } from '../../types/activity.types';
 import { useDispatch, useSelector } from 'react-redux';
-
-interface ActivityItem {
-    id: string;
-    type: 'generation' | 'job' | 'application' | 'shortlist' | 'interview' | 'candidate' | 'ai';
-    title: string;
-    description?: string;
-    score: number | null;
-    timestamp: string;
-    status: 'pending' | 'completed' | 'in-progress' | 'rejected';
-    time: string; // Human readable time like "3 hours ago"
-    link?: string;
-    jobTitle?: string;
-    metadata?: {
-        jobId?: string;
-        isActive?: boolean;
-    };
-}
 
 // Map API types to icon types
 const getActivityIcon = (type: ActivityItem['type']) => {
@@ -135,19 +119,7 @@ export const RecentActivity: React.FC = () => {
 
     // Extract activities from the response structure
     const activityItems = useMemo(() => {
-        if (!activities) return [];
-
-        // If it's the full response with activities array
-        if (Array.isArray(activities)) {
-            return activities;
-        }
-
-        // If it's the paginated response
-        if ('activities' in activities && Array.isArray(activities)) {
-            return activities;
-        }
-
-        return [];
+        return activities ?? [];
     }, [activities]);
 
     useEffect(() => {

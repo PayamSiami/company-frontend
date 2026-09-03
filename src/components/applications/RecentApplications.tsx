@@ -9,6 +9,7 @@ import { cn } from '../../lib/utils';
 import { formatDate } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import { StatusUpdateModal } from './StatusUpdateModal';
+import type { IApplication } from '../../types';
 
 const getStatusBadge = (status: string) => {
     const config: Record<string, { variant: 'warning' | 'info' | 'success' | 'danger', label: string }> = {
@@ -18,6 +19,23 @@ const getStatusBadge = (status: string) => {
         rejected: { variant: 'danger', label: 'رد شده' },
     };
     return config[status] || config.pending;
+};
+
+/** Safely read the candidate's display name (backend may not populate `userId`) */
+const getCandidateName = (app: IApplication): string => {
+    const name = typeof app.userId === 'object' ? app.userId.username : undefined;
+    return name ?? 'ناشناس';
+};
+
+/** First letter of the candidate's name, or "?" when unknown */
+const getCandidateInitial = (app: IApplication): string => {
+    const name = getCandidateName(app);
+    return name !== 'ناشناس' ? name.charAt(0) : '?';
+};
+
+/** Safely read the job title (backend may not populate `jobId`) */
+const getJobTitle = (app: IApplication): string => {
+    return (typeof app.jobId === 'object' ? app.jobId.title : undefined) ?? 'نامشخص';
 };
 
 const getScoreColor = (score: number) => {
@@ -31,7 +49,7 @@ export default function RecentApplications() {
     const [showStatusModal, setShowStatusModal] = useState(false);
     const applications = useSelector(selectApplications);
     const applicationsLoading = useSelector(selectApplicationsLoading);
-    const [selectedApplication, setSelectedApplication] = useState<any>({ id: null, status: null });
+    const [selectedApplication, setSelectedApplication] = useState<IApplication | null>(null);
 
     return (
         <>
@@ -85,22 +103,22 @@ export default function RecentApplications() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                                            {applications.slice(0, 5).map((app: any) => {
+                                            {applications.slice(0, 5).map((app: IApplication) => {
                                                 const statusConfig = getStatusBadge(app.status);
                                                 return (
                                                     <tr key={app._id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
                                                         <td className="px-4 py-3">
                                                             <div className="flex items-center gap-3">
                                                                 <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium flex-shrink-0">
-                                                                    {app?.resume?.personalInfo?.firstName?.charAt(0) || '?'}
+                                                                    {getCandidateInitial(app)}
                                                                 </div>
                                                                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                                                    {app?.resume?.personalInfo?.firstName + ' ' + app?.resume?.personalInfo?.lastName || 'ناشناس'}
+                                                                    {getCandidateName(app)}
                                                                 </span>
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-3 text-start text-sm text-gray-600 dark:text-gray-300">
-                                                            {app?.job?.title || 'نامشخص'}
+                                                            {getJobTitle(app)}
                                                         </td>
                                                         <td className="px-4 py-3 text-start text-sm text-gray-600 dark:text-gray-300">
                                                             <Badge variant={statusConfig.variant} size="sm">
@@ -116,7 +134,7 @@ export default function RecentApplications() {
                                                                     value={app.aiScore || 0}
                                                                     max={100}
                                                                     className="w-12 h-1.5"
-                                                                    color={app.aiScore >= 70 ? 'green' : app.aiScore >= 40 ? 'yellow' : 'red'}
+                                                                    color={app.aiScore != null && app.aiScore >= 70 ? 'green' : app.aiScore != null && app.aiScore >= 40 ? 'yellow' : 'red'}
                                                                 />
                                                             </div>
                                                         </td>

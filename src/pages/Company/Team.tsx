@@ -9,6 +9,7 @@ import {
     updateMemberRole,
     resendInvite,
 } from '../../store/slices/team.slice';
+import { getErrorMessage } from '../../api/apiError';
 import { Card } from '../../components/common/UI/Card';
 import { Button } from '../../components/common/UI/Button';
 import { Input } from '../../components/common/UI/Input';
@@ -153,8 +154,8 @@ const CompanyTeamPage: React.FC = () => {
             toast.success(`Invitation sent to ${inviteData.email}`);
             setShowInviteModal(false);
             setInviteData({ email: '', role: 'member', department: '', message: '' });
-        } catch (error: any) {
-            toast.error(error || 'Failed to send invitation');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'Failed to send invitation'));
         } finally {
             setIsSubmitting(false);
         }
@@ -168,8 +169,8 @@ const CompanyTeamPage: React.FC = () => {
             toast.success(`${member.firstName} ${member.lastName} removed from team`);
             setShowDeleteConfirm(false);
             setSelectedMember(null);
-        } catch (error: any) {
-            toast.error(error || 'Failed to remove member');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'Failed to remove member'));
         } finally {
             setIsSubmitting(false);
         }
@@ -181,8 +182,8 @@ const CompanyTeamPage: React.FC = () => {
         try {
             await dispatch(resendInvite(member.id)).unwrap();
             toast.success(`Invitation resent to ${member.email}`);
-        } catch (error: any) {
-            toast.error(error || 'Failed to resend invitation');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'Failed to resend invitation'));
         } finally {
             setIsSubmitting(false);
         }
@@ -196,8 +197,8 @@ const CompanyTeamPage: React.FC = () => {
             toast.success(`${member.firstName} ${member.lastName} is now ${role}`);
             setShowRoleChangeConfirm(false);
             setSelectedMember(null);
-        } catch (error: any) {
-            toast.error(error || 'Failed to update role');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'Failed to update role'));
         } finally {
             setIsSubmitting(false);
         }

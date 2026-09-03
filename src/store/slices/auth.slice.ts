@@ -1,6 +1,7 @@
 // frontend-company/src/store/slices/auth.slice.ts
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
 import { authApi, authTokenManager } from '../../api/auth.api'
+import { getErrorMessage } from '../../api/apiError'
 import type {
   LoginDto,
   RegisterDto,
@@ -20,8 +21,10 @@ interface AuthState {
   success: string | null
 }
 
+const storedAuthUser = authTokenManager.getUser()
+
 const initialState: AuthState = {
-  user: authTokenManager.getUser()?.user ?? null,
+  user: (storedAuthUser && 'user' in storedAuthUser ? storedAuthUser.user : null) ?? null,
   accessToken: authTokenManager.getAccessToken(),
   refreshToken: authTokenManager.getRefreshToken(),
   isAuthenticated: authTokenManager.hasTokens(),
@@ -38,8 +41,8 @@ export const login = createAsyncThunk('auth/login', async (data: LoginDto, { rej
     authTokenManager.setTokens(response.data.token, response.data.refreshToken || '')
     authTokenManager.setUser(response.data)
     return response
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || 'Login failed')
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error, 'Login failed'))
   }
 })
 
@@ -51,8 +54,8 @@ export const register = createAsyncThunk(
       authTokenManager.setTokens(response.data.token, response.data.refreshToken || '')
       authTokenManager.setUser(response.data)
       return response
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Registration failed')
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Registration failed'))
     }
   }
 )
@@ -63,10 +66,10 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
     authTokenManager.clearTokens()
     authTokenManager.clearUser()
     return { success: true }
-  } catch (error: any) {
+  } catch (error) {
     authTokenManager.clearTokens()
     authTokenManager.clearUser()
-    return rejectWithValue(error.response?.data?.message || 'Logout failed')
+    return rejectWithValue(getErrorMessage(error, 'Logout failed'))
   }
 })
 
@@ -74,11 +77,11 @@ export const getCurrentUser = createAsyncThunk(
   'auth/getCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      const { data }: any = await authApi.getCurrentUser()
-      // authTokenManager.setUser(data)
+      const data = await authApi.getCurrentUser()
+      authTokenManager.setUser(data)
       return data
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch user')
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Failed to fetch user'))
     }
   }
 )
@@ -89,8 +92,8 @@ export const forgotPassword = createAsyncThunk(
     try {
       const response = await authApi.forgotPassword(data)
       return response
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to send reset email')
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Failed to send reset email'))
     }
   }
 )
@@ -101,8 +104,8 @@ export const resetPassword = createAsyncThunk(
     try {
       const response = await authApi.resetPassword(data)
       return response
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to reset password')
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Failed to reset password'))
     }
   }
 )

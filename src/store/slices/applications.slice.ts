@@ -5,8 +5,10 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { applicationsApi } from "../../api/applications.api";
+import { getErrorMessage } from "../../api/apiError";
 import type { IApplication } from "../../types";
 import type {
+  ApplicationsListResponseDto,
   UpdateApplicationStatusDto,
   ApplicationFiltersDto,
 } from "../../types/dto.types";
@@ -46,16 +48,16 @@ const initialState: ApplicationsState = {
 
 // ✅ Typed thunks with rejectValue
 export const fetchApplications = createAsyncThunk<
-  IApplication[], // Success return type
+  ApplicationsListResponseDto, // Success return type
   ApplicationFiltersDto | undefined, // First argument type
   { rejectValue: string } // Reject value type
 >("applications/fetchAll", async (params, { rejectWithValue }) => {
   try {
-    const { data }: any = await applicationsApi.getAll(params);
+    const { data } = await applicationsApi.getAll(params);
     return data.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch applications",
+      getErrorMessage(error, "Failed to fetch applications"),
     );
   }
 });
@@ -66,11 +68,11 @@ export const fetchApplicationById = createAsyncThunk<
   { rejectValue: string }
 >("applications/fetchById", async (id, { rejectWithValue }) => {
   try {
-    const { data }: any = await applicationsApi.getById(id);
+    const { data } = await applicationsApi.getById(id);
     return data.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch application",
+      getErrorMessage(error, "Failed to fetch application"),
     );
   }
 });
@@ -83,9 +85,9 @@ export const updateApplicationStatus = createAsyncThunk<
   try {
     const response = await applicationsApi.updateStatus(id, data);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return rejectWithValue(
-      error.response?.data?.message || "Failed to update application status",
+      getErrorMessage(error, "Failed to update application status"),
     );
   }
 });
@@ -103,9 +105,9 @@ export const bulkUpdateApplications = createAsyncThunk<
       );
       const responses = await Promise.all(updatePromises);
       return responses.map((response) => response.data);
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to bulk update applications",
+        getErrorMessage(error, "Failed to bulk update applications"),
       );
     }
   },
@@ -152,9 +154,11 @@ const applicationsSlice = createSlice({
       })
       .addCase(fetchApplications.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { applications }: any = action.payload;
-        state.applications = applications;
-        state.pagination.total = action.payload.length;
+        const { applications, pagination } = action.payload;
+        state.applications = applications ?? [];
+        if (pagination?.total != null) {
+          state.pagination.total = pagination.total;
+        }
         state.success = "Applications fetched successfully";
       })
       .addCase(fetchApplications.rejected, (state, action) => {
